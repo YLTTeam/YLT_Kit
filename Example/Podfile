@@ -1,5 +1,5 @@
 use_frameworks!
-
+platform :ios, '9.0'
 target 'YLT_Kit_Example' do
   pod 'YLT_Kit', :path => '../'
 
