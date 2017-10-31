@@ -10,7 +10,7 @@
 
 @interface UIView (YLT_Create)
 
-+ (UIView *(^)(void))YLT_create;
++ (UIView *(^)(void))YLT_Create;
 /**
  视图的创建
  */

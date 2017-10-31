@@ -35,6 +35,10 @@ typedef NS_OPTIONS(NSUInteger, YLT_StringFilterType) {
  */
 - (UITextField *(^)(UIColor *textColor))YLT_TextColor;
 /**
+ 文本框字体颜色
+ */
+- (UITextField *(^)(UIFont *font))YLT_Font;
+/**
  左边视图
  */
 - (UITextField *(^)(UIView *leftView))YLT_LeftView;

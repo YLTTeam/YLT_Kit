@@ -61,6 +61,15 @@
 }
 
 /**
+ 文本框字体颜色
+ */
+- (UITextField *(^)(UIFont *font))YLT_Font {
+    return  ^id(UIFont *font) {
+        self.font = font;
+        return self;
+    };
+}
+/**
  键盘类型
  */
 - (UITextField *(^)(UIKeyboardType keyboardType))YLT_KeyboardType {

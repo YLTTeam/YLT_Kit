@@ -53,7 +53,7 @@
 
 @implementation UIView (YLT_Create)
 
-+ (UIView *(^)(void))YLT_create {
++ (UIView *(^)(void))YLT_Create {
     return ^id() {
         UIView *result = [[[self class] alloc] init];
         return result;
