@@ -253,7 +253,14 @@
     };
 }
 
-
+/**
+ 获取当前对象
+ 
+ @return 当前对象
+ */
+- (id)YLT_Self {
+    return self;
+}
 #pragma mark - method
 /**
  获取当前视图的中心点

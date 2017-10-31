@@ -71,6 +71,13 @@
 
 
 #pragma mark - normal method
+
+/**
+ 获取当前对象
+
+ @return 当前对象
+ */
+- (id)YLT_Self;
 /**
  获取当前视图的中心点
  
