@@ -24,28 +24,32 @@
         NSString *type = @"png";
         NSString *name = imageName;
         NSMutableString *dir = nil;
-        for (NSString *path in array) {
-            if ([path hasPrefix:@".bundle"]) {
-                bundleName = path;
-            } else if ([path rangeOfString:@"."].location != NSNotFound) {
-                NSArray *nameList = [path componentsSeparatedByString:@"."];
-                name = nameList[0];
-                if ([name hasSuffix:@"@2x"]) {
-                    name = [name stringByReplacingOccurrencesOfString:@"@2x" withString:@""];
+        if (array.count == 1) {
+            result = [UIImage imageNamed:imageName];
+        } else if (array.count > 1) {
+            for (NSString *path in array) {
+                if ([path hasPrefix:@".bundle"]) {
+                    bundleName = path;
+                } else if ([path rangeOfString:@"."].location != NSNotFound) {
+                    NSArray *nameList = [path componentsSeparatedByString:@"."];
+                    name = nameList[0];
+                    if ([name hasSuffix:@"@2x"]) {
+                        name = [name stringByReplacingOccurrencesOfString:@"@2x" withString:@""];
+                    }
+                    if ([name hasSuffix:@"@3x"]) {
+                        name = [name stringByReplacingOccurrencesOfString:@"@3x" withString:@""];
+                    }
+                    type = nameList[1];
+                } else {
+                    if (dir == nil) {
+                        dir = [[NSMutableString alloc] init];
+                    }
+                    [dir appendFormat:@"%@/", path];
                 }
-                if ([name hasSuffix:@"@3x"]) {
-                    name = [name stringByReplacingOccurrencesOfString:@"@3x" withString:@""];
-                }
-                type = nameList[1];
-            } else {
-                if (dir == nil) {
-                    dir = [[NSMutableString alloc] init];
-                }
-                [dir appendFormat:@"%@/", path];
             }
+            
+            result = [UIImage imageWithContentsOfFile:[[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForAuxiliaryExecutable:[NSString stringWithFormat:@"%@.bundle", bundleName]]]?:[NSBundle bundleForClass:[self class]] pathForResource:name ofType:type?:@"png" inDirectory:dir]];
         }
-        
-        result = [UIImage imageWithContentsOfFile:[[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForAuxiliaryExecutable:[NSString stringWithFormat:@"%@.bundle", bundleName]]]?:[NSBundle bundleForClass:[self class]] pathForResource:name ofType:type?:@"png" inDirectory:dir]];
     }
     
     return result;
