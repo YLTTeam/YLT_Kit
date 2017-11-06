@@ -27,7 +27,7 @@
             }
             else if ([image isKindOfClass:[NSString class]]) {
                 
-                if ([((NSString *)image) YLT_CheckString]) {
+                if ([((NSString *)image) YLT_CheckURL]) {
                     [self setImageWithURL:[NSURL URLWithString:(NSString *)image]];
                 }
                 else {
