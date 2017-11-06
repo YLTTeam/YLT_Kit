@@ -51,5 +51,20 @@
     return result;
 }
 
+/**
+ 绘制圆角图片
+ 
+ @return 圆角图片
+ */
+- (UIImage *)YLT_DrawCircleImage {
+    CGRect bounds = CGRectMake(0, 0, self.size.width, self.size.height);
+    UIGraphicsBeginImageContextWithOptions(bounds.size, NO, [UIScreen mainScreen].scale);
+    [[UIBezierPath bezierPathWithArcCenter:CGPointMake(self.size.width/2., self.size.height/2.) radius:(self.size.width>=self.size.height)?self.size.height/2.:self.size.width/2. startAngle:0 endAngle:M_PI*2. clockwise:YES] addClip];
+    [self drawInRect:bounds];
+    UIImage *output = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return output;
+}
+
 
 @end

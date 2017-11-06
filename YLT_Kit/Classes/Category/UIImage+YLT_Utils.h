@@ -17,4 +17,11 @@
  */
 + (UIImage *)YLT_ImageNamed:(NSString *)imageName;
 
+/**
+ 绘制圆角图片
+
+ @return 圆角图片
+ */
+- (UIImage *)YLT_DrawCircleImage;
+
 @end

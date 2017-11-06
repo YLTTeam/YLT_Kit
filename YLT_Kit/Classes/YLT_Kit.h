@@ -21,5 +21,6 @@
 #import "Gesonry.h"
 #import "YLT_TableRowModel.h"
 #import "YLT_TableSectionModel.h"
+#import "UIImage+YLT_Utils.h"
 
 #endif /* YLT_Kit_h */
