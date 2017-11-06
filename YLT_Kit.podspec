@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YLT_Kit'
-  s.version          = '0.0.6'
+  s.version          = '0.0.7'
   s.summary          = 'YLT_Kit. 基础的kit框架'
 
   s.description      = <<-DESC
@@ -21,5 +21,6 @@ Pod::Spec.new do |s|
   s.dependency 'ReactiveObjC', '~> 3.0.0'
   s.dependency 'Masonry'
   s.dependency 'YLT_BaseLib'
+  s.dependency 'SDWebImage'
 
 end

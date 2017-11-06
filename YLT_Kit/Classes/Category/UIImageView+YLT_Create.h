@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Masonry/Masonry.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface UIImageView (YLT_Create)
 
@@ -14,6 +15,16 @@
  设置image
  */
 - (UIImageView *(^)(id image))YLT_Image;
+
+/**
+ 圆形图片
+ */
+- (UIImageView *(^)(id image))YLT_CirleImage;
+
+/**
+ 圆角图片
+ */
+- (UIImageView *(^)(id image, CGFloat radius))YLT_RectImage;
 /**
  设置显示方式
  */

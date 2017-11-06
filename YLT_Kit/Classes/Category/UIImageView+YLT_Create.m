@@ -38,6 +38,65 @@
         return self;
     };
 }
+
+/**
+ 圆形图片
+ */
+- (UIImageView *(^)(id image))YLT_CirleImage {
+    return ^id(id image) {
+        if ([self isKindOfClass:[UIImageView class]]) {
+            if ([image isKindOfClass:[UIImage class]]) {
+                [self setImage:[image YLT_DrawCircleImage]];
+            }
+            else if ([image isKindOfClass:[NSURL class]]) {
+                [self sd_setImageWithURL:(NSURL *)image completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                    [self setImage:[image YLT_DrawCircleImage]];
+                }];
+            }
+            else if ([image isKindOfClass:[NSString class]]) {
+                if ([((NSString *)image) YLT_CheckURL]) {
+                    [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                        [self setImage:[image YLT_DrawCircleImage]];
+                    }];
+                }
+                else {
+                    [self setImage:[[UIImage YLT_ImageNamed:(NSString *)image] YLT_DrawCircleImage]];
+                }
+            }
+        }
+        return self;
+    };
+}
+
+/**
+ 圆角图片
+ */
+- (UIImageView *(^)(id image, CGFloat radius))YLT_RectImage {
+    return ^id(id image, CGFloat radius) {
+        if ([self isKindOfClass:[UIImageView class]]) {
+            if ([image isKindOfClass:[UIImage class]]) {
+                [self setImage:[image YLT_DrawRectImage:radius]];
+            }
+            else if ([image isKindOfClass:[NSURL class]]) {
+                [self sd_setImageWithURL:(NSURL *)image completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                    [self setImage:[image YLT_DrawRectImage:radius]];
+                }];
+            }
+            else if ([image isKindOfClass:[NSString class]]) {
+                if ([((NSString *)image) YLT_CheckURL]) {
+                    [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                        [self setImage:[image YLT_DrawRectImage:radius]];
+                    }];
+                }
+                else {
+                    [self setImage:[[UIImage YLT_ImageNamed:(NSString *)image] YLT_DrawRectImage:radius]];
+                }
+            }
+        }
+        return self;
+    };
+}
+
 /**
  设置显示方式
  */

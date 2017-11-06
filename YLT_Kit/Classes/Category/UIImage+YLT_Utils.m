@@ -66,5 +66,21 @@
     return output;
 }
 
+/**
+ 绘制圆角
+ 
+ @param radius 圆角
+ @return 圆角图
+ */
+- (UIImage *)YLT_DrawRectImage:(CGFloat)radius {
+    CGRect bounds = CGRectMake(0, 0, self.size.width, self.size.height);
+    UIGraphicsBeginImageContextWithOptions(bounds.size, NO, [UIScreen mainScreen].scale);
+    [[UIBezierPath bezierPathWithRoundedRect:bounds cornerRadius:radius] addClip];
+    [self drawInRect:bounds];
+    UIImage *output = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return output;
+}
+
 
 @end

@@ -20,8 +20,16 @@
 /**
  绘制圆角图片
 
- @return 圆角图片
+ @return 圆形图片
  */
 - (UIImage *)YLT_DrawCircleImage;
+
+/**
+ 绘制圆角
+
+ @param radius 圆角
+ @return 圆角图
+ */
+- (UIImage *)YLT_DrawRectImage:(CGFloat)radius;
 
 @end
