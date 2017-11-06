@@ -19,9 +19,12 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor redColor];
+//    UIImageView.YLT_Layout(self.view, ^(MASConstraintMaker *make) {
+//        make.edges.equalTo(self.view);
+//    }).YLT_ConvertToImageView().YLT_Image([UIImage YLT_ImageNamed:@"bg"]).YLT_ContentMode(UIViewContentModeScaleAspectFit);
     UIImageView.YLT_Layout(self.view, ^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
-    }).YLT_ConvertToImageView().YLT_Image([[UIImage YLT_ImageNamed:@"bg"] YLT_DrawCircleImage]);
+    }).YLT_ConvertToImageView().YLT_Image([[UIImage YLT_ImageNamed:@"bg"] YLT_DrawCircleImage]).YLT_ContentMode(UIViewContentModeScaleAspectFit);
 }
 
 - (void)didReceiveMemoryWarning

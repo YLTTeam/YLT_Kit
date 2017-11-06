@@ -61,10 +61,14 @@
  @return 圆角图片
  */
 - (UIImage *)YLT_DrawCircleImage {
-    CGRect bounds = CGRectMake(0, 0, self.size.width, self.size.height);
+    CGFloat x = (self.size.width>self.size.height)?(self.size.width-self.size.height)/2.:0;
+    CGFloat y = (self.size.width>self.size.height)?0:(self.size.height-self.size.width)/2.;
+    CGFloat width = (self.size.width>self.size.height)?self.size.height:self.size.width;
+    CGRect bounds = CGRectMake(0, 0, width, width);
+    
     UIGraphicsBeginImageContextWithOptions(bounds.size, NO, [UIScreen mainScreen].scale);
-    [[UIBezierPath bezierPathWithArcCenter:CGPointMake(self.size.width/2., self.size.height/2.) radius:(self.size.width>=self.size.height)?self.size.height/2.:self.size.width/2. startAngle:0 endAngle:M_PI*2. clockwise:YES] addClip];
-    [self drawInRect:bounds];
+    [[UIBezierPath bezierPathWithArcCenter:CGPointMake(width/2., width/2.) radius:width/2. startAngle:0 endAngle:M_PI*2. clockwise:YES] addClip];
+    [self drawInRect:CGRectMake(-x, -y, self.size.width, self.size.height)];
     UIImage *output = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return output;
