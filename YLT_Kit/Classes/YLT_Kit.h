@@ -22,5 +22,6 @@
 #import "YLT_TableRowModel.h"
 #import "YLT_TableSectionModel.h"
 #import "UIImage+YLT_Utils.h"
+#import "YLT_VerticalFlowLayout.h"
 
 #endif /* YLT_Kit_h */
