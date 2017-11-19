@@ -49,6 +49,10 @@
     }
 }
 
+- (void)dealloc {
+    YLT_LogWarn(@"dealloc");
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
