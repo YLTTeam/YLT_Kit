@@ -5,9 +5,21 @@
 //  Created by YLT_Alex on 2017/11/9.
 //
 
-#import "YLT_VerticalFlowLayout.h"
+#import "YLT_HorizontalFlowLayout.h"
 
-@implementation YLT_VerticalFlowLayout
+@implementation YLT_HorizontalFlowLayoutModel
+
++ (YLT_HorizontalFlowLayoutModel *)modelWithPreRow:(NSUInteger)countPreRow row:(NSInteger)row {
+    YLT_HorizontalFlowLayoutModel *model = [[YLT_HorizontalFlowLayoutModel alloc] init];
+    model.countPreRow = countPreRow;
+    model.row = row;
+    return model;
+}
+
+@end
+
+
+@implementation YLT_HorizontalFlowLayout
 
 - (instancetype)init
 {
@@ -43,9 +55,7 @@
     
 }
 
-- (CGSize)collectionViewContentSize
-{
-    
+- (CGSize)collectionViewContentSize {
     //每个section的页码的总数
     NSInteger actualLo = 0;
     for (NSString *key in [_sectionDic allKeys]) {
@@ -63,6 +73,9 @@
     {
         return;
     }
+    //    if (attributes.indexPath.row==20) {
+    //        self.itemSize = CGSizeMake(200, 200);
+    //    }
     
     //collectionView 的宽度
     CGFloat width = self.collectionView.frame.size.width;
@@ -82,10 +95,17 @@
     
     CGFloat offset = section * stride;
     
+    CGFloat cellwidth = self.itemSize.width;
+    CGFloat cellheight = self.itemSize.height;
+    
+    if (_sectionConfigs.count != 0 && _sectionConfigs.count > attributes.indexPath.section) {
+        cellwidth = width/((CGFloat)_sectionConfigs[attributes.indexPath.section].countPreRow);
+        cellheight = height/((CGFloat)_sectionConfigs[attributes.indexPath.section].row);
+    }
     //计算x方向item个数
-    NSInteger xCount = (width / self.itemSize.width);
+    NSInteger xCount = (width / cellwidth);
     //计算y方向item个数
-    NSInteger yCount = (height / self.itemSize.height);
+    NSInteger yCount = (height / cellheight);
     //计算一页总个数
     NSInteger allCount = (xCount * yCount);
     //获取每个section的页数，从0开始
@@ -99,14 +119,15 @@
     
     
     //x方向每个item的偏移量
-    CGFloat xCellOffset = remain * self.itemSize.width;
+    CGFloat xCellOffset = remain * cellwidth;
     //y方向每个item的偏移量
-    CGFloat yCellOffset = merchant * self.itemSize.height;
+    CGFloat yCellOffset = merchant * cellheight;
     
     //获取每个section中item占了几页
     NSInteger pageRe = (itemCount % allCount == 0)? (itemCount / allCount) : (itemCount / allCount) + 1;
     //将每个section与pageRe对应，计算下面的位置
     [_sectionDic setValue:@(pageRe) forKey:[NSString stringWithFormat:@"%ld", section]];
+    
     
     if(self.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
         
@@ -124,7 +145,7 @@
         yCellOffset += offset;
     }
     
-    attributes.frame = CGRectMake(xCellOffset, yCellOffset, self.itemSize.width, self.itemSize.height);
+    attributes.frame = CGRectMake(xCellOffset, yCellOffset, cellwidth, cellheight);
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -141,3 +162,4 @@
     return self.allAttributes;
 }
 @end
+
