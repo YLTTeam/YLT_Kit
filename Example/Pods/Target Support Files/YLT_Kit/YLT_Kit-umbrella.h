@@ -19,6 +19,8 @@
 #import "UITableView+YLT_Create.h"
 #import "UITableViewCell+YLT_Create.h"
 #import "UITextField+YLT_Create.h"
+#import "UITextField+YLT_Utils.h"
+#import "UITextView+YLT_Utils.h"
 #import "UIView+GESAdditions.h"
 #import "UIView+YLT_Create.h"
 #import "YLT_HorizontalFlowLayout.h"

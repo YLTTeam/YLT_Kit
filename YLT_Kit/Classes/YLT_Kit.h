@@ -23,5 +23,7 @@
 #import "YLT_TableSectionModel.h"
 #import "UIImage+YLT_Utils.h"
 #import "YLT_HorizontalFlowLayout.h"
+#import "UITextField+YLT_Utils.h"
+#import "UITextView+YLT_Utils.h"
 
 #endif /* YLT_Kit_h */
