@@ -55,12 +55,14 @@
             }
             else if ([image isKindOfClass:[NSURL class]]) {
                 [self sd_setImageWithURL:(NSURL *)image completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                    @strongify(self);
                     [self setImage:[image YLT_DrawCircleImage]];
                 }];
             }
             else if ([image isKindOfClass:[NSString class]]) {
                 if ([((NSString *)image) YLT_CheckURL]) {
                     [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                        @strongify(self);
                         [self setImage:[image YLT_DrawCircleImage]];
                     }];
                 }
