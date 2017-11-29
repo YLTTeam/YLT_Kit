@@ -10,6 +10,7 @@
 #import <YLT_BaseLib/YLT_BaseLib.h>
 #import "UIImage+YLT_Utils.h"
 #import "UIView+YLT_Create.h"
+#import <ReactiveObjC/ReactiveObjC.h>
 
 @implementation UIImageView (YLT_Create)
 
@@ -17,7 +18,9 @@
  设置image
  */
 - (UIImageView *(^)(id))YLT_Image {
+    @weakify(self);
     return ^id(id image) {
+        @strongify(self);
         if ([self isKindOfClass:[UIImageView class]]) {
             if ([image isKindOfClass:[UIImage class]]) {
                 [self setImage:image];
@@ -43,7 +46,9 @@
  圆形图片
  */
 - (UIImageView *(^)(id image))YLT_CirleImage {
+    @weakify(self);
     return ^id(id image) {
+        @strongify(self);
         if ([self isKindOfClass:[UIImageView class]]) {
             if ([image isKindOfClass:[UIImage class]]) {
                 [self setImage:[image YLT_DrawCircleImage]];
@@ -72,7 +77,9 @@
  圆角图片
  */
 - (UIImageView *(^)(id image, CGFloat radius))YLT_RectImage {
+    @weakify(self);
     return ^id(id image, CGFloat radius) {
+        @strongify(self);
         if ([self isKindOfClass:[UIImageView class]]) {
             if ([image isKindOfClass:[UIImage class]]) {
                 [self setImage:[image YLT_DrawRectImage:radius]];
@@ -101,7 +108,9 @@
  设置显示方式
  */
 - (UIImageView *(^)(UIViewContentMode contentMode))YLT_ContentMode {
+    @weakify(self);
     return ^id(UIViewContentMode contentMode) {
+        @strongify(self);
         self.contentMode = contentMode;
         return self;
     };

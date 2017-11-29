@@ -7,6 +7,7 @@
 //
 
 #import "YLT_TableSectionModel.h"
+#import <ReactiveObjC/ReactiveObjC.h>
 
 @implementation YLT_TableSectionModel
 
@@ -14,7 +15,9 @@
  创建SectionData
  */
 + (YLT_TableSectionModel *(^)(NSArray *list))ph_sectionData {
+    @weakify(self);
     return ^id(NSArray *list) {
+        @strongify(self);
         YLT_TableSectionModel *result = [[YLT_TableSectionModel alloc] init];
         result.sectionData = list;
         return result;
@@ -25,7 +28,9 @@
  sectionHeader 高度
  */
 - (YLT_TableSectionModel *(^)(CGFloat headerHeight, UIView *header))ph_sectionHeaderView {
+    @weakify(self);
     return ^id(CGFloat headerHeight, UIView *header) {
+        @strongify(self);
         self.sectionHeaderHeight = headerHeight;
         self.sectionHeaderView = header;
         self.sectionHeaderTitle = @"";
@@ -37,7 +42,9 @@
  sectionHeader 高度
  */
 - (YLT_TableSectionModel *(^)(CGFloat headerHeight, NSString *headerTitle))ph_sectionHeaderTitle {
+    @weakify(self);
     return ^id(CGFloat headerHeight, NSString *headerTitle) {
+        @strongify(self);
         self.sectionHeaderHeight = headerHeight;
         self.sectionHeaderTitle = headerTitle;
         self.sectionHeaderView = nil;
@@ -49,7 +56,9 @@
  sectionHeader 高度
  */
 - (YLT_TableSectionModel *(^)(CGFloat footerHeight, UIView *footer))ph_sectionFooterView {
+    @weakify(self);
     return ^id(CGFloat footerHeight, UIView *footer) {
+        @strongify(self);
         self.sectionFooterHeight = footerHeight;
         self.sectionFooterView = footer;
         self.sectionFooterTitle = @"";
@@ -61,7 +70,9 @@
  sectionHeader 高度
  */
 - (YLT_TableSectionModel *(^)(CGFloat footerHeight, NSString *footerTitle))ph_sectionFooterTitle {
+    @weakify(self);
     return ^id(CGFloat footerHeight, NSString *footerTitle) {
+        @strongify(self);
         self.sectionFooterHeight = footerHeight;
         self.sectionFooterTitle = footerTitle;
         self.sectionFooterView = nil;
@@ -73,7 +84,9 @@
  cell配置
  */
 - (YLT_TableSectionModel *(^)(CGFloat rowHeight, Class cellClass))ph_cell {
+    @weakify(self);
     return ^id(CGFloat rowHeight, Class cellClass) {
+        @strongify(self);
         self.rowHeight = rowHeight;
         self.cellClass = cellClass;
         return self;

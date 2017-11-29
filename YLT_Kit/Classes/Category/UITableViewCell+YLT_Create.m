@@ -11,6 +11,7 @@
 #import "UIImage+YLT_Utils.h"
 #import "UIImageView+YLT_Create.h"
 #import "UILabel+YLT_Create.h"
+#import <ReactiveObjC/ReactiveObjC.h>
 
 @implementation UITableViewCell (YLT_Create)
 
@@ -47,7 +48,9 @@
  绑定数据
  */
 - (UITableViewCell *(^)(NSIndexPath *indexPath, id bindData))YLT_CellBindData {
+    @weakify(self);
     return ^id(NSIndexPath *indexPath, id bindData) {
+        @strongify(self);
         self.cellData = bindData;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
@@ -62,7 +65,9 @@
  处理UI
  */
 - (UITableViewCell *(^)(void))YLT_CellConfigUI {
+    @weakify(self);
     return ^id() {
+        @strongify(self);
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
         if ([self respondsToSelector:@selector(YLT_configUI)]) {
@@ -77,7 +82,9 @@
  accessory type
  */
 - (UITableViewCell *(^)(UITableViewCellAccessoryType accessoryType))YLT_AccessoryType {
+    @weakify(self);
     return ^id(UITableViewCellAccessoryType accessoryType) {
+        @strongify(self);
         self.accessoryType = accessoryType;
         return self;
     };
@@ -86,7 +93,9 @@
  左边image
  */
 - (UITableViewCell *(^)(id leftImg))YLT_LeftImage {
+    @weakify(self);
     return ^id(id leftImg) {
+        @strongify(self);
         self.imageView.YLT_Image(leftImg);
         return self;
     };
@@ -95,7 +104,9 @@
  左边标题
  */
 - (UITableViewCell *(^)(NSString *title))YLT_Title {
+    @weakify(self);
     return ^id(NSString *title) {
+        @strongify(self);
         self.textLabel.YLT_Text(title);
         return self;
     };
@@ -104,7 +115,9 @@
  详细标题
  */
 - (UITableViewCell *(^)(NSString *subTitle))YLT_SubTitle {
+    @weakify(self);
     return ^id(NSString *subTitle) {
+        @strongify(self);
         self.detailTextLabel.YLT_Text(subTitle);
         return self;
     };

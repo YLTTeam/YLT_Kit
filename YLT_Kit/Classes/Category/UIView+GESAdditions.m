@@ -7,11 +7,14 @@
 //
 
 #import "UIView+GESAdditions.h"
+#import <ReactiveObjC/ReactiveObjC.h>
 
 @implementation UIView (GESAdditions)
 
 - (id(^)(id,SEL))ges_add:(Class)cls {
+    @weakify(self);
     return ^(id target,SEL action) {
+        @strongify(self);
         id gesture = [[cls alloc] initWithTarget:target action:action];
         [self addGestureRecognizer:gesture];
         self.userInteractionEnabled = YES;
@@ -20,7 +23,9 @@
 }
 
 - (void (^)(id))ges_remove {
+    @weakify(self);
     return ^(id obj) {
+        @strongify(self);
         if ([obj isKindOfClass:[UIGestureRecognizer class]]) {
             //通过实例移除手势
             [self removeGestureRecognizer:obj];
@@ -36,7 +41,9 @@
 }
 
 - (void (^)(void))ges_removeAll {
+    @weakify(self);
     return ^() {
+        @strongify(self);
         for (UIGestureRecognizer *ges in self.gestureRecognizers) {
             [self removeGestureRecognizer:ges];
         }

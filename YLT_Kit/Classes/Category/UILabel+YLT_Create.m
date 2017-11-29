@@ -7,6 +7,7 @@
 
 #import "UILabel+YLT_Create.h"
 #import "UIView+YLT_Create.h"
+#import <ReactiveObjC/ReactiveObjC.h>
 
 @implementation UILabel (YLT_Create)
 
@@ -14,7 +15,9 @@
  文字
  */
 - (UILabel *(^)(NSString *text))YLT_Text {
+    @weakify(self);
     return ^id(NSString *text) {
+        @strongify(self);
         self.text = text;
         return self;
     };
@@ -23,7 +26,9 @@
  文字颜色
  */
 - (UILabel *(^)(UIColor *textColor))YLT_TextColor {
+    @weakify(self);
     return ^id(UIColor *textColor) {
+        @strongify(self);
         self.textColor = textColor;
         return self;
     };
@@ -32,7 +37,9 @@
  字体
  */
 - (UILabel *(^)(UIFont *font))YLT_Font {
+    @weakify(self);
     return ^id(UIFont *font) {
+        @strongify(self);
         self.font = font;
         return self;
     };
@@ -41,7 +48,9 @@
  设置字号大小
  */
 - (UILabel *(^)(CGFloat fontSize))YLT_FontSize {
+    @weakify(self);
     return ^id(CGFloat fontSize) {
+        @strongify(self);
         self.font = [UIFont systemFontOfSize:fontSize];
         return self;
     };
@@ -51,7 +60,9 @@
  文字的对齐方式 默认左对齐
  */
 - (UILabel *(^)(NSTextAlignment alignment))YLT_TextAlignment {
+    @weakify(self);
     return ^id(NSTextAlignment alignment) {
+        @strongify(self);
         self.textAlignment = alignment;
         return self;
     };
@@ -60,7 +71,9 @@
  文字的行数 默认为1
  */
 - (UILabel *(^)(NSUInteger lineNum))YLT_LineNum {
+    @weakify(self);
     return ^id(NSUInteger lineNum) {
+        @strongify(self);
         self.numberOfLines = lineNum;
         return self;
     };

@@ -20,7 +20,9 @@
  普通image
  */
 - (UIButton *(^)(id img))YLT_NormarlImage {
+    @weakify(self);
     return ^id(id image) {
+        @strongify(self);
         return self.YLT_StateImage(image, UIControlStateNormal);
     };
 }
@@ -28,7 +30,9 @@
  普通title
  */
 - (UIButton *(^)(NSString *title))YLT_NormalTitle {
+    @weakify(self);
     return ^id(NSString *title) {
+        @strongify(self);
         return self.YLT_StateTitle(title, UIControlStateNormal);
     };
 }
@@ -36,7 +40,9 @@
  普通Color
  */
 - (UIButton *(^)(UIColor *color))YLT_NormalColor {
+    @weakify(self);
     return ^id(UIColor *color) {
+        @strongify(self);
         return self.YLT_StateColor(color, UIControlStateNormal);
     };
 }
@@ -44,7 +50,9 @@
  普通字号
  */
 - (UIButton *(^)(CGFloat fontSize))YLT_FontSize {
+    @weakify(self);
     return ^id(CGFloat fontSize) {
+        @strongify(self);
         self.titleLabel.font = [UIFont systemFontOfSize:fontSize];
         return self;
     };
@@ -53,7 +61,9 @@
  选中image
  */
 - (UIButton *(^)(id img))YLT_SelectedImage {
+    @weakify(self);
     return ^id(id img) {
+        @strongify(self);
         return self.YLT_StateImage(img, UIControlStateSelected);
     };
 }
@@ -61,7 +71,9 @@
  选中title
  */
 - (UIButton *(^)(NSString *title))YLT_SelectedTitle {
+    @weakify(self);
     return ^id(NSString *title) {
+        @strongify(self);
         return self.YLT_StateTitle(title, UIControlStateSelected);
     };
 }
@@ -69,7 +81,9 @@
  选中Color
  */
 - (UIButton *(^)(UIColor *color))YLT_SelectedColor {
+    @weakify(self);
     return ^id(UIColor *color) {
+        @strongify(self);
         return self.YLT_StateColor(color, UIControlStateSelected);
     };
 }
@@ -77,7 +91,9 @@
  高亮image
  */
 - (UIButton *(^)(id img, UIControlState state))YLT_StateImage {
+    @weakify(self);
     return ^id(id img, UIControlState state) {
+        @strongify(self);
         if ([self isKindOfClass:[UIButton class]]) {
             if ([img isKindOfClass:[UIImage class]]) {
                 [self setImage:img forState:state];
@@ -103,7 +119,9 @@
  高亮title
  */
 - (UIButton *(^)(NSString *title, UIControlState state))YLT_StateTitle {
+    @weakify(self);
     return ^id(NSString *title, UIControlState state) {
+        @strongify(self);
         if ([self isKindOfClass:[UIButton class]]) {
             [self setTitle:title forState:state];
         }
@@ -114,7 +132,9 @@
  高亮Color
  */
 - (UIButton *(^)(UIColor *color, UIControlState state))YLT_StateColor {
+    @weakify(self);
     return ^id(UIColor *color, UIControlState state) {
+        @strongify(self);
         if ([self isKindOfClass:[UIButton class]]) {
             [self setTitleColor:color forState:state];
         }
@@ -126,7 +146,9 @@
  设置按钮的状态
  */
 - (UIButton *(^)(UIControlState state))YLT_State {
+    @weakify(self);
     return ^id(UIControlState state) {
+        @strongify(self);
         switch (state) {
             case UIControlStateHighlighted: self.highlighted = YES; break;
             case UIControlStateDisabled: self.enabled = YES; break;
@@ -142,7 +164,9 @@
  布局
  */
 - (UIButton *(^)(YLT_ButtonLayout layout))YLT_Layout {
+    @weakify(self);
     return ^id(YLT_ButtonLayout layout) {
+        @strongify(self);
         [self layoutIfNeeded];
         switch (layout) {
             case YLT_ButtonLayoutImageAtLeft: {
@@ -175,7 +199,9 @@
  点击按钮的事件
  */
 - (UIButton *(^)(void(^)(UIButton *response)))YLT_ButtonClickBlock {
+    @weakify(self);
     return ^id(void(^clickBlock)(UIButton *response)) {
+        @strongify(self);
         [[self rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
             if (clickBlock) {
                 clickBlock(x);

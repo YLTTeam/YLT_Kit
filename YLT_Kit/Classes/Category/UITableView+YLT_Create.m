@@ -9,6 +9,7 @@
 #import <objc/message.h>
 #import <YLT_BaseLib/YLT_BaseLib.h>
 #import "UITableViewCell+YLT_Create.h"
+#import <ReactiveObjC/ReactiveObjC.h>
 
 @interface UITableView (YLT_Data)
 
@@ -210,7 +211,9 @@
 @implementation UITableView (YLT_Create)
 
 + (UITableView *(^)(void))YLT_Create {
+    @weakify(self);
     return ^id() {
+        @strongify(self);
         UITableView *result = [[[self class] alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         result.rowHeight = 44.;
         [result YLT_delegate];
@@ -221,7 +224,9 @@
  列表类别
  */
 + (UITableView *(^)(UIView *superView, void(^layout)(MASConstraintMaker *make), UITableViewStyle style))YLT_Layout {
+    @weakify(self);
     return ^id(UIView *superView, void(^layout)(MASConstraintMaker *make), UITableViewStyle style) {
+        @strongify(self);
         UITableView *result = [[[self class] alloc] initWithFrame:CGRectZero style:style];
         result.rowHeight = 44.;
         [result YLT_delegate];
@@ -242,7 +247,9 @@
  视图的创建frame
  */
 + (UITableView *(^)(UIView *superView, CGRect frame, UITableViewStyle style))YLT_Frame {
+    @weakify(self);
     return ^id(UIView *superView, CGRect frame, UITableViewStyle style) {
+        @strongify(self);
         UITableView *result = [[[self class] alloc] initWithFrame:frame style:style];
         [result YLT_delegate];
         if (superView) {
@@ -256,7 +263,9 @@
  header高度
  */
 - (UITableView *(^)(UIView *headerView))YLT_TableHeader {
+    @weakify(self);
     return ^id(UIView *headerView) {
+        @strongify(self);
         self.tableHeaderView = headerView;
         return self;
     };
@@ -265,7 +274,9 @@
  footer高度
  */
 - (UITableView *(^)(UIView *footerView))YLT_TableFooter {
+    @weakify(self);
     return ^id(UIView *footerView) {
+        @strongify(self);
         self.tableFooterView = footerView;
         return self;
     };
@@ -274,7 +285,9 @@
  列表数据
  */
 - (UITableView *(^)(NSArray<YLT_TableSectionModel *> *list))YLT_TableData {
+    @weakify(self);
     return ^id(NSArray<YLT_TableSectionModel *> *list) {
+        @strongify(self);
         self.tableData = list;
         [self reloadData];
         return self;
@@ -284,7 +297,9 @@
  cell配置
  */
 - (UITableView *(^)(CGFloat rowHeight, Class cellClass))YLT_Cell {
+    @weakify(self);
     return ^id(CGFloat rowHeight, Class cellClass) {
+        @strongify(self);
         self.rowHeight = rowHeight;
         self.cellClass = cellClass;
         return self;
@@ -295,7 +310,9 @@
  单击Cell回调
  */
 - (UITableView *(^)(void(^)(UITableViewCell *cell, NSIndexPath *indexPath, id response)))YLT_CellClick {
+    @weakify(self);
     return ^id(void(^cellActionBlock)(UITableViewCell *cell, NSIndexPath *indexPath, id response)) {
+        @strongify(self);
         self.cellBlock = cellActionBlock;
         return self;
     };
@@ -305,7 +322,9 @@
  刷新列表
  */
 - (UITableView *(^)(void))YLT_ReloadData {
+    @weakify(self);
     return ^id() {
+        @strongify(self);
         [self reloadData];
         return self;
     };
@@ -316,7 +335,9 @@
  header高度
  */
 - (UITableView *(^)(CGFloat headerHeight, UIView *headerView))YLT_SectionHeader {
+    @weakify(self);
     return ^id(CGFloat headerHeight, UIView *headerView) {
+        @strongify(self);
         return self;
     };
 }
@@ -324,7 +345,9 @@
  footer高度
  */
 - (UITableView *(^)(CGFloat footerHeight, UIView *footerView))YLT_SectionFooter {
+    @weakify(self);
     return ^id(CGFloat footerHeight, UIView *footerView) {
+        @strongify(self);
         return self;
     };
 }

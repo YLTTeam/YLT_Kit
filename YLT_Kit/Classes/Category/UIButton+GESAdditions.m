@@ -7,11 +7,14 @@
 //
 
 #import "UIButton+GESAdditions.h"
+#import <ReactiveObjC/ReactiveObjC.h>
 
 @implementation UIButton (GESAdditions)
 
 - (void (^)(id, SEL, UIControlEvents))ges_addAction {
+    @weakify(self);
     return ^(id target,SEL action,UIControlEvents controlEvents) {
+        @strongify(self);
         [self addTarget:target action:action forControlEvents:controlEvents];
     };
 }
