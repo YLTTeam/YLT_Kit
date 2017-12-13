@@ -25,5 +25,6 @@
 #import "YLT_HorizontalFlowLayout.h"
 #import "UITextField+YLT_Utils.h"
 #import "UITextView+YLT_Utils.h"
+#import "UIImage+YLT_HSV.h"
 
 #endif /* YLT_Kit_h */
