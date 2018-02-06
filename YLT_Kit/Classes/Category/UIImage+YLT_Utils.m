@@ -9,6 +9,22 @@
 #import <YLT_BaseLib/YLT_BaseLib.h>
 
 @implementation UIImage (YLT_Utils)
+/**
+ 通过颜色获取纯色的图片
+ 
+ @param color 颜色
+ @return 图片
+ */
++ (UIImage *)YLT_ImageFromColor:(UIColor *)color {
+    CGRect rect=CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return theImage;
+}
 
 /**
  读取Image

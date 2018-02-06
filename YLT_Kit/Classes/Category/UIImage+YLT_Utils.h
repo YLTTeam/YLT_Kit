@@ -10,6 +10,13 @@
 @interface UIImage (YLT_Utils)
 
 /**
+ 通过颜色获取纯色的图片
+ 
+ @param color 颜色
+ @return 图片
+ */
++ (UIImage *)YLT_ImageFromColor:(UIColor *)color;
+/**
  读取Image
  
  @param imageName image的路径或名字
