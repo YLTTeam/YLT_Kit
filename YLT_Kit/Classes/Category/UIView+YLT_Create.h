@@ -60,10 +60,10 @@
  点击事件
  */
 - (UIView *(^)(void (^)(id response)))YLT_ClickBlock;
-/**
- 信号量
- */
-- (UIView *(^)(RACSignal *signal))YLT_Signal;
+///**
+// 信号量
+// */
+//- (UIView *(^)(RACSignal *signal))YLT_Signal;
 
 
 #pragma mark - type convert
