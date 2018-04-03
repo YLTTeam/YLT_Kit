@@ -40,20 +40,24 @@ YLT_ShareInstanceHeader(YLT_PhotoHelper);
 /**
  使用照相机
  
+ @param allowEdit 是否裁剪为正方形
  @param success 成功的回调
  @param failed 失败的回调
  */
-+ (void)YLT_PhotoFromCamera:(void(^)(NSDictionary *info))success
-                     failed:(void(^)(NSError *error))failed;
++ (void)YLT_PhotoFromCameraAllowEdit:(BOOL)allowEdit
+                             success:(void(^)(NSDictionary *info))success
+                              failed:(void(^)(NSError *error))failed;
 
 /**
  使用相册
  
+ @param allowEdit 是否裁剪为正方形
  @param success 成功的回调
  @param failed 失败的回调
  */
-+ (void)YLT_PhotoFromLibrary:(void(^)(NSDictionary *info))success
-                      failed:(void(^)(NSError *error))failed;
++ (void)YLT_PhotoFromLibraryAllowEdit:(BOOL)allowEdit
+                              success:(void(^)(NSDictionary *info))success
+                               failed:(void(^)(NSError *error))failed;
 
 /**
  获取系统相册

@@ -14,11 +14,20 @@
 #define iPhone [NSObject YLT_DeviceIsiPhone]
 
 //屏幕信息
-#define iPhone_3_5 ([UIScreen mainScreen].bounds.size.width==320&&[UIScreen mainScreen].bounds.size.height==480)
-#define iPhone_4 ([UIScreen mainScreen].bounds.size.width==320&&[UIScreen mainScreen].bounds.size.height==568)
-#define iPhone_4_7 ([UIScreen mainScreen].bounds.size.width==375&&[UIScreen mainScreen].bounds.size.height==667)
-#define iPhone_5_5 ([UIScreen mainScreen].bounds.size.width==414&&[UIScreen mainScreen].bounds.size.height==736)
-#define iPhone_x ([UIScreen mainScreen].bounds.size.width==375&&[UIScreen mainScreen].bounds.size.height==812)
+#define iPhone4 ([UIScreen mainScreen].bounds.size.width==320&&[UIScreen mainScreen].bounds.size.height==480)
+#define iPhone5 ([UIScreen mainScreen].bounds.size.width==320&&[UIScreen mainScreen].bounds.size.height==568)
+#define iPhone6 ([UIScreen mainScreen].bounds.size.width==375&&[UIScreen mainScreen].bounds.size.height==667)
+#define iPhone6P ([UIScreen mainScreen].bounds.size.width==414&&[UIScreen mainScreen].bounds.size.height==736)
+#define iPhoneX ([UIScreen mainScreen].bounds.size.width==375&&[UIScreen mainScreen].bounds.size.height==812)
+
+// 状态栏高度
+#define STATUS_BAR_HEIGHT (iPhoneX ? 44.f : 20.f)
+// 导航栏高度
+#define NAVIGATION_BAR_HEIGHT (iPhoneX ? 88.f : 64.f)
+// tabBar高度
+#define TAB_BAR_HEIGHT (iPhoneX ? (49.f + 34.f) : 49.f)
+// home indicator hone按钮高度
+#define HOME_INDICATOR_HEIGHT (iPhoneX ? 34.f : 0.f)
 
 // iOS系统信息
 #define YLT_iOS_VERSION [[UIDevice currentDevice] systemVersion]
@@ -58,7 +67,7 @@
 
 #if DEBUG
 //输出日志信息
-#define YLT_LogAll(type,format,...) NSLog(@"%@ %s+%d " format,type,__func__,__LINE__,##__VA_ARGS__)
+#define YLT_LogAll(type,format,...) NSLog(@"%@ %s %s+%d " format,type,__FILE__,__func__,__LINE__,##__VA_ARGS__)
 #define YLT_Log(format,...) YLT_LogAll(@"",format,##__VA_ARGS__)
 #define YLT_LogInfo(format,...) YLT_LogAll(@"",format,##__VA_ARGS__)
 #define YLT_LogWarn(format,...) YLT_LogAll(@"‼️",format,##__VA_ARGS__)
@@ -92,11 +101,11 @@
 //主bundle
 #define YLT_MainBundle [NSBundle mainBundle]
 
-#define YLT_WEAKSELF [self YLT_WeakSelf]
+#define YLT_WEAKSELF __weak typeof(self) weakSelf = self;
 
 //颜色宏定义
 #define YLT_RGBA(r,g,b,a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
-#define YLT_RGB(r,g,b) RGBA(r,g,b,1.0f)
+#define YLT_RGB(r,g,b) YLT_RGBA(r,g,b,1.0f)
 #define YLT_HEXCOLOR(hex) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:1]
 #define YLT_HEXCOLORA(hex, alpha) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:alpha]
 #define YLT_StringColor(color) [color YLT_ColorFromHexString]
@@ -145,6 +154,18 @@
                                         }\
                                         return result;\
                                     }
+
+/// main / background thead
+#define YLT_MAIN(block)  if ([NSThread isMainThread]) {\
+                            block();\
+                         } else {\
+                            dispatch_async(dispatch_get_main_queue(),block);\
+                         }
+#define YLT_MAINDelay(x, block) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(x * NSEC_PER_SEC)), dispatch_get_main_queue(), block)
+#define YLT_BACK(block)  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block)
+#define YLT_BACKDelay(x, block) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(x * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block)
+
+
 
 
 

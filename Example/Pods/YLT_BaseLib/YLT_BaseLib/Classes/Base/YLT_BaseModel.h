@@ -49,7 +49,6 @@
  */
 + (id)readForKey:(NSString *)key;
 
-
 /**
  读取数据到当前对象
 

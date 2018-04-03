@@ -41,64 +41,68 @@ YLT_ShareInstanceHeader(YLT_FileHelper);
  
  @param path 本地路径 存储到默认路径
  @param data 文件的data
+ @param callback 回调
  */
-+ (void)saveToPath:(NSString *)path file:(NSData *)data;
++ (void)saveToPath:(NSString *)path file:(NSData *)data callback:(void(^)(NSString *path))callback;
 
 /**
  存储图片到本地
  
  @param path 本地路径 存储到默认路径
  @param image 图片
+ @param callback 回调
  */
-+ (void)saveToPath:(NSString *)path image:(UIImage *)image;
++ (void)saveToPath:(NSString *)path image:(UIImage *)image callback:(void(^)(NSString *path))callback;
 
 /**
  存储文件到本地
  
  @param filename 本地路径 存储到默认路径
  @param data 文件的data
+ @param callback 回调
  */
-+ (void)saveWithFileName:(NSString *)filename file:(NSData *)data;
++ (void)saveWithFileName:(NSString *)filename file:(NSData *)data callback:(void(^)(NSString *path))callback;
 
 /**
  存储图片到本地
  
  @param filename 本地路径 存储到默认路径
  @param image 图片
+ @param callback 回调
  */
-+ (void)saveWithFilename:(NSString *)filename image:(UIImage *)image;
++ (void)saveWithFilename:(NSString *)filename image:(UIImage *)image callback:(void(^)(NSString *path))callback;
 
 /**
  从默认路径中读取图片
  
  @param filename 图片名
- @return 图片
+ @param callback 回调
  */
-+ (UIImage *)readImageWithFilename:(NSString *)filename;
++ (void)readImageWithFilename:(NSString *)filename callback:(void(^)(UIImage *result))callback;
 
 /**
  从默认路径中读取文件
  
  @param filename 文件名
- @return 文件
+ @param callback 回调
  */
-+ (NSData *)readFileWithFilename:(NSString *)filename;
++ (void)readFileWithFilename:(NSString *)filename callback:(void(^)(NSData *result))callback;
 
 /**
  从Path中读取图片
  
  @param path 路径
- @return 图片
+ @param callback 回调
  */
-+ (UIImage *)readImageFromPath:(NSString *)path;
++ (void)readImageFromPath:(NSString *)path callback:(void(^)(UIImage *result))callback;
 
 /**
  从Path中读取文件
  
  @param path 路径
- @return 文件
+ @param callback 回调
  */
-+ (NSData *)readFileFromPath:(NSString *)path;
++ (void)readFileFromPath:(NSString *)path callback:(void(^)(NSData *result))callback;
 
 
 @end

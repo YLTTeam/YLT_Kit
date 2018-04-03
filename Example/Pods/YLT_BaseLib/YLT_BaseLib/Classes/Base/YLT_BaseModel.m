@@ -208,7 +208,6 @@
     return @[];
 }
 
-
 /**
  移除所有的当前Model的对象
  
@@ -221,7 +220,5 @@
     }
     return [[NSUserDefaults standardUserDefaults] synchronize];
 }
-
-
 
 @end

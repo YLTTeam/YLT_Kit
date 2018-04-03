@@ -54,7 +54,7 @@
 
 @end
 
-@interface UIViewController (ylt_BaseVC)<HookBaseVCProtocol>
+@interface UIViewController (YLT_BaseVC)<HookBaseVCProtocol>
 
 /**
  创建控制器

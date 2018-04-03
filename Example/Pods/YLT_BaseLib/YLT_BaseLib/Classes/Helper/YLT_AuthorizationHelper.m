@@ -6,6 +6,7 @@
 //
 
 #import "YLT_AuthorizationHelper.h"
+#import "YLT_BaseMacro.h"
 @import UIKit;
 @import Photos;
 @import AssetsLibrary;
@@ -21,10 +22,6 @@
 @import Intents;
 @import CoreBluetooth;
 @import Accounts;
-
-#define IOS8 ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 8.0)
-#define IOS9 ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 9.0)
-#define IOS10 ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 10.0)
 
 @interface YLT_AuthorizationHelper()<CLLocationManagerDelegate>{}
 
@@ -118,7 +115,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 #pragma mark - Photo Library
 - (void)YLT_PhotoLibraryAccessSuccess:(void(^)(void))success
                                failed:(void(^)(void))failed{
-    if (IOS8) {
+    if (iOS8Later) {
         //used `PHPhotoLibrary`
         PHAuthorizationStatus authStatus = [PHPhotoLibrary authorizationStatus];
         if (authStatus == PHAuthorizationStatusNotDetermined) {
@@ -230,7 +227,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 #pragma mark - AddressBook
 - (void)YLT_AddressBookAccessSuccess:(void(^)(void))success
                               failed:(void(^)(void))failed{
-    if (IOS9) {
+    if (iOS9Later) {
         
         CNAuthorizationStatus authStatus = [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts];
         if (authStatus == CNAuthorizationStatusNotDetermined) {
@@ -444,8 +441,8 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 #pragma mark - Siri
 - (void)YLT_SiriAccessSuccess:(void(^)(void))success
                        failed:(void(^)(void))failed{
-    if (!IOS10) {
-        NSAssert(IOS10, @"This method must used in iOS 10.0 or later/该方法必须在iOS10.0或以上版本使用");
+    if (!iOS10Later) {
+        NSAssert(iOS10Later, @"This method must used in iOS 10.0 or later/该方法必须在iOS10.0或以上版本使用");
         success = nil;
         failed = nil;
         return;

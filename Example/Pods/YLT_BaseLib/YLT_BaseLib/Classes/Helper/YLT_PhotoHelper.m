@@ -32,19 +32,21 @@ YLT_ShareInstance(YLT_PhotoHelper);
 
 - (void)YLT_init {
 }
-
 /**
  使用照相机
  
+ @param allowEdit 是否裁剪为正方形
  @param success 成功的回调
  @param failed 失败的回调
  */
-+ (void)YLT_PhotoFromCamera:(void(^)(NSDictionary *info))success
-                     failed:(void(^)(NSError *error))failed {
++ (void)YLT_PhotoFromCameraAllowEdit:(BOOL)allowEdit
+                             success:(void(^)(NSDictionary *info))success
+                              failed:(void(^)(NSError *error))failed {
     [YLT_PhotoHelper shareInstance].success = success;
     [YLT_PhotoHelper shareInstance].failed = failed;
     [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_Camera success:^{
         [YLT_PhotoHelper shareInstance].pickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [YLT_PhotoHelper shareInstance].pickerVC.allowsEditing = allowEdit;
         [[YLT_PhotoHelper shareInstance].YLT_CurrentVC presentViewController:[YLT_PhotoHelper shareInstance].pickerVC animated:YES completion:nil];
     } failed:^{
         NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:PHAuthorizationStatusDenied userInfo:@{NSLocalizedDescriptionKey:@"无权限访问"}];
@@ -53,18 +55,23 @@ YLT_ShareInstance(YLT_PhotoHelper);
     
 }
 
+;
+
 /**
  使用相册
  
+ @param allowEdit 是否裁剪为正方形
  @param success 成功的回调
  @param failed 失败的回调
  */
-+ (void)YLT_PhotoFromLibrary:(void(^)(NSDictionary *info))success
-                      failed:(void(^)(NSError *error))failed {
++ (void)YLT_PhotoFromLibraryAllowEdit:(BOOL)allowEdit
+                              success:(void(^)(NSDictionary *info))success
+                               failed:(void(^)(NSError *error))failed {
     [YLT_PhotoHelper shareInstance].success = success;
     [YLT_PhotoHelper shareInstance].failed = failed;
     [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_PhotoLibrary success:^{
         [YLT_PhotoHelper shareInstance].pickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [YLT_PhotoHelper shareInstance].pickerVC.allowsEditing = allowEdit;
         [[YLT_PhotoHelper shareInstance].YLT_CurrentVC presentViewController:[YLT_PhotoHelper shareInstance].pickerVC animated:YES completion:nil];
     } failed:^{
         NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:PHAuthorizationStatusDenied userInfo:@{NSLocalizedDescriptionKey:@"无权限访问"}];

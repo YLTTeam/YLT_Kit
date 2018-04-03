@@ -26,13 +26,19 @@
  @return 有效性 YES:有效 NO:无效
  */
 - (BOOL)YLT_CheckString {
-    if (self == nil || self == NULL) {
+    if (self == nil) {
         return NO;
-    }
-    if ([self isKindOfClass:[NSNull class]]) {
+    } else if (self == NULL) {
         return NO;
-    }
-    if ([[self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] == 0) {
+    } else if ([self isKindOfClass:[NSNull class]]) {
+        return NO;
+    } else if (![self isKindOfClass:[NSString class]]) {
+        return NO;
+    } else if ([[self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]==0) {
+        return NO;
+    } else if ([self isEqualToString:@"(null)"]) {
+        return NO;
+    } else if ([self isEqualToString:@""]) {
         return NO;
     }
     return YES;
@@ -90,7 +96,11 @@
 - (BOOL)YLT_CheckURL {
     NSString *pattern = @"^(http||https)://([\\w-]+\.)+[\\w-]+(/[\\w-./?%&=]*)?$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", pattern];
-    return [pred evaluateWithObject:self];
+    if ([pred evaluateWithObject:self]) {
+//        BOOL res = [[NSURL URLWithString:self] checkResourceIsReachableAndReturnError:nil];
+        return YES;
+    }
+    return NO;
 }
 
 /**
@@ -167,6 +177,27 @@
     [[NSScanner scannerWithString:aString] scanHexInt:&a];
     
     return [UIColor colorWithRed:((float) r / 255.0f) green:((float) g / 255.0f) blue:((float) b / 255.0f) alpha:((float) a / 255.0f)];
+}
+
+#pragma mark - Public method
+/**
+ 判断字符串是否为空
+ 
+ @param sender 目标字符串
+ @return YES:空 NO:非空
+ */
++ (BOOL)isBlankString:(NSString *)sender {
+    return !sender.YLT_CheckString;
+}
+
+/**
+ 字符串是否有效
+ 
+ @param sender 目标字符串
+ @return YES:有效 NO:无效
+ */
++ (BOOL)isValidString:(NSString *)sender {
+    return sender.YLT_CheckString;
 }
 
 @end

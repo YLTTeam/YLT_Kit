@@ -64,12 +64,5 @@
  */
 - (void)YLT_SwizzleSelectorInClass:(Class)theClass originalSel:(SEL)originalSel replaceSel:(SEL)replaceSel;
 
-/**
- 获取弱指针
-
- @return 当前对象
- */
-- (instancetype)YLT_WeakSelf;
-
 
 @end

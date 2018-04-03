@@ -68,10 +68,15 @@ YLT_ShareInstance(YLT_FileHelper);
     return [YLT_FileHelper createPath:basePath filename:filename];
 }
 
-+ (void)saveToPath:(NSString *)path file:(NSData *)data {
++ (void)saveToPath:(NSString *)path file:(NSData *)data callback:(void (^)(NSString *))callback {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         @try {
-            [data writeToFile:path atomically:YES];
+            BOOL result = [data writeToFile:path atomically:YES];
+            if (result) {
+                if (callback) {
+                    callback(path);
+                }
+            }
         } @catch (NSException *exception) {
             YLT_LogError(@"文件写入失败 %@", exception);
         } @finally {
@@ -79,38 +84,64 @@ YLT_ShareInstance(YLT_FileHelper);
     });
 }
 
-+ (void)saveToPath:(NSString *)path image:(UIImage *)image {
-    NSData *data = UIImageJPEGRepresentation(image, 0.95);
-    [YLT_FileHelper saveToPath:path file:data];
++ (void)saveToPath:(NSString *)path image:(UIImage *)image callback:(void (^)(NSString *))callback {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSData *data = UIImageJPEGRepresentation(image, 0.95);
+        [YLT_FileHelper saveToPath:path file:data callback:callback];
+    });
 }
 
-+ (void)saveWithFileName:(NSString *)filename file:(NSData *)data {
-    NSString *path = [YLT_FileHelper createPath:[YLT_FileHelper defaultFilePath] filename:filename];
-    [YLT_FileHelper saveWithFileName:path file:data];
++ (void)saveWithFileName:(NSString *)filename file:(NSData *)data callback:(void (^)(NSString *))callback {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSString *path = [YLT_FileHelper createPath:[YLT_FileHelper defaultFilePath] filename:filename];
+        [YLT_FileHelper saveWithFileName:path file:data callback:callback];
+    });
 }
 
-+ (void)saveWithFilename:(NSString *)filename image:(UIImage *)image {
-    NSString *path = [YLT_FileHelper createPath:[YLT_FileHelper defaultFilePath] filename:filename];
-    NSData *data = UIImageJPEGRepresentation(image, 0.95);
-    [YLT_FileHelper saveToPath:path file:data];
++ (void)saveWithFilename:(NSString *)filename image:(UIImage *)image callback:(void (^)(NSString *))callback {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSString *path = [YLT_FileHelper createPath:[YLT_FileHelper defaultFilePath] filename:filename];
+        NSData *data = UIImageJPEGRepresentation(image, 0.95);
+        [YLT_FileHelper saveToPath:path file:data callback:callback];
+    });
 }
 
-+ (UIImage *)readImageWithFilename:(NSString *)filename {
-    NSString *path = [YLT_FileHelper createPath:[YLT_FileHelper defaultFilePath] filename:filename];
-    return [UIImage imageWithData:[YLT_FileHelper readFileFromPath:path]];
++ (void)readImageWithFilename:(NSString *)filename callback:(void (^)(UIImage *))callback {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSString *path = [YLT_FileHelper createPath:[YLT_FileHelper defaultFilePath] filename:filename];
+        [self readImageFromPath:path callback:callback];
+    });
 }
 
-+ (NSData *)readFileWithFilename:(NSString *)filename {
-    NSString *path = [YLT_FileHelper createPath:[YLT_FileHelper defaultFilePath] filename:filename];
-    return [YLT_FileHelper readFileFromPath:path];
++ (void)readFileWithFilename:(NSString *)filename callback:(void (^)(NSData *))callback {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSString *path = [YLT_FileHelper createPath:[YLT_FileHelper defaultFilePath] filename:filename];
+        [self readFileFromPath:path callback:callback];
+    });
 }
 
-+ (UIImage *)readImageFromPath:(NSString *)path {
-    return [UIImage imageWithData:[YLT_FileHelper readFileFromPath:path]];
++ (void)readImageFromPath:(NSString *)path callback:(void (^)(UIImage *))callback {
+    [self readFileFromPath:path callback:^(NSData *result) {
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            UIImage *result = [UIImage imageWithData:result];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (callback) {
+                    callback(result);
+                }
+            });
+        });
+    }];
 }
 
-+ (NSData *)readFileFromPath:(NSString *)path {
-    return [NSData dataWithContentsOfFile:path];
++ (void)readFileFromPath:(NSString *)path callback:(void (^)(NSData *))callback {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSData *data = [NSData dataWithContentsOfFile:path];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (callback && data) {
+                callback(data);
+            }
+        });
+    });
 }
 
 @end

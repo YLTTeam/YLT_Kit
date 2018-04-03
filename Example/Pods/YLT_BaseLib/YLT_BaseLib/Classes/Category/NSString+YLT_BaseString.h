@@ -73,4 +73,20 @@
  */
 - (UIColor *)YLT_ColorFromHexString;
 
+/**
+ 判断字符串是否为空
+ 
+ @param sender 目标字符串
+ @return YES:空 NO:非空
+ */
++ (BOOL)isBlankString:(NSString *)sender;
+
+/**
+ 字符串是否有效
+ 
+ @param sender 目标字符串
+ @return YES:有效 NO:无效
+ */
++ (BOOL)isValidString:(NSString *)sender;
+
 @end

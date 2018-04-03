@@ -28,8 +28,8 @@
     })
     .YLT_ConvertToImageView()
     .YLT_Image([[UIImage YLT_ImageNamed:@"bg"] YLT_DrawCircleImage])
-    .YLT_ContentMode(UIViewContentModeScaleAspectFit)
-    .YLT_Signal(RACObserve(self, tag));
+    .YLT_ContentMode(UIViewContentModeScaleAspectFit);
+    //.YLT_Signal(RACObserve(self, tag));
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
