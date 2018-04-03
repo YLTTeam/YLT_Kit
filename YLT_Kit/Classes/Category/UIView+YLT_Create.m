@@ -212,6 +212,20 @@
     };
 }
 
+/**
+ 信号量
+ */
+- (UIView *(^)(RACSignal *signal))YLT_Signal {
+    @weakify(self);
+    return ^id(RACSignal *signal) {
+        @strongify(self);
+        [signal subscribeNext:^(id  _Nullable x) {
+            NSLog(@"%@", x);
+        }];
+        return self;
+    };
+}
+
 #pragma mark - Convert
 /**
  类型转化

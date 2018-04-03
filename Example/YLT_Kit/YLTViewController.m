@@ -10,7 +10,7 @@
 #import <YLT_Kit/YLT_Kit.h>
 
 @interface YLTViewController ()
-
+@property (assign, nonatomic) NSInteger tag;
 @end
 
 @implementation YLTViewController
@@ -22,9 +22,18 @@
 //    UIImageView.YLT_Layout(self.view, ^(MASConstraintMaker *make) {
 //        make.edges.equalTo(self.view);
 //    }).YLT_ConvertToImageView().YLT_Image([UIImage YLT_ImageNamed:@"bg"]).YLT_ContentMode(UIViewContentModeScaleAspectFit);
-    UIImageView.YLT_Layout(self.view, ^(MASConstraintMaker *make) {
+    UIImageView
+    .YLT_Layout(self.view, ^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
-    }).YLT_ConvertToImageView().YLT_Image([[UIImage YLT_ImageNamed:@"bg"] YLT_DrawCircleImage]).YLT_ContentMode(UIViewContentModeScaleAspectFit);
+    })
+    .YLT_ConvertToImageView()
+    .YLT_Image([[UIImage YLT_ImageNamed:@"bg"] YLT_DrawCircleImage])
+    .YLT_ContentMode(UIViewContentModeScaleAspectFit)
+    .YLT_Signal(RACObserve(self, tag));
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    self.tag = self.tag+1;
 }
 
 - (void)didReceiveMemoryWarning

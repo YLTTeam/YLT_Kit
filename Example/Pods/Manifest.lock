@@ -26,7 +26,7 @@ PODS:
   - YLT_BaseLib (0.0.19):
     - FMDB
     - MJExtension (~> 3.0.13)
-  - YLT_Kit (0.0.15):
+  - YLT_Kit (0.0.19):
     - AFNetworking
     - Masonry
     - ReactiveObjC (~> 3.0.0)
@@ -48,8 +48,8 @@ SPEC CHECKSUMS:
   ReactiveObjC: ce79989e8684b9086b5f8d0c74bc7b81a8729c9e
   SDWebImage: 89a9d32cd520bbb46eb14e541d5109b3564af198
   YLT_BaseLib: 5672856ea2749ca218eec4a2dc46341204a57f9a
-  YLT_Kit: c304da36bb9de37aeb78ed7b0dd8463307b4ae81
+  YLT_Kit: 7ef1d82578332e14a8f32b98993bf452f271287a
 
 PODFILE CHECKSUM: 07bcf2cbce2b76ef3d0df73e22fb941f26885a7e
 
-COCOAPODS: 1.4.0.beta.2
+COCOAPODS: 1.4.0

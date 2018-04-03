@@ -13,48 +13,81 @@
 @end
 
 @implementation YLT_BaseVC
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wundeclared-selector"
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-}
-
-/**
- 往下一个页面传输数据和回调
- 
- @param data 数据
- @param callback 回调
- */
-- (void)YLT_nextData:(id)data callback:(void(^)(id response))callback {
-    self.ylt_params = data;
-    self.ylt_callback = callback;
-}
-
-/**
- 从下级页面返回当前页面的调用
- 
- @param response 返回的数据
- */
-- (void)YLT_nextPageResponse:(id)response {
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    YLT_BaseVC *vc = segue.destinationViewController;
-    @weakify(self);
-    if ([vc respondsToSelector:@selector(YLT_nextData:callback:)]) {
-        [vc YLT_nextData:sender callback:^(id data) {
-            @strongify(self);
-            [self YLT_nextPageResponse:data];
-        }];
-    }
-}
-
-- (void)dealloc {
-    YLT_LogWarn(@"dealloc");
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
+#pragma mark - Navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+}
+
+- (void)dealloc {
+    YLT_LogInfo(@"Dealloc %@", NSStringFromClass([self class]));
+}
+
+
+#pragma mark - ViewDidLoad 中调用
+/**
+ Setup
+ 主要负责页面变量的初始化、页面元素的颜色等
+ */
+- (void)ylt_setup {
+}
+
+/**
+ 视图的页面配置
+ 主要负责视图的添加工作 以及约束的设置
+ */
+- (void)ylt_addSubViews {
+}
+
+/**
+ 网络请求
+ 主要负责当前页面的初始网络请求
+ */
+- (void)ylt_request {
+}
+
+#pragma mark - viewWillAppear 中调用
+/**
+ 数据与视图的绑定
+ 主要负责数据与页面的绑定操作
+ */
+- (void)ylt_bindData {
+}
+
+#pragma mark - viewWillLayoutSubviews 中调用
+/**
+ 页面的布局
+ 视图加载完成需要更新布局的操作
+ */
+- (void)ylt_layout {
+}
+
+#pragma mark - viewWillDisappear 中调用
+/**
+ 页面消失的调用
+ 当页面消失的时候的回调
+ */
+- (void)ylt_dismiss {
+}
+
+#pragma mark - setter/getter
+
+- (void(^)(id response))ylt_callback {
+    if (_ylt_callback) {
+        return _ylt_callback;
+    }
+    return ^(id response) {
+    };
+}
+
+#pragma clang diagnostic pop
 
 @end

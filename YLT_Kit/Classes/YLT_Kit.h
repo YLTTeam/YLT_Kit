@@ -8,7 +8,6 @@
 #ifndef YLT_Kit_h
 #define YLT_Kit_h
 
-#import "YLT_BaseVCProtocol.h"
 #import "YLT_BaseVC.h"
 #import "UIView+YLT_Create.h"
 #import "UIImageView+YLT_Create.h"

@@ -6,11 +6,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "YLT_BaseVCProtocol.h"
+#import "UIViewController+YLT_BaseVC.h"
 #import <YLT_BaseLib/YLT_BaseLib.h>
 #import <ReactiveObjc/ReactiveObjc.h>
 
-@interface YLT_BaseVC : UIViewController <YLT_BaseVCProtocol>
+@interface YLT_BaseVC : UIViewController
 
 /**
  上一个页面传入的参数

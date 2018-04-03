@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Masonry/Masonry.h>
+#import <ReactiveObjC/ReactiveObjC.h>
 
 @interface UIView (YLT_Create)
 
@@ -59,7 +60,10 @@
  点击事件
  */
 - (UIView *(^)(void (^)(id response)))YLT_ClickBlock;
-
+/**
+ 信号量
+ */
+- (UIView *(^)(RACSignal *signal))YLT_Signal;
 
 
 #pragma mark - type convert
@@ -68,7 +72,6 @@
 - (UIImageView *(^)(void))YLT_ConvertToImageView;
 - (UITableView *(^)(void))YLT_ConvertToTableView;
 - (UITextField *(^)(void))YLT_ConvertToTextField;
-
 
 #pragma mark - normal method
 
