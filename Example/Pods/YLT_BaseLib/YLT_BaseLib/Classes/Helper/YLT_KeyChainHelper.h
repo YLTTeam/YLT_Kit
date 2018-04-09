@@ -18,7 +18,7 @@ YLT_ShareInstanceHeader(YLT_KeyChainHelper);
  @param aValue 对应的Value
  @param aKey   对应的Key
  */
-+ (void)YLT_saveKeychainValue:(NSString *)aValue key:(NSString *)aKey;
++ (void)ylt_saveKeychainValue:(NSString *)aValue key:(NSString *)aKey;
 
 
 /**
@@ -27,7 +27,7 @@ YLT_ShareInstanceHeader(YLT_KeyChainHelper);
  @param aKey 对应的Key
  @return 返回储存的Value
  */
-+ (NSString *)YLT_readValueWithKeychain:(NSString *)aKey;
++ (NSString *)ylt_readValueWithKeychain:(NSString *)aKey;
 
 
 /**
@@ -35,9 +35,9 @@ YLT_ShareInstanceHeader(YLT_KeyChainHelper);
  
  @param aKey 对应的Key
  */
-+ (void)YLT_deleteKeychainValue:(NSString *)aKey;
++ (void)ylt_deleteKeychainValue:(NSString *)aKey;
 
-+ (NSString *)YLT_uuid;
++ (NSString *)ylt_uuid;
 
 @end
 

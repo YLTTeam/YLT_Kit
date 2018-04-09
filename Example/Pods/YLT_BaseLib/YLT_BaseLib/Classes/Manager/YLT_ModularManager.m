@@ -26,7 +26,7 @@ YLT_ShareInstanceHeader(YLT_ModularManager);
 
 YLT_ShareInstance(YLT_ModularManager);
 
-- (void)YLT_init {
+- (void)ylt_init {
 }
 
 - (NSMutableArray *)modularList {
@@ -40,7 +40,7 @@ YLT_ShareInstance(YLT_ModularManager);
 
  @param plistPath 路径
  */
-+ (void)modularWithPlistPath:(NSString *)plistPath {
++ (void)ylt_modularWithPlistPath:(NSString *)plistPath {
     [[NSArray arrayWithContentsOfFile:plistPath] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [[YLT_ModularManager shareInstance].modularList addObject:NSClassFromString(obj)];
     }];
@@ -365,7 +365,7 @@ YLT_ShareInstance(YLT_ModularManager);
             [cls application:application viewControllerWithRestorationIdentifierPath:identifierComponents coder:coder];
         }
     }
-    return self.YLT_CurrentVC;
+    return self.ylt_currentVC;
 }
 + (BOOL) application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder  {
     for (Class cls in [YLT_ModularManager shareInstance].modularList) {

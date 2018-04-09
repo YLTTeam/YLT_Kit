@@ -13,7 +13,7 @@
 /**
  timer
  */
-@property (nonatomic, strong) NSTimer * timer;
+@property (nonatomic, strong) NSTimer *timer;
 
 /**
  存放任务的数组
@@ -31,7 +31,7 @@
 
 YLT_ShareInstance(YLT_DownloaderHelper);
 
-- (void)YLT_init {
+- (void)ylt_init {
     self.timer = [NSTimer scheduledTimerWithTimeInterval:0.001 target:self selector:@selector(timerFiredMethod) userInfo:nil repeats:YES];
     [self addRunloopObserver];
     
@@ -42,10 +42,10 @@ YLT_ShareInstance(YLT_DownloaderHelper);
 }
 
 //添加任务
-- (void)addTask:(BOOL(^)(void))task withKey:(id)key {
+- (void)ylt_addTask:(BOOL(^)(void))task withKey:(id)key {
     [self.tasks addObject:task];
     [self.taskKeys addObject:key];
-    if (self.tasks.count > self.maxCount) {
+    if (self.tasks.count > self.ylt_maxCount) {
         [self.tasks removeObjectAtIndex:0];
         [self.taskKeys removeObjectAtIndex:0];
     }

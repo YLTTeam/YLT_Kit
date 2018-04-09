@@ -42,66 +42,66 @@
 
 YLT_ShareInstance(YLT_AuthorizationHelper);
 
-- (void)YLT_init {
+- (void)ylt_init {
 }
 
-- (void)YLT_AuthorizationType:(YLT_AuthorizationType)type
+- (void)ylt_authorizationType:(ylt_authorizationType)type
                       success:(void(^)(void))success
                        failed:(void(^)(void))failed {
     switch (type) {
         case YLT_PhotoLibrary:
-            [self YLT_PhotoLibraryAccessSuccess:success
+            [self ylt_photoLibraryAccessSuccess:success
                                          failed:failed];
             break;
             
         case YLT_NetWork:
-            [self YLT_NetworkAccessSuccess:success
+            [self ylt_networkAccessSuccess:success
                                     failed:failed];
             break;
             
         case YLT_Camera:
-            [self YLT_CameraAccessSuccess:success
+            [self ylt_cameraAccessSuccess:success
                                    failed:failed];
             break;
             
         case YLT_Microphone:
-            [self YLT_AudioAccessSuccess:success
+            [self ylt_audioAccessSuccess:success
                                   failed:failed];
             break;
         case YLT_AddressBook:
-            [self YLT_AddressBookAccessSuccess:success
+            [self ylt_addressBookAccessSuccess:success
                                         failed:failed];
             break;
         case YLT_Calendar:
-            [self YLT_CalendarAccessSuccess:success
+            [self ylt_calendarAccessSuccess:success
                                      failed:failed];
             break;
         case YLT_Reminder:
-            [self YLT_ReminderAccessSuccess:success
+            [self ylt_reminderAccessSuccess:success
                                      failed:failed];
             break;
         case YLT_MapAlways:
-            [self YLT_MapAlwaysAccessSuccess:success
+            [self ylt_mapAlwaysAccessSuccess:success
                                       failed:failed];
             break;
         case YLT_MapWhenInUse:
-            [self YLT_MapWhenInUseAccessSuccess:success
+            [self ylt_mapWhenInUseAccessSuccess:success
                                          failed:failed];
             break;
         case YLT_AppleMusic:
-            [self YLT_AppleMusicAccessSuccess:success
+            [self ylt_appleMusicAccessSuccess:success
                                        failed:failed];
             break;
         case YLT_SpeechRecognizer:
-            [self YLT_SpeechRecognizerAccessSuccess:success
+            [self ylt_speechRecognizerAccessSuccess:success
                                              failed:failed];
             break;
         case YLT_Siri:
-            [self YLT_SiriAccessSuccess:success
+            [self ylt_siriAccessSuccess:success
                                  failed:failed];
             break;
         case YLT_Bluetooth:
-            [self YLT_BluetoothAccessSuccess:success
+            [self ylt_bluetoothAccessSuccess:success
                                       failed:failed];
             break;
             
@@ -113,7 +113,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 }
 
 #pragma mark - Photo Library
-- (void)YLT_PhotoLibraryAccessSuccess:(void(^)(void))success
+- (void)ylt_photoLibraryAccessSuccess:(void(^)(void))success
                                failed:(void(^)(void))failed{
     if (iOS8Later) {
         //used `PHPhotoLibrary`
@@ -151,7 +151,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 }
 
 #pragma mark - Network
-- (void)YLT_NetworkAccessSuccess:(void(^)(void))success
+- (void)ylt_networkAccessSuccess:(void(^)(void))success
                           failed:(void(^)(void))failed{
     
     CTCellularData *cellularData = [[CTCellularData alloc] init];
@@ -176,7 +176,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 }
 
 #pragma mark - AvcaptureMedia
-- (void)YLT_CameraAccessSuccess:(void(^)(void))success
+- (void)ylt_cameraAccessSuccess:(void(^)(void))success
                          failed:(void(^)(void))failed{
     
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -200,7 +200,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
     }
 }
 
-- (void)YLT_AudioAccessSuccess:(void(^)(void))success
+- (void)ylt_audioAccessSuccess:(void(^)(void))success
                         failed:(void(^)(void))failed{
     
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
@@ -225,7 +225,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 }
 
 #pragma mark - AddressBook
-- (void)YLT_AddressBookAccessSuccess:(void(^)(void))success
+- (void)ylt_addressBookAccessSuccess:(void(^)(void))success
                               failed:(void(^)(void))failed{
     if (iOS9Later) {
         
@@ -286,7 +286,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 }
 
 #pragma mark - Calendar
-- (void)YLT_CalendarAccessSuccess:(void(^)(void))success
+- (void)ylt_calendarAccessSuccess:(void(^)(void))success
                            failed:(void(^)(void))failed{
     
     EKAuthorizationStatus authStatus = [EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent];
@@ -311,7 +311,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 }
 
 #pragma mark - Reminder
-- (void)YLT_ReminderAccessSuccess:(void(^)(void))success
+- (void)ylt_reminderAccessSuccess:(void(^)(void))success
                            failed:(void(^)(void))failed{
     EKAuthorizationStatus authStatus = [EKEventStore authorizationStatusForEntityType:EKEntityTypeReminder];
     if (authStatus == EKAuthorizationStatusNotDetermined) {
@@ -336,7 +336,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 
 #pragma mark - Map
 
-- (void)YLT_MapAlwaysAccessSuccess:(void(^)(void))success
+- (void)ylt_mapAlwaysAccessSuccess:(void(^)(void))success
                             failed:(void(^)(void))failed{
     if (![CLLocationManager locationServicesEnabled]) {
         NSAssert([CLLocationManager locationServicesEnabled], @"Location service enabled failed");
@@ -362,7 +362,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
     }
 }
 
-- (void)YLT_MapWhenInUseAccessSuccess:(void(^)(void))success
+- (void)ylt_mapWhenInUseAccessSuccess:(void(^)(void))success
                                failed:(void(^)(void))failed{
     if (![CLLocationManager locationServicesEnabled]) {
         NSAssert([CLLocationManager locationServicesEnabled], @"Location service enabled failed");
@@ -387,7 +387,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
     }
 }
 #pragma mark - Apple Music
-- (void)YLT_AppleMusicAccessSuccess:(void(^)(void))success
+- (void)ylt_appleMusicAccessSuccess:(void(^)(void))success
                              failed:(void(^)(void))failed{
     MPMediaLibraryAuthorizationStatus authStatus = [MPMediaLibrary authorizationStatus];
     if (authStatus == MPMediaLibraryAuthorizationStatusNotDetermined) {
@@ -410,7 +410,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 }
 
 #pragma mark - SpeechRecognizer
-- (void)YLT_SpeechRecognizerAccessSuccess:(void(^)(void))success
+- (void)ylt_speechRecognizerAccessSuccess:(void(^)(void))success
                                    failed:(void(^)(void))failed{
     
     SFSpeechRecognizerAuthorizationStatus authStatus = [SFSpeechRecognizer authorizationStatus];
@@ -435,11 +435,11 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 }
 
 #pragma mark - Health
-- (void)YLT_HealthAccessSuccess:(void(^)(void))success
+- (void)ylt_healthAccessSuccess:(void(^)(void))success
                          failed:(void(^)(void))failed{
 }
 #pragma mark - Siri
-- (void)YLT_SiriAccessSuccess:(void(^)(void))success
+- (void)ylt_siriAccessSuccess:(void(^)(void))success
                        failed:(void(^)(void))failed{
     if (!iOS10Later) {
         NSAssert(iOS10Later, @"This method must used in iOS 10.0 or later/该方法必须在iOS10.0或以上版本使用");
@@ -470,7 +470,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 }
 
 #pragma mark - Bluetooth
-- (void)YLT_BluetoothAccessSuccess:(void(^)(void))success
+- (void)ylt_bluetoothAccessSuccess:(void(^)(void))success
                             failed:(void(^)(void))failed{
     CBPeripheralManagerAuthorizationStatus authStatus = [CBPeripheralManager authorizationStatus];
     if (authStatus == CBPeripheralManagerAuthorizationStatusNotDetermined) {

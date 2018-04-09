@@ -47,7 +47,7 @@
 
 #pragma mark - viewWillDisappear 中调用
 /**
- 页面消失的调用
+ 页面消失的调用 注意只有 pop 或者 dismiss的时候才会调用
  当页面消失的时候的回调
  */
 - (void)ylt_dismiss;
@@ -66,39 +66,39 @@
 /**
  快速创建控制器并传入参数
  
- @param ylt_Param 参数
+ @param ylt_param 参数
  @return 控制器
  */
-+ (UIViewController *)ylt_createVCWithParam:(id)ylt_Param;
++ (UIViewController *)ylt_createVCWithParam:(id)ylt_param;
 
 /**
  快速创建控制器并传入参数
  
- @param ylt_Param 参数
+ @param ylt_param 参数
  @param callback 回调
  @return 控制器
  */
-+ (UIViewController *)ylt_createVCWithParam:(id)ylt_Param
++ (UIViewController *)ylt_createVCWithParam:(id)ylt_param
                                    callback:(void(^)(id response))callback;
 
 /**
  创建视图并PUSH到对应的视图
 
- @param ylt_Param 参数
+ @param ylt_param 参数
  @param callback 回调
  @return 控制器
  */
-+ (UIViewController *)ylt_pushVCWithParam:(id)ylt_Param
++ (UIViewController *)ylt_pushVCWithParam:(id)ylt_param
                                  callback:(void(^)(id response))callback;
 
 /**
  创建控制器并Modal到对应的视图
 
- @param ylt_Param 参数
+ @param ylt_param 参数
  @param callback 回调
  @return 控制器
  */
-+ (UIViewController *)ylt_modalVCWithParam:(id)ylt_Param
++ (UIViewController *)ylt_modalVCWithParam:(id)ylt_param
                                   callback:(void(^)(id response))callback;
 
 @end

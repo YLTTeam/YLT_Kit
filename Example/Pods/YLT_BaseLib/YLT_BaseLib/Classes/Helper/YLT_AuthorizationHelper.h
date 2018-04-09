@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "YLT_BaseMacro.h"
 
-typedef NS_ENUM(NSInteger, YLT_AuthorizationType) {
+typedef NS_ENUM(NSInteger, ylt_authorizationType) {
     /**
      *  相册/PhotoLibrary
      */
@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, YLT_AuthorizationType) {
 
 YLT_ShareInstanceHeader(YLT_AuthorizationHelper);
 
-- (void)YLT_AuthorizationType:(YLT_AuthorizationType)type
+- (void)ylt_authorizationType:(ylt_authorizationType)type
                       success:(void(^)(void))success
                        failed:(void(^)(void))failed;
 

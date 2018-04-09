@@ -28,6 +28,6 @@
 /**
  Cell 数据
  */
-+ (YLT_TableRowModel *(^)(CGFloat rowHeight, Class cellClass, id data))ph_create;
++ (YLT_TableRowModel *(^)(CGFloat rowHeight, Class cellClass, id data))ylt_create;
 
 @end

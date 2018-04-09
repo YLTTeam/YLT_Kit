@@ -12,21 +12,21 @@
 
 YLT_ShareInstance(YLT_DBHelper);
 
-- (void)YLT_init {
+- (void)ylt_init {
 }
 
-- (NSString *)dbPath {
-    if (!_dbPath) {
-        _dbPath = [YLT_DOCUMENT_PATH stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.db", YLT_BundleIdentifier]];
+- (NSString *)ylt_dbPath {
+    if (!_ylt_dbPath) {
+        _ylt_dbPath = [YLT_DOCUMENT_PATH stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.db", YLT_BundleIdentifier]];
     }
-    return _dbPath;
+    return _ylt_dbPath;
 }
 
-- (FMDatabaseQueue *)databaseQueue {
-    if (!_databaseQueue) {
-        _databaseQueue = [FMDatabaseQueue databaseQueueWithPath:[YLT_DBHelper shareInstance].dbPath];
+- (FMDatabaseQueue *)ylt_databaseQueue {
+    if (!_ylt_databaseQueue) {
+        _ylt_databaseQueue = [FMDatabaseQueue databaseQueueWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
     }
-    return _databaseQueue;
+    return _ylt_databaseQueue;
 }
 
 @end

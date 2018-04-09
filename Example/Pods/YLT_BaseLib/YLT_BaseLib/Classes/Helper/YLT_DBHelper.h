@@ -17,11 +17,11 @@ YLT_ShareInstanceHeader(YLT_DBHelper);
 /**
  数据库路径
  */
-@property (nonatomic, strong) NSString *dbPath;
+@property (nonatomic, strong) NSString *ylt_dbPath;
 
 /**
  数据库队列
  */
-@property (nonatomic, strong) FMDatabaseQueue *databaseQueue;
+@property (nonatomic, strong) FMDatabaseQueue *ylt_databaseQueue;
 
 @end

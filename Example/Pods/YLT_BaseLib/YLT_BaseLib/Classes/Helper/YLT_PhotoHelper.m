@@ -7,9 +7,9 @@
 
 #import "YLT_PhotoHelper.h"
 #import <UIKit/UIKit.h>
-#import "NSObject+YLT_BaseObject.h"
+#import "NSObject+YLT_Extension.h"
 #import "YLT_AuthorizationHelper.h"
-#import "NSString+YLT_BaseString.h"
+#import "NSString+YLT_Extension.h"
 
 @implementation YLT_PhotoAlbumInfo
 
@@ -30,7 +30,7 @@
 
 YLT_ShareInstance(YLT_PhotoHelper);
 
-- (void)YLT_init {
+- (void)ylt_init {
 }
 /**
  使用照相机
@@ -39,15 +39,15 @@ YLT_ShareInstance(YLT_PhotoHelper);
  @param success 成功的回调
  @param failed 失败的回调
  */
-+ (void)YLT_PhotoFromCameraAllowEdit:(BOOL)allowEdit
++ (void)ylt_photoFromCameraAllowEdit:(BOOL)allowEdit
                              success:(void(^)(NSDictionary *info))success
                               failed:(void(^)(NSError *error))failed {
     [YLT_PhotoHelper shareInstance].success = success;
     [YLT_PhotoHelper shareInstance].failed = failed;
-    [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_Camera success:^{
+    [[YLT_AuthorizationHelper shareInstance] ylt_authorizationType:YLT_Camera success:^{
         [YLT_PhotoHelper shareInstance].pickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
         [YLT_PhotoHelper shareInstance].pickerVC.allowsEditing = allowEdit;
-        [[YLT_PhotoHelper shareInstance].YLT_CurrentVC presentViewController:[YLT_PhotoHelper shareInstance].pickerVC animated:YES completion:nil];
+        [[YLT_PhotoHelper shareInstance].ylt_currentVC presentViewController:[YLT_PhotoHelper shareInstance].pickerVC animated:YES completion:nil];
     } failed:^{
         NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:PHAuthorizationStatusDenied userInfo:@{NSLocalizedDescriptionKey:@"无权限访问"}];
         [YLT_PhotoHelper shareInstance].failed(error);
@@ -64,15 +64,15 @@ YLT_ShareInstance(YLT_PhotoHelper);
  @param success 成功的回调
  @param failed 失败的回调
  */
-+ (void)YLT_PhotoFromLibraryAllowEdit:(BOOL)allowEdit
++ (void)ylt_photoFromLibraryAllowEdit:(BOOL)allowEdit
                               success:(void(^)(NSDictionary *info))success
                                failed:(void(^)(NSError *error))failed {
     [YLT_PhotoHelper shareInstance].success = success;
     [YLT_PhotoHelper shareInstance].failed = failed;
-    [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_PhotoLibrary success:^{
+    [[YLT_AuthorizationHelper shareInstance] ylt_authorizationType:YLT_PhotoLibrary success:^{
         [YLT_PhotoHelper shareInstance].pickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [YLT_PhotoHelper shareInstance].pickerVC.allowsEditing = allowEdit;
-        [[YLT_PhotoHelper shareInstance].YLT_CurrentVC presentViewController:[YLT_PhotoHelper shareInstance].pickerVC animated:YES completion:nil];
+        [[YLT_PhotoHelper shareInstance].ylt_currentVC presentViewController:[YLT_PhotoHelper shareInstance].pickerVC animated:YES completion:nil];
     } failed:^{
         NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:PHAuthorizationStatusDenied userInfo:@{NSLocalizedDescriptionKey:@"无权限访问"}];
         [YLT_PhotoHelper shareInstance].failed(error);
@@ -84,7 +84,7 @@ YLT_ShareInstance(YLT_PhotoHelper);
  
  @param callback 获取系统相册的回调
  */
-+ (void)YLT_CameraRoll:(void(^)(PHAssetCollection *cameraRoll))callback {
++ (void)ylt_cameraRoll:(void(^)(PHAssetCollection *cameraRoll))callback {
     for (PHAssetCollection *asset in [YLT_PhotoHelper shareInstance].albums) {
         if ((asset.assetCollectionType == PHAssetCollectionTypeSmartAlbum) && (asset.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumUserLibrary)) {
             callback(asset);
@@ -92,7 +92,12 @@ YLT_ShareInstance(YLT_PhotoHelper);
     }
 }
 
-+ (void)YLT_RequestAuthorizationStatus:(void(^)(PHAuthorizationStatus status))callback {
+/**
+ 获取系统相册权限
+ 
+ @param callback 获取到系统相册权限的回调
+ */
++ (void)ylt_requestAuthorizationStatus:(void(^)(PHAuthorizationStatus status))callback {
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
         callback(status);
     }];
@@ -104,9 +109,9 @@ YLT_ShareInstance(YLT_PhotoHelper);
  @param finish 相册加载成功的block
  @param error 相册加载失败的block
  */
-+ (void)YLT_LoadAlbums:(void(^)(NSArray *albums))finish
++ (void)ylt_loadAlbums:(void(^)(NSArray *albums))finish
                  error:(void(^)(NSString *error))error {
-    [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_PhotoLibrary success:^{
+    [[YLT_AuthorizationHelper shareInstance] ylt_authorizationType:YLT_PhotoLibrary success:^{
         if ([YLT_PhotoHelper shareInstance].albums.count == 0) {
             error(@"相册为空");
         } else {
@@ -117,7 +122,7 @@ YLT_ShareInstance(YLT_PhotoHelper);
     }];
 }
 
-+ (NSMutableArray *)YLT_AllAlbums {
++ (NSMutableArray *)ylt_allAlbums {
     NSMutableArray *albums = [NSMutableArray array];
     // 所有智能相册
     PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
@@ -166,10 +171,10 @@ YLT_ShareInstance(YLT_PhotoHelper);
  @param finish 照片获取成功的回调
  @param error 照片获取失败的回调
  */
-+ (void)YLT_LoadPhotosFromAlbum:(PHAssetCollection *)album
++ (void)ylt_loadPhotosFromAlbum:(PHAssetCollection *)album
                          finish:(void(^)(NSArray *photos))finish
                           error:(void(^)(NSString *error))error {
-    [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_PhotoLibrary success:^{
+    [[YLT_AuthorizationHelper shareInstance] ylt_authorizationType:YLT_PhotoLibrary success:^{
         PHFetchOptions *options = [[PHFetchOptions alloc] init];
         options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
         PHFetchResult<PHAsset *> *assets = [PHAsset fetchAssetsInAssetCollection:album options:options];
@@ -196,7 +201,7 @@ YLT_ShareInstance(YLT_PhotoHelper);
  @param finish 加载成功的回调
  @param error 加载失败的回调
  */
-+ (void)YLT_LoadThumbnailFromAsset:(PHAsset *)asset
++ (void)ylt_loadThumbnailFromAsset:(PHAsset *)asset
                             finish:(void(^)(UIImage *result, NSDictionary *info))finish
                              error:(void(^)(NSString *error))error {
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake((YLT_SCREEN_WIDTH-15)/3, (YLT_SCREEN_WIDTH-15)/3) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
@@ -213,7 +218,7 @@ YLT_ShareInstance(YLT_PhotoHelper);
  @param finish 加载成功的回调
  @param error 加载失败的回调
  */
-+ (void)YLT_LoadOriginalFromAsset:(PHAsset *)asset
++ (void)ylt_loadOriginalFromAsset:(PHAsset *)asset
                            finish:(void(^)(UIImage *result, NSDictionary *info))finish
                             error:(void(^)(NSString *error))error {
     static PHImageRequestOptions *originalOptions;
@@ -239,7 +244,7 @@ YLT_ShareInstance(YLT_PhotoHelper);
  @param finish 成功回调
  @param error 失败回调
  */
-+ (void)YLT_LoadSizePhotoFromAsset:(PHAsset *)asset
++ (void)ylt_loadSizePhotoFromAsset:(PHAsset *)asset
                               size:(CGSize)size
                             finish:(void(^)(UIImage *result, NSDictionary *info))finish
                              error:(void(^)(NSString *error))error {
@@ -267,11 +272,11 @@ YLT_ShareInstance(YLT_PhotoHelper);
 
 #pragma mark - get
 
-- (NSMutableArray *)allAlbumInfo {
-    if (!_allAlbumInfo) {
-        _allAlbumInfo = [[NSMutableArray alloc] init];
-        for (PHAssetCollection *album in self.allAlbums) {
-            if (([album.localizedTitle YLT_CheckString])) {
+- (NSMutableArray *)ylt_allAlbumInfo {
+    if (!_ylt_allAlbumInfo) {
+        _ylt_allAlbumInfo = [[NSMutableArray alloc] init];
+        for (PHAssetCollection *album in self.ylt_allAlbums) {
+            if (([album.localizedTitle ylt_isValid])) {
                 PHFetchResult<PHAsset *> *assets = [PHAsset fetchAssetsInAssetCollection:album options:nil];
                 if (assets.count > 0) {
                     YLT_PhotoAlbumInfo *info = [[YLT_PhotoAlbumInfo alloc] init];
@@ -279,24 +284,24 @@ YLT_ShareInstance(YLT_PhotoHelper);
                     info.name = album.localizedTitle;
                     info.count = assets.count;
                     info.thumb = [assets lastObject];
-                    [_allAlbumInfo addObject:info];
+                    [_ylt_allAlbumInfo addObject:info];
                 }
             }
         }
     }
-    return _allAlbumInfo;
+    return _ylt_allAlbumInfo;
 }
 
-- (NSMutableArray *)allAlbums {
-    if (!_allAlbums) {
-        _allAlbums = [YLT_PhotoHelper YLT_AllAlbums];
+- (NSMutableArray *)ylt_allAlbums {
+    if (!_ylt_allAlbums) {
+        _ylt_allAlbums = [YLT_PhotoHelper ylt_allAlbums];
     }
-    return _allAlbums;
+    return _ylt_allAlbums;
 }
 
-- (void)setAllowsEditing:(BOOL)allowsEditing {
-    _allowsEditing = allowsEditing;
-    self.pickerVC.allowsEditing = allowsEditing;
+- (void)setYlt_allowsEditing:(BOOL)ylt_allowsEditing {
+    _ylt_allowsEditing = ylt_allowsEditing;
+    self.pickerVC.allowsEditing = ylt_allowsEditing;
 }
 
 - (UIImagePickerController *)pickerVC {

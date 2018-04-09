@@ -8,10 +8,10 @@
 #ifndef YLT_BaseMacro_h
 #define YLT_BaseMacro_h
 
-#import "NSObject+YLT_BaseObject.h"
+#import "NSObject+YLT_Extension.h"
 /// iOS设备信息
-#define iPad [NSObject YLT_DeviceIsiPad]
-#define iPhone [NSObject YLT_DeviceIsiPhone]
+#define iPad ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+#define iPhone ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
 
 //屏幕信息
 #define iPhone4 ([UIScreen mainScreen].bounds.size.width==320&&[UIScreen mainScreen].bounds.size.height==480)
@@ -109,7 +109,7 @@
 #define YLT_HEXCOLOR(hex) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:1]
 #define YLT_HEXCOLORA(hex, alpha) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:alpha]
 #define YLT_StringColor(color) [color YLT_ColorFromHexString]
-#define YLT_StringValue(str) [str YLT_CheckString]?str:@""
+#define YLT_StringValue(str) [str ylt_isValid]?str:@""
 
 
 //快速生成单例对象
@@ -119,8 +119,8 @@
                                             static dispatch_once_t onceToken;\
                                             dispatch_once(&onceToken, ^{\
                                             share_cls = [[cls alloc] init];\
-                                                if ([share_cls respondsToSelector:@selector(YLT_init)]) {\
-                                                    [share_cls performSelector:@selector(YLT_init) withObject:nil];\
+                                                if ([share_cls respondsToSelector:@selector(ylt_init)]) {\
+                                                    [share_cls performSelector:@selector(ylt_init) withObject:nil];\
                                                     }\
                                                 });\
                                                 return share_cls;\
@@ -130,8 +130,8 @@
                                                     static dispatch_once_t onceToken;\
                                                     dispatch_once(&onceToken, ^{\
                                                         share_cls = [super allocWithZone:zone];\
-                                                        if ([share_cls respondsToSelector:@selector(YLT_init)]) {\
-                                                            [share_cls performSelector:@selector(YLT_init) withObject:nil];\
+                                                        if ([share_cls respondsToSelector:@selector(ylt_init)]) {\
+                                                            [share_cls performSelector:@selector(ylt_init) withObject:nil];\
                                                         }\
                                                     });\
                                                 }\

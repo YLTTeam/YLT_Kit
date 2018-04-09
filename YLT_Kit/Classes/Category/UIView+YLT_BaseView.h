@@ -12,31 +12,31 @@
 /**
  x
  */
-@property (nonatomic, assign) CGFloat YLT_x;
+@property (nonatomic, assign) CGFloat ylt_x;
 
 /**
  y
  */
-@property (nonatomic, assign) CGFloat YLT_y;
+@property (nonatomic, assign) CGFloat ylt_y;
 
 /**
  width
  */
-@property (nonatomic, assign) CGFloat YLT_width;
+@property (nonatomic, assign) CGFloat ylt_width;
 
 /**
  height
  */
-@property (nonatomic, assign) CGFloat YLT_height;
+@property (nonatomic, assign) CGFloat ylt_height;
 
 /**
  中心点 x
  */
-@property (nonatomic, assign) CGFloat YLT_centerX;
+@property (nonatomic, assign) CGFloat ylt_centerX;
 
 /**
  中心点 y
  */
-@property (nonatomic, assign) CGFloat YLT_centerY;
+@property (nonatomic, assign) CGFloat ylt_centerY;
 
 @end

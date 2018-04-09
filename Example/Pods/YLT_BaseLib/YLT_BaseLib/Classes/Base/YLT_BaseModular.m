@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation YLT_BaseModular
 
-- (void)YLT_init {
+- (void)ylt_init {
 }
 
 + (void)applicationDidFinishLaunching:(UIApplication *)application {
@@ -174,7 +174,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UIViewController *) application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder  {
     
-    return self.YLT_CurrentVC;
+    return self.ylt_currentVC;
 }
 + (BOOL) application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder  {
     

@@ -15,6 +15,6 @@
  
  @param plistPath 路径
  */
-+ (void)modularWithPlistPath:(NSString *)plistPath;
++ (void)ylt_modularWithPlistPath:(NSString *)plistPath;
 
 @end

@@ -9,44 +9,47 @@
 
 @implementation UIView (YLT_BaseView)
 
-- (void)setYLT_x:(CGFloat)x {
-    self.frame = CGRectMake(x, self.YLT_y, self.YLT_width, self.YLT_height);
+@dynamic ylt_centerX;
+@dynamic ylt_centerY;
+
+- (void)setYlt_x:(CGFloat)x {
+    self.frame = CGRectMake(x, self.ylt_x, self.ylt_width, self.ylt_height);
 }
 
-- (CGFloat)YLT_x {
+- (CGFloat)ylt_x {
     return self.frame.origin.x;
 }
 
-- (void)setYLT_y:(CGFloat)y {
-    self.frame = CGRectMake(self.YLT_x, y, self.YLT_width, self.YLT_height);
+- (void)setYlt_y:(CGFloat)y {
+    self.frame = CGRectMake(self.ylt_x, y, self.ylt_width, self.ylt_height);
 }
 
-- (CGFloat)YLT_y {
+- (CGFloat)ylt_y {
     return self.frame.origin.y;
 }
 
-- (void)setYLT_width:(CGFloat)width {
-    self.frame = CGRectMake(self.YLT_x, self.YLT_y, width, self.YLT_height);
+- (void)setYlt_width:(CGFloat)width {
+    self.frame = CGRectMake(self.ylt_x, self.ylt_y, width, self.ylt_height);
 }
 
-- (CGFloat)YLT_width {
+- (CGFloat)ylt_width {
     return self.frame.size.width;
 }
 
-- (void)setYLT_height:(CGFloat)height {
-    self.frame = CGRectMake(self.YLT_x, self.YLT_y, self.YLT_width, height);
+- (void)setYlt_height:(CGFloat)height {
+    self.frame = CGRectMake(self.ylt_x, self.ylt_y, self.ylt_width, height);
 }
 
-- (CGFloat)YLT_height {
+- (CGFloat)ylt_height {
     return self.frame.size.height;
 }
 
-- (CGFloat)YLT_centerX {
-    return (self.YLT_x+self.YLT_width)/2.;
+- (CGFloat)ylt_centerX {
+    return (self.ylt_x+self.ylt_width)/2.;
 }
 
-- (CGFloat)YLT_centerY {
-    return (self.YLT_y+self.YLT_height)/2.;
+- (CGFloat)ylt_centerY {
+    return (self.ylt_y+self.ylt_height)/2.;
 }
 
 

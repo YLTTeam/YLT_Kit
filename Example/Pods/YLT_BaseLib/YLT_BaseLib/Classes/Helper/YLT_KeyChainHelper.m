@@ -11,10 +11,10 @@
 
 YLT_ShareInstance(YLT_KeyChainHelper);
 
-- (void)YLT_init {
+- (void)ylt_init {
 }
 
-+ (NSMutableDictionary *)YLT_getKeychainQuery:(NSString *)service{
++ (NSMutableDictionary *)ylt_getKeychainQuery:(NSString *)service{
     return [NSMutableDictionary dictionaryWithObjectsAndKeys:
             (__bridge_transfer id)kSecClassGenericPassword,
             (__bridge_transfer id)kSecClass,service,
@@ -25,14 +25,14 @@ YLT_ShareInstance(YLT_KeyChainHelper);
             nil];
 }
 
-+ (void)YLT_saveKeychainValue:(NSString *)aValue key:(NSString *)aKey{
++ (void)ylt_saveKeychainValue:(NSString *)aValue key:(NSString *)aKey{
     if (!aKey) {
         return ;
     }
     if(!aValue) {
         aValue = @"";
     }
-    NSMutableDictionary * keychainQuery = [self YLT_getKeychainQuery:aKey];
+    NSMutableDictionary * keychainQuery = [self ylt_getKeychainQuery:aKey];
     SecItemDelete((__bridge_retained CFDictionaryRef)keychainQuery);
     
     [keychainQuery setObject:[NSKeyedArchiver archivedDataWithRootObject:aValue] forKey:(__bridge_transfer id)kSecValueData];
@@ -43,10 +43,10 @@ YLT_ShareInstance(YLT_KeyChainHelper);
     }
 }
 
-+ (NSString *)YLT_readValueWithKeychain:(NSString *)aKey
++ (NSString *)ylt_readValueWithKeychain:(NSString *)aKey
 {
     NSString *ret = nil;
-    NSMutableDictionary *keychainQuery = [self YLT_getKeychainQuery:aKey];
+    NSMutableDictionary *keychainQuery = [self ylt_getKeychainQuery:aKey];
     [keychainQuery setObject:(id)kCFBooleanTrue forKey:(__bridge_transfer id)kSecReturnData];
     [keychainQuery setObject:(__bridge_transfer id)kSecMatchLimitOne forKey:(__bridge_transfer id)kSecMatchLimit];
     CFDataRef keyData = NULL;
@@ -63,16 +63,16 @@ YLT_ShareInstance(YLT_KeyChainHelper);
     return ret;
 }
 
-+ (void)YLT_deleteKeychainValue:(NSString *)aKey {
-    NSMutableDictionary *keychainQuery = [self YLT_getKeychainQuery:aKey];
++ (void)ylt_deleteKeychainValue:(NSString *)aKey {
+    NSMutableDictionary *keychainQuery = [self ylt_getKeychainQuery:aKey];
     SecItemDelete((__bridge CFDictionaryRef)keychainQuery);
 }
 
-+ (NSString *)YLT_uuid {
-    NSString *deviceId = [YLT_KeyChainHelper YLT_readValueWithKeychain:@"Key_DeviceUUIDString"];
++ (NSString *)ylt_uuid {
+    NSString *deviceId = [YLT_KeyChainHelper ylt_readValueWithKeychain:[NSString stringWithFormat:@"Key_DeviceUUIDString_%@", YLT_BundleIdentifier]];
     if (!deviceId || !deviceId.length) {
         deviceId = [[UIDevice currentDevice].identifierForVendor UUIDString];
-        [YLT_KeyChainHelper YLT_saveKeychainValue:deviceId key:@"Key_DeviceUUIDString"];
+        [YLT_KeyChainHelper ylt_saveKeychainValue:deviceId key:[NSString stringWithFormat:@"Key_DeviceUUIDString_%@", YLT_BundleIdentifier]];
     }
     return deviceId;
 }

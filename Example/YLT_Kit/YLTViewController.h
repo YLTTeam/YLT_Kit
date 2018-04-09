@@ -6,8 +6,8 @@
 //  Copyright (c) 2017 xphaijj0305@126.com. All rights reserved.
 //
 
-@import UIKit;
+#import <YLT_Kit/YLT_Kit.h>
 
-@interface YLTViewController : UIViewController
+@interface YLTViewController : YLT_BaseVC
 
 @end

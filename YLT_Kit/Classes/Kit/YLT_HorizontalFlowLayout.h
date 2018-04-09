@@ -12,26 +12,26 @@
 /**
  每行多少个
  */
-@property (nonatomic, assign) NSUInteger countPreRow;
+@property (nonatomic, assign) NSUInteger ylt_countPreRow;
 
 /**
  多少行
  */
-@property (nonatomic, assign) NSUInteger row;
+@property (nonatomic, assign) NSUInteger ylt_row;
 
-+ (YLT_HorizontalFlowLayoutModel *)modelWithPreRow:(NSUInteger)countPreRow row:(NSInteger)row;
++ (YLT_HorizontalFlowLayoutModel *)ylt_modelWithPreRow:(NSUInteger)countPreRow row:(NSInteger)row;
 
 @end
 
 @interface YLT_HorizontalFlowLayout : UICollectionViewFlowLayout
 
-@property (nonatomic, copy) NSMutableDictionary *sectionDic;
-@property (strong, nonatomic) NSMutableArray *allAttributes;
+@property (nonatomic, copy) NSMutableDictionary *ylt_sectionDic;
+@property (strong, nonatomic) NSMutableArray *ylt_allAttributes;
 
 /**
  块配置信息
  */
-@property (nonatomic, strong) NSArray<YLT_HorizontalFlowLayoutModel *> *sectionConfigs;
+@property (nonatomic, strong) NSArray<YLT_HorizontalFlowLayoutModel *> *ylt_sectionConfigs;
 
 @end
 

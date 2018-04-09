@@ -13,7 +13,7 @@
 /**
  Cell 数据
  */
-+ (YLT_TableRowModel *(^)(CGFloat rowHeight, Class cellClass, id data))ph_create {
++ (YLT_TableRowModel *(^)(CGFloat rowHeight, Class cellClass, id data))ylt_create {
     return ^id(CGFloat rowHeight, Class cellClass, id data) {
         YLT_TableRowModel *result = [[YLT_TableRowModel alloc] init];
         result.rowHeight = rowHeight;
