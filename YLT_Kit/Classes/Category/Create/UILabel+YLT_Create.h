@@ -11,6 +11,10 @@
 @interface UILabel (YLT_Create)
 
 /**
+ 是否可以长按复制
+ */
+@property (nonatomic,assign) BOOL ylt_isCopyable;
+/**
  文字
  */
 - (UILabel *(^)(NSString *text))ylt_text;

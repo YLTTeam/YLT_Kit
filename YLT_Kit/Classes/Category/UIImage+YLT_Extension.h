@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class ALAsset;
 
 @interface UIImage (YLT_Extension)
 
@@ -26,6 +27,24 @@
  @return 图片
  */
 + (UIImage *)ylt_imageFromColor:(UIColor *)color;
+
+/**
+ 通过颜色,尺寸获取纯色的图片
+ 
+ @param aColor 颜色
+ @param aFrame 尺寸
+ @return 图片
+ */
++ (UIImage *)ylt_imageWithColor:(UIColor *)aColor withFrame:(CGRect)aFrame;
+
+/**
+ 渲染纯色图片颜色，比如将白色箭头渲染成黑色箭头
+ 
+ @param color 目标颜色
+ @return 图片
+ */
+- (UIImage *)ylt_renderColor:(UIColor *)color;
+
 /**
  读取Image
  
@@ -36,18 +55,99 @@
 
 /**
  绘制圆角图片
-
+ 
  @return 圆形图片
  */
 - (UIImage *)ylt_drawCircleImage;
 
 /**
  绘制圆角
-
+ 
  @param radius 圆角
  @return 圆角图
  */
 - (UIImage *)ylt_drawRectImage:(CGFloat)radius;
+
+/**
+ 压缩到指定大小size
+ 
+ @param size 目标size
+ @return 压缩图
+ */
+- (UIImage*)ylt_scaledToSize:(CGSize)size;
+
+/**
+ 压缩到指定大小size,并保证图片清晰度和质量好于上面方法
+ 
+ @param size 目标size
+ @param highQuality 是否保证质量
+ @return 压缩图
+ */
+- (UIImage*)ylt_scaledToSize:(CGSize)size highQuality:(BOOL)highQuality;
+
+/**
+ 给定任意一个 UIImage 对象，要求将这个 UIImage 对象的 PNGData 压缩到传入的 KB 以内。
+ 原项目dataRepresentation可以替换成这个
+ 
+ @param KB 目标kb大小
+ @return 压缩图
+ */
+- (UIImage * __nonnull)ylt_pngImageDataWithKB:(NSUInteger)KB;
+
+/**
+ 修正图片方向
+ 
+ @param aImage 原图
+ @return 修正图
+ */
++ (UIImage * __nonnull)ylt_fixOrientation:(UIImage *)aImage;
+
+/**
+ 获取视频的帧图
+ 
+ @param videoURL 视频url
+ @return 视频帧图
+ */
++ (UIImage* __nonnull) ylt_thumbnailImageForVideo:(NSURL *)videoURL;
+
+/**
+ 获取原图
+ 
+ @param asset 资源
+ @return 图片
+ */
++ (UIImage *)ylt_fullResolutionImageFromALAsset:(ALAsset *)asset;
+
+/**
+ 获取调整后的全屏图
+ 
+ @param asset 资源
+ @return 图片
+ */
++ (UIImage *)ylt_fullScreenImageALAsset:(ALAsset *)asset;
+
+/**
+ 获取当前屏幕
+ 
+ @return 屏幕快照
+ */
++ (UIImage *)ylt_screenshotImage;
+
+/**
+ 将某个视图转换成图片
+ 
+ @param view 视图
+ @return 图片
+ */
++ (UIImage *)ylt_convertViewToImage:(UIView *)view;
+
+/**
+ 返回图片在某个坐标点的像素颜色
+ 
+ @param point 坐标点
+ @return 颜色
+ */
+- (UIColor *)ylt_colorAtPixel:(CGPoint)point;
 
 
 @end

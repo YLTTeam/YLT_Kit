@@ -18,18 +18,18 @@
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [NSObject ylt_swizzleSelectorInClass:[UITableView class] originalSel:@selector(initWithStyle:reuseIdentifier:) replaceSel:@selector(initWithStyle:YLT_ReuseIdentifier:)];
+        [NSObject ylt_swizzleSelectorInClass:[UITableView class] originalSel:@selector(initWithStyle:reuseIdentifier:) replaceSel:@selector(initWithStyle:ylt_reuseIdentifier:)];
     });
 }
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style YLT_ReuseIdentifier:(NSString *)reuseIdentifier {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style ylt_reuseIdentifier:(NSString *)reuseIdentifier {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
     if ([self respondsToSelector:@selector(YLT_cellStyle)]) {
         style = (UITableViewCellStyle)[self performSelector:@selector(YLT_CellStyle) withObject:nil];
     }
 #pragma clang diagnostic pop
-    self = [self initWithStyle:style YLT_ReuseIdentifier:reuseIdentifier];
+    self = [self initWithStyle:style ylt_reuseIdentifier:reuseIdentifier];
     self.ylt_cellConfigUI();
     return self;
 }

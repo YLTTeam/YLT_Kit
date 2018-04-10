@@ -6,6 +6,8 @@
 //
 
 #import "UIImage+YLT_Extension.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <AVFoundation/AVFoundation.h>
 
 @implementation UIImage (YLT_Extension)
 
@@ -16,14 +18,32 @@
  @return 图片
  */
 + (UIImage *)ylt_imageFromColor:(UIColor *)color {
-    CGRect rect=CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
-    UIGraphicsBeginImageContext(rect.size);
+    return [UIImage ylt_imageWithColor:color withFrame:CGRectMake(0, 0, 1, 1)];
+}
+
++ (UIImage *)ylt_imageWithColor:(UIColor *)aColor withFrame:(CGRect)aFrame {
+    UIGraphicsBeginImageContext(aFrame.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
+    CGContextSetFillColorWithColor(context, [aColor CGColor]);
+    CGContextFillRect(context, aFrame);
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return theImage;
+    return img;
+}
+
+- (UIImage *)ylt_renderColor:(UIColor *)color {
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(context, 0, self.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextSetBlendMode(context, kCGBlendModeNormal);
+    CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
+    CGContextClipToMask(context, rect, self.CGImage);
+    [color setFill];
+    CGContextFillRect(context, rect);
+    UIImage*newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
 /**
@@ -104,6 +124,282 @@
     UIImage *output = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return output;
+}
+
+//对图片尺寸进行压缩--
+- (UIImage*)ylt_scaledToSize:(CGSize)size {
+    return [self ylt_scaledToSize:size highQuality:NO];
+}
+
+- (UIImage*)ylt_scaledToSize:(CGSize)size highQuality:(BOOL)highQuality{
+    UIImage *sourceImage = self;
+    UIImage *newImage = nil;
+    CGSize imageSize = sourceImage.size;
+    CGFloat scaleFactor = 0.0;
+    if (CGSizeEqualToSize(imageSize, size) == NO)
+    {
+        CGFloat widthFactor = size.width / imageSize.width;
+        CGFloat heightFactor = size.height / imageSize.height;
+        if (widthFactor < heightFactor)
+            scaleFactor = heightFactor; // scale to fit height
+        else
+            scaleFactor = widthFactor; // scale to fit width
+    }
+    CGFloat targetWidth = imageSize.width* scaleFactor;
+    CGFloat targetHeight = imageSize.height* scaleFactor;
+    
+    size = CGSizeMake(floorf(targetWidth), floorf(targetHeight));
+    if (highQuality) {
+        UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    }else{
+        UIGraphicsBeginImageContext(size); // this will crop
+    }
+    [sourceImage drawInRect:CGRectMake(0, 0, ceilf(targetWidth), ceilf(targetHeight))];
+    newImage = UIGraphicsGetImageFromCurrentImageContext();
+    if(newImage == nil){
+        newImage = sourceImage;
+    }
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+- (UIImage * __nonnull)ylt_pngImageDataWithKB:(NSUInteger)KB {
+    int scale=1;
+    //   等比例缩放
+    NSData *imageAfterProcessing = UIImagePNGRepresentation(self);
+    while ((imageAfterProcessing.length/1024)>KB) {
+        scale++;
+        imageAfterProcessing=UIImagePNGRepresentation([self ylt_scaledToSize:CGSizeMake(self.size.width/scale, self.size.height/scale)]);
+    }
+    return [[UIImage alloc] initWithData:imageAfterProcessing];
+}
+
++ (UIImage * __nonnull)ylt_fixOrientation:(UIImage *)aImage {
+    if (aImage.imageOrientation == UIImageOrientationUp)
+        return aImage;
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationDown:
+        case UIImageOrientationDownMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, aImage.size.height);
+            transform = CGAffineTransformRotate(transform, M_PI);
+            break;
+            
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+            transform = CGAffineTransformRotate(transform, M_PI_2);
+            break;
+            
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            transform = CGAffineTransformTranslate(transform, 0, aImage.size.height);
+            transform = CGAffineTransformRotate(transform, -M_PI_2);
+            break;
+        default:
+            break;
+    }
+    
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationUpMirrored:
+        case UIImageOrientationDownMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+            
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRightMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.height, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+        default:
+            break;
+    }
+    
+    // Now we draw the underlying CGImage into a new context, applying the transform
+    // calculated above.
+    CGContextRef ctx = CGBitmapContextCreate(NULL, aImage.size.width, aImage.size.height,
+                                             CGImageGetBitsPerComponent(aImage.CGImage), 0,
+                                             CGImageGetColorSpace(aImage.CGImage),
+                                             CGImageGetBitmapInfo(aImage.CGImage));
+    CGContextConcatCTM(ctx, transform);
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            // Grr...
+            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.height,aImage.size.width), aImage.CGImage);
+            break;
+            
+        default:
+            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.width,aImage.size.height), aImage.CGImage);
+            break;
+    }
+    
+    // And now we just create a new UIImage from the drawing context
+    CGImageRef cgimg = CGBitmapContextCreateImage(ctx);
+    UIImage *img = [UIImage imageWithCGImage:cgimg];
+    CGContextRelease(ctx);
+    CGImageRelease(cgimg);
+    return img;
+}
+
++ (UIImage* __nonnull) ylt_thumbnailImageForVideo:(NSURL *)videoURL {
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
+    NSParameterAssert(asset);
+    AVAssetImageGenerator *assetImageGenerator =[[AVAssetImageGenerator alloc] initWithAsset:asset];
+    assetImageGenerator.appliesPreferredTrackTransform = YES;
+    assetImageGenerator.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels;
+    
+    CGImageRef thumbnailImageRef = NULL;
+    NSError *thumbnailImageGenerationError = nil;
+    //CMTimeMake(a,b),a为第几帧开始，b为每秒多少帧，copyCGImageAtTime获取该时间点的帧图片
+    thumbnailImageRef = [assetImageGenerator copyCGImageAtTime:CMTimeMake(0, 10)actualTime:NULL error:&thumbnailImageGenerationError];
+    
+    if(!thumbnailImageRef) {
+        NSLog(@"thumbnailImageGenerationError %@",thumbnailImageGenerationError);
+    }
+    UIImage*thumbnailImage = thumbnailImageRef ? [[UIImage alloc]initWithCGImage: thumbnailImageRef] : nil;
+    
+    return thumbnailImage;
+}
+
++ (UIImage *)ylt_fullResolutionImageFromALAsset:(ALAsset *)asset {
+    ALAssetRepresentation *assetRep = [asset defaultRepresentation];
+    CGImageRef imgRef = [assetRep fullResolutionImage];
+    UIImage *img = [UIImage imageWithCGImage:imgRef scale:assetRep.scale orientation:(UIImageOrientation)assetRep.orientation];
+    return img;
+}
+
++ (UIImage *)ylt_fullScreenImageALAsset:(ALAsset *)asset {
+    ALAssetRepresentation *assetRep = [asset defaultRepresentation];
+    CGImageRef imgRef = [assetRep fullScreenImage];//fullScreenImage已经调整过方向了
+    UIImage *img = [UIImage imageWithCGImage:imgRef];
+    return img;
+}
+
+//截取当前屏幕
++ (UIImage *)ylt_screenshotImage {
+    CGSize imageSize = CGSizeZero;
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (UIInterfaceOrientationIsPortrait(orientation))
+        imageSize = [UIScreen mainScreen].bounds.size;
+    else
+        imageSize = CGSizeMake([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    for (UIWindow *window in [[UIApplication sharedApplication] windows])
+    {
+        CGContextTranslateCTM(context, window.center.x, window.center.y);
+        CGContextConcatCTM(context, window.transform);
+        CGContextTranslateCTM(context, -window.bounds.size.width * window.layer.anchorPoint.x, -window.bounds.size.height * window.layer.anchorPoint.y);
+        if (orientation == UIInterfaceOrientationLandscapeLeft)
+        {
+            CGContextRotateCTM(context, M_PI_2);
+            CGContextTranslateCTM(context, 0, -imageSize.width);
+        }
+        else if (orientation == UIInterfaceOrientationLandscapeRight)
+        {
+            CGContextRotateCTM(context, -M_PI_2);
+            CGContextTranslateCTM(context, -imageSize.height, 0);
+        } else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+            CGContextRotateCTM(context, M_PI);
+            CGContextTranslateCTM(context, -imageSize.width, -imageSize.height);
+        }
+        if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)])
+        {
+            [window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES];
+        }
+        else
+        {
+            [window.layer renderInContext:context];
+        }
+    }
+    CGContextRestoreGState(context);
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
++ (UIImage *)ylt_convertViewToImage:(UIView *)view {
+    //第一个参数表示区域大小。第二个参数表示是否是非透明的。如果需要显示半透明效果，需要传NO，否则传YES。第三个参数就是屏幕密度了
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, YES, [UIScreen mainScreen].scale);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
+- (UIColor *)ylt_colorAtPixel:(CGPoint)point {
+    
+    // Cancel if point is outside image coordinates
+    
+    if (!CGRectContainsPoint(CGRectMake(0.0f, 0.0f, self.size.width, self.size.height), point)) {
+        
+        return nil;
+        
+    }
+    NSInteger pointX = trunc(point.x);
+    
+    NSInteger pointY = trunc(point.y);
+    
+    CGImageRef cgImage = self.CGImage;
+    
+    NSUInteger width = self.size.width;
+    
+    NSUInteger height = self.size.height;
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    int bytesPerPixel = 4;
+    
+    int bytesPerRow = bytesPerPixel * 1;
+    
+    NSUInteger bitsPerComponent = 8;
+    
+    unsigned char pixelData[4] = { 0, 0, 0, 0 };
+    
+    CGContextRef context = CGBitmapContextCreate(pixelData,
+                                                 
+                                                 1,
+                                                 
+                                                 1,
+                                                 
+                                                 bitsPerComponent,
+                                                 
+                                                 bytesPerRow,
+                                                 
+                                                 colorSpace,
+                                                 
+                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    
+    CGColorSpaceRelease(colorSpace);
+    
+    CGContextSetBlendMode(context, kCGBlendModeCopy);
+    
+    
+    // Draw the pixel we are interested in onto the bitmap context
+    
+    CGContextTranslateCTM(context, -pointX, pointY-(CGFloat)height);
+    
+    CGContextDrawImage(context, CGRectMake(0.0f, 0.0f, (CGFloat)width, (CGFloat)height), cgImage);
+    
+    CGContextRelease(context);
+    
+    // Convert color values [0..255] to floats [0.0..1.0]
+    
+    CGFloat red = (CGFloat)pixelData[0] / 255.0f;
+    
+    CGFloat green = (CGFloat)pixelData[1] / 255.0f;
+    
+    CGFloat blue = (CGFloat)pixelData[2] / 255.0f;
+    
+    CGFloat alpha = (CGFloat)pixelData[3] / 255.0f;
+    
+    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
 //交换

@@ -7,9 +7,61 @@
 
 #import "UILabel+YLT_Create.h"
 #import "UIView+YLT_Create.h"
+#import <objc/runtime.h>
 #import <ReactiveObjC/ReactiveObjC.h>
 
 @implementation UILabel (YLT_Create)
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    return (action == @selector(copyText:));
+}
+
+- (void)attachTapHandler {
+    self.userInteractionEnabled = YES;
+    UILongPressGestureRecognizer *g = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [self addGestureRecognizer:g];
+}
+
+//  手势事件
+- (void)handleTap:(UIGestureRecognizer *)g {
+    if ([self isFirstResponder]) {
+        return;
+    }
+    [self becomeFirstResponder];
+    
+    UIMenuItem *item = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(copyText:)];
+    [[UIMenuController sharedMenuController] setMenuItems:[NSArray arrayWithObject:item]];
+    [[UIMenuController sharedMenuController] setTargetRect:self.frame inView:self.superview];
+    [[UIMenuController sharedMenuController] setMenuVisible:YES animated:YES];
+}
+
+//  复制时执行的方法
+- (void)copyText:(id)sender {
+    UIPasteboard *pBoard = [UIPasteboard generalPasteboard];
+    if (objc_getAssociatedObject(self, @"expectedText")) {
+        pBoard.string = objc_getAssociatedObject(self, @"expectedText");
+    } else {
+        if (self.text) {
+            pBoard.string = self.text;
+        } else {
+            pBoard.string = self.attributedText.string;
+        }
+    }
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return [objc_getAssociatedObject(self, @selector(ylt_isCopyable)) boolValue];
+}
+
+- (void)setYlt_isCopyable:(BOOL)ylt_isCopyable {
+    objc_setAssociatedObject(self, @selector(ylt_isCopyable), [NSNumber numberWithBool:ylt_isCopyable], OBJC_ASSOCIATION_ASSIGN);
+    [self attachTapHandler];
+}
+
+- (BOOL)ylt_isCopyable {
+    return [objc_getAssociatedObject(self, @selector(ylt_isCopyable)) boolValue];
+}
+
 
 /**
  文字
