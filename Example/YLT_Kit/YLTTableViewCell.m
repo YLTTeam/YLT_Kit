@@ -33,7 +33,7 @@
         })
         .ylt_convertToLabel()
         .ylt_font([UIFont systemFontOfSize:20])
-        .ylt_textColor([UIColor greenColor]).ylt_lineNum(0);
+        .ylt_textColor([UIColor blackColor]).ylt_lineNum(0);
     }
     return _label;
 }

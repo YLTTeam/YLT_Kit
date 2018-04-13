@@ -8,9 +8,9 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM (NSUInteger, UIGradientStyle) {
-    UIGradientStyleLeftToRight,
-    UIGradientStyleRadial,
-    UIGradientStyleTopToBottom
+    YLT_UIGradientStyleLeftToRight,
+    YLT_UIGradientStyleRadial,
+    YLT_UIGradientStyleTopToBottom
 };
 
 @interface UIColor (YLT_Extension)

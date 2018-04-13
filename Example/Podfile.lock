@@ -36,7 +36,7 @@ PODS:
     - FMDB
     - MJExtension
     - RMUniversalAlert
-  - YLT_Kit (0.0.21):
+  - YLT_Kit (0.1.0):
     - AFNetworking
     - Masonry
     - ReactiveObjC
@@ -62,7 +62,7 @@ SPEC CHECKSUMS:
   UIAlertController+Blocks: 80e28b92523fb58aba4d1bccec013d5a0b0bddb2
   UIAlertView+Blocks: a46c99c5144f6c5dbc7d62fd2a0678daceec89a3
   YLT_BaseLib: b13bf3cf232cfd6589ce51e8c5fd0757c95056b2
-  YLT_Kit: cd925a72fe185a1ac212b9751cffb9277bec41d8
+  YLT_Kit: b98ceba262cb683766bfec9fda2a501fa5ecdbd9
 
 PODFILE CHECKSUM: 65a474d3ca23e64c48d267336e751acf6a3ca453
 

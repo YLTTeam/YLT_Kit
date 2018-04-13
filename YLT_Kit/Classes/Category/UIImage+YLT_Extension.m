@@ -136,8 +136,7 @@
     UIImage *newImage = nil;
     CGSize imageSize = sourceImage.size;
     CGFloat scaleFactor = 0.0;
-    if (CGSizeEqualToSize(imageSize, size) == NO)
-    {
+    if (CGSizeEqualToSize(imageSize, size) == NO) {
         CGFloat widthFactor = size.width / imageSize.width;
         CGFloat heightFactor = size.height / imageSize.height;
         if (widthFactor < heightFactor)
@@ -161,17 +160,6 @@
     }
     UIGraphicsEndImageContext();
     return newImage;
-}
-
-- (UIImage * __nonnull)ylt_pngImageDataWithKB:(NSUInteger)KB {
-    int scale=1;
-    //   等比例缩放
-    NSData *imageAfterProcessing = UIImagePNGRepresentation(self);
-    while ((imageAfterProcessing.length/1024)>KB) {
-        scale++;
-        imageAfterProcessing=UIImagePNGRepresentation([self ylt_scaledToSize:CGSizeMake(self.size.width/scale, self.size.height/scale)]);
-    }
-    return [[UIImage alloc] initWithData:imageAfterProcessing];
 }
 
 + (UIImage * __nonnull)ylt_fixOrientation:(UIImage *)aImage {
@@ -628,6 +616,95 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
     CGContextRelease(cgctx);
     free(imgPixel);
     return my_Image;
+}
+
+
+//- (UIImage * __nonnull)ylt_pngImageDataWithKB:(NSUInteger)KB {
+//    int scale=1;
+//    //   等比例缩放
+//    NSData *imageAfterProcessing = UIImagePNGRepresentation(self);
+//    while ((imageAfterProcessing.length/1024)>KB) {
+//        scale++;
+//        imageAfterProcessing=UIImagePNGRepresentation([self ylt_scaledToSize:CGSizeMake(self.size.width/scale, self.size.height/scale)]);
+//    }
+//    return [[UIImage alloc] initWithData:imageAfterProcessing];
+//}
+/**
+ 图片的默认优化算法
+ 
+ @return 优化后的图片，返回的一定是JPEG格式的
+ */
+- (UIImage *)ylt_representation {
+    return [UIImage imageWithData:[UIImage ylt_representationData:UIImageJPEGRepresentation(self, 0.95) kb:512]];
+}
+
+/**
+ 获取图片的类型
+ 
+ @param imageData 图片数据
+ @return 类型名称 PNG、JPEG等
+ */
++ (NSString *)ylt_imageTypeFromData:(NSData *)imageData {
+    if (imageData.length < 1) {
+        return nil;
+    }
+    uint8_t c;
+    [imageData getBytes:&c length:1];
+    switch (c) {
+        case 0xFF:
+            return @"JPEG";
+        case 0x89:
+            return @"PNG";
+        case 0x47:
+            return @"GIF";
+        case 0x49:
+        case 0x4D:
+            return @"TIFF";
+        case 0x52:
+            if ([imageData length] < 12) {
+                return nil;
+            }
+            NSString *testString = [[NSString alloc] initWithData:[imageData subdataWithRange:NSMakeRange(0, 12)] encoding:NSASCIIStringEncoding];
+            if ([testString hasPrefix:@"RIFF"] && [testString hasSuffix:@"WEBP"]) {
+                return @"webp";
+            }
+            return nil;
+    }
+    return nil;
+}
+
+/**
+ 图片压缩算法处理
+ 
+ @param imageData 图片压缩前的数据 PNG的使用 UIImagePNGRepresentation JPEG使用 UIImageJPEGRepresentation
+ @param kb 大小
+ @return 压缩后的Data
+ */
++ (NSData *)ylt_representationData:(NSData *)imageData kb:(NSUInteger)kb {
+    if (imageData.length <= kb) {
+        return imageData;
+    }
+    NSString *imageType = [self ylt_imageTypeFromData:imageData];
+    if ([imageType isEqualToString:@"PNG"]) {
+        while (imageData.length > kb) {
+            @autoreleasepool {
+                CGFloat scale = ((CGFloat)kb)/((CGFloat)imageData.length);
+                UIImage *image = [UIImage imageWithData:imageData];
+                imageData = UIImagePNGRepresentation([image ylt_scaledToSize:CGSizeMake(image.size.width*scale*2., image.size.height*scale*2.) highQuality:YES]);
+            }
+        }
+        return imageData;
+    } else if ([imageType isEqualToString:@"JPEG"]) {
+        while (imageData.length > kb) {
+            @autoreleasepool {
+                CGFloat scale = ((CGFloat)kb)/((CGFloat)imageData.length);
+                UIImage *image = [UIImage imageWithData:imageData];
+                imageData = UIImageJPEGRepresentation([image ylt_scaledToSize:CGSizeMake(image.size.width*scale*2., image.size.height*scale*2.) highQuality:YES], 0.98);
+            }
+        }
+        return imageData;
+    }
+    return imageData;
 }
 
 @end

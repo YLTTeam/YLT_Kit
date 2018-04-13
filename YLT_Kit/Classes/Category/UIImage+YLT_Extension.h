@@ -86,15 +86,6 @@
 - (UIImage*)ylt_scaledToSize:(CGSize)size highQuality:(BOOL)highQuality;
 
 /**
- 给定任意一个 UIImage 对象，要求将这个 UIImage 对象的 PNGData 压缩到传入的 KB 以内。
- 原项目dataRepresentation可以替换成这个
- 
- @param KB 目标kb大小
- @return 压缩图
- */
-- (UIImage * __nonnull)ylt_pngImageDataWithKB:(NSUInteger)KB;
-
-/**
  修正图片方向
  
  @param aImage 原图
@@ -149,5 +140,28 @@
  */
 - (UIColor *)ylt_colorAtPixel:(CGPoint)point;
 
+/**
+ 图片的默认优化算法
+
+ @return 优化后的图片，返回的一定是JPEG格式的 最大控制在512KB范围内
+ */
+- (UIImage *)ylt_representation;
+
+/**
+ 获取图片的类型
+
+ @param imageData 图片数据
+ @return 类型名称 PNG、JPEG等
+ */
++ (NSString *)ylt_imageTypeFromData:(NSData *)imageData;
+
+/**
+ 图片压缩算法处理
+
+ @param imageData 图片压缩前的数据 PNG的使用 UIImagePNGRepresentation JPEG使用 UIImageJPEGRepresentation
+ @param kb 大小
+ @return 压缩后的Data
+ */
++ (NSData *)ylt_representationData:(NSData *)imageData kb:(NSUInteger)kb;
 
 @end

@@ -350,7 +350,7 @@
     }
     
     switch (gradientStyle) {
-        case UIGradientStyleLeftToRight: {
+        case YLT_UIGradientStyleLeftToRight: {
             backgroundGradientLayer.colors = cgColors;
             
             [backgroundGradientLayer setStartPoint:CGPointMake(0.0, 0.5)];
@@ -368,7 +368,7 @@
             return [UIColor colorWithPatternImage:backgroundColorImage];
         }
             
-        case UIGradientStyleRadial: {
+        case YLT_UIGradientStyleRadial: {
             UIGraphicsBeginImageContextWithOptions(frame.size,NO, [UIScreen mainScreen].scale);
             
             CGFloat locations[2] = {0.0, 1.0};
@@ -398,7 +398,7 @@
             return [UIColor colorWithPatternImage:backgroundColorImage];
         }
             
-        case UIGradientStyleTopToBottom:
+        case YLT_UIGradientStyleTopToBottom:
         default: {
             
             backgroundGradientLayer.colors = cgColors;

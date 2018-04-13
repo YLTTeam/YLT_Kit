@@ -64,16 +64,57 @@
 }
 
 /**
- 方法交换
+ 方法交换 类方法
  
- @param theClass 方法交换的类
- @param originalSel 原始方法
- @param replaceSel 替换的方法
+ @param origSelector 原始方法
+ @param newSelector 替换的方法
  */
-- (void)ylt_swizzleSelectorInClass:(Class)theClass originalSel:(SEL)originalSel replaceSel:(SEL)replaceSel {
-    Method originalMethod = class_getInstanceMethod(theClass, originalSel);
-    Method swizzledMethod = class_getInstanceMethod(theClass, replaceSel);
-    method_exchangeImplementations(originalMethod, swizzledMethod);
++ (void)ylt_swizzleClassMethod:(SEL)origSelector withMethod:(SEL)newSelector {
+    Class cls = [self class];
+    Method originalMethod = class_getClassMethod(cls, origSelector);
+    Method swizzledMethod = class_getClassMethod(cls, newSelector);
+    Class metacls = objc_getMetaClass(NSStringFromClass(cls).UTF8String);
+    if (class_addMethod(metacls,
+                        origSelector,
+                        method_getImplementation(swizzledMethod),
+                        method_getTypeEncoding(swizzledMethod)) ) {
+        class_replaceMethod(metacls,
+                            newSelector,
+                            method_getImplementation(originalMethod),
+                            method_getTypeEncoding(originalMethod));
+    } else {
+        method_exchangeImplementations(originalMethod, swizzledMethod);
+    }
+}
+
+/**
+ 方法交换 实例方法
+ 
+ @param origSelector 原始方法
+ @param newSelector 替换的方法
+ */
++ (void)ylt_swizzleInstanceMethod:(SEL)origSelector withMethod:(SEL)newSelector {
+    Class cls = self;
+    Method originalMethod = class_getInstanceMethod(cls, origSelector);
+    Method swizzledMethod = class_getInstanceMethod(cls, newSelector);
+    if (class_addMethod(cls,
+                        origSelector,
+                        method_getImplementation(swizzledMethod),
+                        method_getTypeEncoding(swizzledMethod)) ) {
+        class_replaceMethod(cls,
+                            newSelector,
+                            method_getImplementation(originalMethod),
+                            method_getTypeEncoding(originalMethod));
+        
+    } else {
+        class_replaceMethod(cls,
+                            newSelector,
+                            class_replaceMethod(cls,
+                                                origSelector,
+                                                method_getImplementation(swizzledMethod),
+                                                method_getTypeEncoding(swizzledMethod)),
+                            method_getTypeEncoding(originalMethod));
+    }
 }
 
 @end

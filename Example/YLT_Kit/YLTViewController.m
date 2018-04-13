@@ -77,39 +77,39 @@
 //    self.ylt_params = [NSString stringWithFormat:@"回调参数 %zd", self.navigationController.viewControllers.count];
 //    YLT_LogInfo(@"---- %@   %zd", self.ylt_params, self.navigationController.viewControllers.count);
     
-//    UIView *header =
-//    UIView
-//    .ylt_create()
-//    .ylt_backgroundColor([UIColor redColor])
-//    .ylt_frame(CGRectMake(0, 0, YLT_SCREEN_WIDTH, 50));
-//
-//    UIView *footer =
-//    UIView
-//    .ylt_create()
-//    .ylt_backgroundColor([UIColor blueColor])
-//    .ylt_frame(CGRectMake(0, 0, YLT_SCREEN_HEIGHT, 100));
-//
-//    YLT_TableSectionModel *model =
-//    [YLT_TableSectionModel YLT_CreateSectionData:@[@"sdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfds", @"2", @"3"]
-//                                    headerString:@"header"
-//                                    footerString:nil];
-//
-//    YLT_TableSectionModel *model1 = [YLT_TableSectionModel YLT_CreateSectionData:@[@"sdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfdssdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfds", @"2", @"3"]
-//                                                                    headerHeight:80
-//                                                                      headerView:UIView.ylt_create().ylt_backgroundColor([UIColor redColor])
-//                                                                    footerHeight:20
-//                                                                      footerView:UIView.ylt_create().ylt_backgroundColor([UIColor blackColor])];
-//    UITableView
-//    .ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
-//        make.edges.equalTo(self.view);
-//    }, UITableViewStylePlain)
-//    .ylt_tableHeader(header)
-//    .ylt_tableFooter(footer)
-//    .ylt_convertToTableView()
-//    .ylt_cell(60, [YLTTableViewCell class])
-//    .ylt_tableData(@[model, model1]).ylt_cellClick(^(UITableViewCell *cell, NSIndexPath *indexPath, id response) {
-//        YLT_LogInfo(@"%@", response);
-//    });
+    UIView *header =
+    UIView
+    .ylt_create()
+    .ylt_backgroundColor([UIColor redColor])
+    .ylt_frame(CGRectMake(0, 0, YLT_SCREEN_WIDTH, 50));
+
+    UIView *footer =
+    UIView
+    .ylt_create()
+    .ylt_backgroundColor([UIColor blueColor])
+    .ylt_frame(CGRectMake(0, 0, YLT_SCREEN_HEIGHT, 100));
+
+    YLT_TableSectionModel *model =
+    [YLT_TableSectionModel ylt_createSectionData:@[@"sdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfds", @"2", @"3"]
+                                    headerString:@"header"
+                                    footerString:nil];
+
+    YLT_TableSectionModel *model1 = [YLT_TableSectionModel ylt_createSectionData:@[@"sdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfdssdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfds", @"2", @"3"]
+                                                                    headerHeight:80
+                                                                      headerView:UIView.ylt_create().ylt_backgroundColor([UIColor redColor])
+                                                                    footerHeight:20
+                                                                      footerView:UIView.ylt_create().ylt_backgroundColor([UIColor blackColor])];
+    UITableView
+    .ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }, UITableViewStylePlain)
+    .ylt_tableHeader(header)
+    .ylt_tableFooter(footer)
+    .ylt_convertToTableView()
+    .ylt_cell(60, [YLTTableViewCell class])
+    .ylt_tableData(@[model, model1]).ylt_cellClick(^(UITableViewCell *cell, NSIndexPath *indexPath, id response) {
+        YLT_LogInfo(@"%@", response);
+    });
 }
 
 - (void)ylt_dismiss {

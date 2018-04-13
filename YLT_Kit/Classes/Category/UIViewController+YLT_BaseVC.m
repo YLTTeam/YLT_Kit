@@ -18,75 +18,70 @@
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        Method oriMethod = class_getInstanceMethod(self, @selector(loadView));
-        Method method = class_getInstanceMethod(self, @selector(hookLoadView));
-        //自身已经有了就添加不成功，直接交换即可
-        if(class_addMethod(self, @selector(loadView), method_getImplementation(method), method_getTypeEncoding(method))){
-            class_replaceMethod(self, @selector(hookLoadView), method_getImplementation(oriMethod), method_getTypeEncoding(oriMethod));
-        }else{
-            method_exchangeImplementations(oriMethod, method);
-        }
+        [UIViewController ylt_swizzleInstanceMethod:@selector(viewDidLoad) withMethod:@selector(ylt_viewDidLoad)];
+        [UIViewController ylt_swizzleInstanceMethod:@selector(viewWillAppear:) withMethod:@selector(ylt_viewWillAppear:)];
+        [UIViewController ylt_swizzleInstanceMethod:@selector(viewWillLayoutSubviews) withMethod:@selector(ylt_viewWillLayoutSubviews)];
+        [UIViewController ylt_swizzleInstanceMethod:@selector(viewWillDisappear:) withMethod:@selector(ylt_viewWillDisappear:)];
+        [UIViewController ylt_swizzleInstanceMethod:@selector(prepareForSegue:sender:) withMethod:@selector(ylt_prepareForSegue:sender:)];
     });
 }
+
 #pragma mark - hook
-- (void)hookLoadView {
-    [self hookLoadView];
-    @weakify(self);
-    [[self rac_signalForSelector:@selector(viewDidLoad)] subscribeNext:^(RACTuple * _Nullable x) {
-        @strongify(self);
-        if ([self respondsToSelector:@selector(ylt_setup)]) {
-            [self performSelector:@selector(ylt_setup)];
-        }
-        if ([self respondsToSelector:@selector(ylt_addSubViews)]) {
-            [self performSelector:@selector(ylt_addSubViews)];
-        }
-        if ([self respondsToSelector:@selector(ylt_request)]) {
-            [self performSelector:@selector(ylt_request)];
-        }
-    }];
-    
-    [[[self rac_signalForSelector:@selector(viewWillAppear:)] take:1] subscribeNext:^(RACTuple * _Nullable x) {
-        @strongify(self);
+- (void)ylt_viewDidLoad {
+    [self ylt_viewDidLoad];
+    if ([self respondsToSelector:@selector(ylt_setup)]) {
+        [self performSelector:@selector(ylt_setup)];
+    }
+    if ([self respondsToSelector:@selector(ylt_addSubViews)]) {
+        [self performSelector:@selector(ylt_addSubViews)];
+    }
+    if ([self respondsToSelector:@selector(ylt_request)]) {
+        [self performSelector:@selector(ylt_request)];
+    }
+}
+
+- (void)ylt_viewWillAppear:(BOOL)animated {
+    [self ylt_viewWillAppear:animated];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         if ([self respondsToSelector:@selector(ylt_bindData)]) {
             [self performSelector:@selector(ylt_bindData)];
         }
-    }];
-    
-    [[self rac_signalForSelector:@selector(viewWillLayoutSubviews)] subscribeNext:^(RACTuple * _Nullable x) {
-        @strongify(self);
-        if ([self respondsToSelector:@selector(ylt_layout)]) {
-            [self performSelector:@selector(ylt_layout)];
-        }
-    }];
-    
-    [[self rac_signalForSelector:@selector(viewWillDisappear:)] subscribeNext:^(RACTuple * _Nullable x) {
-        @strongify(self);
-        if (self.navigationController && self.navigationController.viewControllers.count != 1 && [self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
-            if ([self respondsToSelector:@selector(ylt_dismiss)]) {
-                [self performSelector:@selector(ylt_dismiss)];
-            }
-            if ([self respondsToSelector:@selector(ylt_back)]) {
-                [self performSelector:@selector(ylt_back)];
-            }
-        } else if (self.presentedViewController == nil) {
-            if ([self respondsToSelector:@selector(ylt_dismiss)]) {
-                [self performSelector:@selector(ylt_dismiss)];
-            }
-            if ([self respondsToSelector:@selector(ylt_back)]) {
-                [self performSelector:@selector(ylt_back)];
-            }
-        }
-    }];
-    
-    [[self rac_signalForSelector:@selector(prepareForSegue:sender:)] subscribeNext:^(RACTuple * _Nullable x) {
-        UIStoryboardSegue *segue = x.first;
-        id sender = x.last;
-        if (segue && [segue respondsToSelector:@selector(destinationViewController)] && [segue.destinationViewController respondsToSelector:@selector(setylt_params:)]) {
-            [segue.destinationViewController performSelector:@selector(setylt_params:) withObject:sender];
-        }
-    }];
+    });
 }
 
+- (void)ylt_viewWillLayoutSubviews {
+    [self ylt_viewWillLayoutSubviews];
+    if ([self respondsToSelector:@selector(ylt_layout)]) {
+        [self performSelector:@selector(ylt_layout)];
+    }
+}
+
+- (void)ylt_viewWillDisappear:(BOOL)animated {
+    [self ylt_viewWillDisappear:animated];
+    if (self.navigationController && self.navigationController.viewControllers.count != 1 && [self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
+        if ([self respondsToSelector:@selector(ylt_dismiss)]) {
+            [self performSelector:@selector(ylt_dismiss)];
+        }
+        if ([self respondsToSelector:@selector(ylt_back)]) {
+            [self performSelector:@selector(ylt_back)];
+        }
+    } else if (self.presentedViewController == nil) {
+        if ([self respondsToSelector:@selector(ylt_dismiss)]) {
+            [self performSelector:@selector(ylt_dismiss)];
+        }
+        if ([self respondsToSelector:@selector(ylt_back)]) {
+            [self performSelector:@selector(ylt_back)];
+        }
+    }
+}
+
+- (void)ylt_prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [self ylt_prepareForSegue:segue sender:sender];
+    if (segue && [segue respondsToSelector:@selector(destinationViewController)] && [segue.destinationViewController respondsToSelector:@selector(setylt_params:)]) {
+        [segue.destinationViewController performSelector:@selector(setylt_params:) withObject:sender];
+    }
+}
 
 #pragma mark - Public Method
 
