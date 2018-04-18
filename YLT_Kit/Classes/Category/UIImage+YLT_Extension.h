@@ -26,7 +26,7 @@
  @param color 颜色
  @return 图片
  */
-+ (UIImage *)ylt_imageFromColor:(UIColor *)color;
++ (UIImage *)ylt_imageWithColor:(UIColor *)color;
 
 /**
  通过颜色,尺寸获取纯色的图片

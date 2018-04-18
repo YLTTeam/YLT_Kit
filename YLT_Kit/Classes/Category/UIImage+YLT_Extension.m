@@ -17,7 +17,7 @@
  @param color 颜色
  @return 图片
  */
-+ (UIImage *)ylt_imageFromColor:(UIColor *)color {
++ (UIImage *)ylt_imageWithColor:(UIColor *)color {
     return [UIImage ylt_imageWithColor:color withFrame:CGRectMake(0, 0, 1, 1)];
 }
 
