@@ -8,7 +8,6 @@
 #ifndef YLT_BaseMacro_h
 #define YLT_BaseMacro_h
 
-#import "NSObject+YLT_Extension.h"
 /// iOS设备信息
 #define iPad ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
 #define iPhone ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
@@ -26,6 +25,8 @@
 #define NAVIGATION_BAR_HEIGHT (iPhoneX ? 88.f : 64.f)
 // tabBar高度
 #define TAB_BAR_HEIGHT (iPhoneX ? (49.f + 34.f) : 49.f)
+// 导航栏不带statusbar
+#define NAVIGATION_BAR_WITHOUTSTATUS_HEIGHT 44
 // home indicator hone按钮高度
 #define HOME_INDICATOR_HEIGHT (iPhoneX ? 34.f : 0.f)
 
@@ -49,13 +50,18 @@
 
 #define iOSNew ([[UIDevice currentDevice] systemVersion].floatValue >= 12.0)
 
-//获取系统对象
+/// 获取系统对象
 #define YLT_Application        [UIApplication sharedApplication]
 #define YLT_AppWindow          [UIApplication sharedApplication].keyWindow
 #define YLT_AppDelegate        (AppDelegate *)[UIApplication sharedApplication].delegate
 #define YLT_RootViewController [UIApplication sharedApplication].delegate.window.rootViewController
-#define YLT_UserDefaults       [NSUserDefaults standardUserDefaults]
+// NSString To NSURL
+#define YTL_URL(urlString)    [NSURL URLWithString:urlString]
 #define YLT_NotificationCenter [NSNotificationCenter defaultCenter]
+#define YTL_FileManager        [NSFileManager defaultManager]
+//获取图片资源
+#define YTL_GetImage(imageName) [UIImage imageNamed:[NSString stringWithFormat:@"%@",imageName]]
+
 //获取屏幕宽高
 #define YLT_SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define YLT_SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -64,6 +70,9 @@
 // iOS沙盒目录
 #define YLT_DOCUMENT_PATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define YLT_CACHE_PATH [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
+
+
+
 
 #if DEBUG
 //输出日志信息
@@ -85,7 +94,7 @@
 //info.plist 文件信息
 #define YLT_InfoDictionary [[NSBundle mainBundle] infoDictionary]
 //当前应用程序的 bundle ID
-#define YLT_BundleIdentifier [[NSBundle mainBundle] bundleIdentifier]
+
 // app名称
 #define YLT_AppName [YLT_InfoDictionary objectForKey:@"CFBundleDisplayName"]
 //将URLTypes 中的第一个当做当前的回调参数
@@ -94,6 +103,10 @@
 #define YLT_AppVersion [YLT_InfoDictionary objectForKey:@"CFBundleShortVersionString"]
 // app build版本
 #define YLT_BuildVersion [YLT_InfoDictionary objectForKey:@"CFBundleVersion"]
+// device Model
+#define YLT_DeviceType  [[UIDevice currentDevice] model]
+// app bundle id
+#define YLT_BundleIdentifier [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]
 // iPhone 别名
 #define YLT_PhoneName [[UIDevice currentDevice] name]
 //当前Bundle
@@ -107,10 +120,28 @@
 #define YLT_RGBA(r,g,b,a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
 #define YLT_RGB(r,g,b) YLT_RGBA(r,g,b,1.0f)
 #define YLT_HEXCOLOR(hex) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:1]
-#define YLT_HEXCOLORA(hex, alpha) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:alpha]
+#define YLT_HEXCOLORA(hex,a) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:a]
 #define YLT_StringColor(color) [color YLT_ColorFromHexString]
 #define YLT_StringValue(str) [str ylt_isValid]?str:@""
 
+///  通知处理
+// 增加一个通知监听
+#define YLT_AddNotification(_selector,_name)\
+([[NSNotificationCenter defaultCenter] addObserver:self selector:_selector name:_name object:nil])
+// 删除一个通知
+#define YLT_RemoveNotificationWithName(_name)\
+([[NSNotificationCenter defaultCenter] removeObserver:self name:_name object:nil])
+// 删除所有通知
+#define YLT_RemoveNotificationObserver() ([[NSNotificationCenter defaultCenter] removeObserver:self])
+// 发送通知
+#define YLT_PostNotification(_name)\
+([[NSNotificationCenter defaultCenter] postNotificationName:_name object:nil userInfo:nil])
+// 发送通知 带object
+#define YLT_PostNotificationWithObj(_name,_obj)\
+([[NSNotificationCenter defaultCenter] postNotificationName:_name object:_obj userInfo:nil])
+// 发送通知 带object，info
+#define YLT_PostNotificationWithInfos(_name,_obj,_infos)\
+([[NSNotificationCenter defaultCenter] postNotificationName:_name object:_obj userInfo:_infos])
 
 //快速生成单例对象
 #define YLT_ShareInstanceHeader(cls)    + (cls *)shareInstance;
@@ -138,6 +169,7 @@
                                                 return share_cls;\
                                             }
 //懒加载宏定义
+
 #define YLT_Lazy(cls, sel, _sel) \
                                     - (cls *)sel {\
                                         if (!_sel) {\
@@ -164,9 +196,6 @@
 #define YLT_MAINDelay(x, block) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(x * NSEC_PER_SEC)), dispatch_get_main_queue(), block)
 #define YLT_BACK(block)  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block)
 #define YLT_BACKDelay(x, block) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(x * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block)
-
-
-
 
 
 #endif /* YLT_BaseMacro_h */

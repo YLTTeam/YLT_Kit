@@ -31,7 +31,7 @@
  @return 结果
  */
 + (NSDictionary *)ylt_dictionaryFromString:(NSString *)jsonString {
-    if (jsonString.ylt_isBlank) {
+    if ([NSString ylt_isBlankString:jsonString]) {
         return nil;
     }
     NSError *error;

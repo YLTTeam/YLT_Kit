@@ -7,6 +7,30 @@
 
 #import <UIKit/UIKit.h>
 
+#if __has_include(<YLT_BaseLib/YLT_BaseLib.h>)
+#import <YLT_BaseLib/YLT_BaseLib.h>
+#endif
+
+#if __has_include(<ReactiveObjc/ReactiveObjc.h>)
+#import <ReactiveObjC/ReactiveObjC.h>
+#endif
+
+#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
+#import <SDWebImage/UIImageView+WebCache.h>
+#endif
+
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#endif
+
+#if __has_include(<AFNetworking/AFNetworking.h>)
+#import <AFNetworking/AFNetworking.h>
+#endif
+
+#if __has_include("PHTools.h")
+#import "PHTools.h"
+#endif
+
 @interface UIView (YLT_BaseView)
 
 /**

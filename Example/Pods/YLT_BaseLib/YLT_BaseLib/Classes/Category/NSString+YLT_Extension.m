@@ -13,7 +13,7 @@
 #import "sys/utsname.h"
 
 @implementation NSString (YLT_Extension)
-@dynamic ylt_isBlank;
+
 @dynamic ylt_isValid;
 @dynamic ylt_isChinese;
 @dynamic ylt_isPureInt;
@@ -486,6 +486,28 @@
 }
 
 /**
+ 获取字符串的高度
+ 
+ @param font 字体大小
+ @param size 字符的矩形默认大小
+ @return 高度
+ */
+- (CGFloat)ylt_heightWithFont:(UIFont *)font constrainedToSize:(CGSize)size {
+    return [self ylt_sizeWithFont:font constrainedToSize:size].height+2.5;
+}
+
+/**
+ 获取字符串的宽度
+ 
+ @param font 字体大小
+ @param size 字符的矩形默认大小
+ @return 宽度
+ */
+- (CGFloat)ylt_widthWithFont:(UIFont *)font constrainedToSize:(CGSize)size {
+    return [self ylt_sizeWithFont:font constrainedToSize:size].width+2.5;
+}
+
+/**
  修剪字符串左边的字符
  
  @param characterSet 字符串处理工具类
@@ -591,14 +613,6 @@
 }
 
 #pragma mark - setter getter
-/**
- 字符串是否为空
- 
- @return YES:空 NO:非空
- */
-- (BOOL)ylt_isBlank {
-    return [NSString ylt_isBlankString:self];
-}
 
 /**
  字符串是否有效
@@ -746,6 +760,154 @@
     [[NSScanner scannerWithString:aString] scanHexInt:&a];
     
     return [UIColor colorWithRed:((float) r / 255.0f) green:((float) g / 255.0f) blue:((float) b / 255.0f) alpha:((float) a / 255.0f)];
+}
+
+/**
+ 字符串是否包含特殊字符
+ 
+ @return YES:包含 NO:不包含
+ */
+-(BOOL)ylt_isIncludeSpecialCharact {
+    NSString *str =@"^[A-Za-z0-9\\u4e00-\u9fa5]+$";
+    NSPredicate* emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", str];
+    if (![emailTest evaluateWithObject:self]) {
+        return YES;
+    }
+    //***需要过滤的特殊字符：~￥#&*<>《》()[]{}【】^@￡¤￥|§¨「」『』￠￢￣~@#￥&*（）——+|《》$_€。
+    NSRange urgentRange = [self rangeOfCharacterFromSet: [NSCharacterSet characterSetWithCharactersInString: @"~￥#&*<>《》()[]{}【】^@￡¤￥|§¨「」『』￠￢￣~@#￥&*（）——+|《》$_€?？。."]];
+    if (urgentRange.location == NSNotFound)
+    {
+        return NO;
+    }
+    return YES;
+}
+
+/**
+ 是否包含emoji表情
+ 
+ @return YES:包含 NO:不包含
+ */
+- (BOOL)ylt_stringContainsEmoji {
+    __block BOOL returnValue = NO;
+    [self enumerateSubstringsInRange:NSMakeRange(0, [self length])
+                             options:NSStringEnumerationByComposedCharacterSequences
+                          usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+                              const unichar hs = [substring characterAtIndex:0];
+                              if (0xd800 <= hs && hs <= 0xdbff) {
+                                  if (substring.length > 1) {
+                                      const unichar ls = [substring characterAtIndex:1];
+                                      const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+                                      if (0x1d000 <= uc && uc <= 0x1f77f) {
+                                          returnValue = YES;
+                                      }
+                                  }
+                              } else if (substring.length > 1) {
+                                  const unichar ls = [substring characterAtIndex:1];
+                                  if (ls == 0x20e3) {
+                                      returnValue = YES;
+                                  }
+                              } else {
+                                  if (0x2100 <= hs && hs <= 0x27ff) {
+                                      returnValue = YES;
+                                  } else if (0x2B05 <= hs && hs <= 0x2b07) {
+                                      returnValue = YES;
+                                  } else if (0x2934 <= hs && hs <= 0x2935) {
+                                      returnValue = YES;
+                                  } else if (0x3297 <= hs && hs <= 0x3299) {
+                                      returnValue = YES;
+                                  } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
+                                      returnValue = YES;
+                                  }
+                              }
+                          }];
+    
+    return returnValue;
+}
+
+/**
+ 去除掉首尾的空白字符和换行字符
+ 
+ @return 替换后的字符串
+ */
+- (NSString *)ylt_removeLinefeedAndSpace {
+    NSString *content = [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    content = [content stringByReplacingOccurrencesOfString:@"\r" withString:@" "];
+    content = [content stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+    return content;
+}
+
+/**
+ 去除掉首尾的空白字符和换行字符
+ 
+ @return 替换后的字符串
+ */
+- (NSString *)ylt_removeRiskBlankAndLinefeed {
+    NSString *content = [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    content = [content stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+    content = [content stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    content = [content stringByReplacingOccurrencesOfString:@" " withString:@""];
+    return content;
+}
+
+/**
+ 格式化金额，金额三位一个逗号
+ 
+ @param amount 需要给格式化的数字
+ @return 格式化结果
+ */
++ (NSString *)ylt_amountFormatWithAmount:(CGFloat)amount {
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    return [formatter stringFromNumber:@(amount)];
+}
+
+/**
+ 去掉浮点型小数点，取绝对值
+ 
+ @param temp 浮点数
+ @return 格式化结果
+ */
++ (NSString *)ylt_stringByRMBFloat:(CGFloat)temp {
+    NSString *str_float = [NSString stringWithFormat:@"%.2f",temp];
+    NSRange range_float = [str_float rangeOfString:@"."];
+    if (range_float.location != NSNotFound) {
+        NSString *str_1 = [str_float substringFromIndex:range_float.location+range_float.length];
+        if ([str_1 floatValue] == 0) {
+            str_float = [str_float substringToIndex:range_float.location];
+        }
+    }
+    return str_float;
+}
+
+/**
+ 手机号码4-7位隐藏为星
+ 
+ @param phoneNum 手机号
+ @return 隐藏后的结果
+ */
++ (NSString *)ylt_phoneNumToAsterisk:(NSString *)phoneNum {
+    if (phoneNum.ylt_isPhone) {
+        return [phoneNum stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+    }
+    return phoneNum;
+}
+
+/**
+ 获取到所有子字符串的位置
+ 
+ @param searchString 子串
+ @param str 目标字串
+ @return 位置结果
+ */
++ (NSArray *)ylt_rangesOfString:(NSString *)searchString inString:(NSString *)str {
+    NSMutableArray *results = [NSMutableArray array];
+    NSRange searchRange = NSMakeRange(0, [str length]);
+    NSRange range;
+    while ((range = [str rangeOfString:searchString options:0 range:searchRange]).location != NSNotFound) {
+        [results addObject:[NSValue valueWithRange:range]];
+        searchRange = NSMakeRange(NSMaxRange(range), [str length] - NSMaxRange(range));
+    }
+    return results;
 }
 
 @end

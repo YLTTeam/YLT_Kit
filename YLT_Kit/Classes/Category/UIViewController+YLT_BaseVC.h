@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIView+YLT_BaseView.h"
 
 @protocol HookBaseVCProtocol <NSObject>
 

@@ -6,6 +6,7 @@
 //
 
 #import "YLT_ModularManager.h"
+#import "NSObject+YLT_Extension.h"
 
 NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic push

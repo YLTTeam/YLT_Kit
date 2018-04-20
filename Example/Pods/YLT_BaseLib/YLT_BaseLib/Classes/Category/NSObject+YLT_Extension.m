@@ -9,10 +9,10 @@
 #import <sys/types.h>
 #import <sys/sysctl.h>
 #import <objc/message.h>
+#import <MJExtension/MJExtension.h>
+#import <FastCoding/FastCoder.h>
 
 @implementation NSObject (YLT_Extension)
-
-
 
 /**
  获取当前的控制器
@@ -116,5 +116,48 @@
                             method_getTypeEncoding(originalMethod));
     }
 }
+
+/**
+ *  存储对象
+ *
+ *  @param key key
+ */
+- (void)ylt_storeValueWithKey:(NSString *)key {
+    NSParameterAssert(self);
+    NSParameterAssert(key);
+    
+    NSData *data = [FastCoder dataWithRootObject:self];
+    if (data) {
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:key];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+/**
+ *  获取对象
+ *
+ *  @param key key
+ *
+ *  @return 对象
+ */
++ (id)ylt_valueByKey:(NSString *)key {
+    NSParameterAssert(key);
+    NSData *data = [[NSUserDefaults standardUserDefaults] valueForKey:key];
+    return [FastCoder objectWithData:data];
+}
+
+/**
+ *  移除对象
+ *
+ *  @param key key
+ */
++ (void)ylt_removeValueForKey:(NSString *)key {
+    NSParameterAssert(key);
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark -
+
 
 @end

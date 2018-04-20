@@ -8,6 +8,12 @@
 #ifndef YLT_Kit_h
 #define YLT_Kit_h
 
+#import "YLT_BaseCollection.h"
+#import "YLT_BaseCollectionVC.h"
+#import "YLT_BaseTable.h"
+#import "YLT_BaseTableVC.h"
+#import "YLT_BaseVC.h"
+#import "YLT_BaseView.h"
 #import "UIButton+YLT_Create.h"
 #import "UIImageView+YLT_Create.h"
 #import "UILabel+YLT_Create.h"
@@ -31,7 +37,5 @@
 #import "YLT_HorizontalFlowLayout.h"
 #import "YLT_TableRowModel.h"
 #import "YLT_TableSectionModel.h"
-#import "YLT_BaseVC.h"
-
 
 #endif /* YLT_Kit_h */

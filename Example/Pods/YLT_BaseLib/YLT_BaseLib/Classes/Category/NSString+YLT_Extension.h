@@ -11,11 +11,6 @@
 @interface NSString (YLT_Extension)
 
 /**
- 字符串是否为空
- */
-@property (nonatomic, assign) BOOL ylt_isBlank;
-
-/**
  字符串是否有效
  */
 @property (nonatomic, assign) BOOL ylt_isValid;
@@ -152,7 +147,7 @@
 
 /**
  验证URL
-
+ 
  @param sender 目标字符串
  @return YES:有效 NO:无效
  */
@@ -160,7 +155,7 @@
 
 /**
  验证本地路径
-
+ 
  @param sender 目标字符串
  @return YES:有效 NO:无效
  */
@@ -251,6 +246,24 @@
 - (CGSize)ylt_sizeWithFont:(UIFont *)font paragraphStyle:(NSMutableParagraphStyle *)paragraphStyle boundingRectWithSize:(CGSize)size ;
 
 /**
+ 获取字符串的高度
+ 
+ @param font 字体大小
+ @param size 字符的矩形默认大小
+ @return 高度
+ */
+- (CGFloat)ylt_heightWithFont:(UIFont *)font constrainedToSize:(CGSize)size;
+
+/**
+ 获取字符串的宽度
+ 
+ @param font 字体大小
+ @param size 字符的矩形默认大小
+ @return 宽度
+ */
+- (CGFloat)ylt_widthWithFont:(UIFont *)font constrainedToSize:(CGSize)size;
+
+/**
  修剪字符串左边的字符
  
  @param characterSet 字符串处理工具类
@@ -283,9 +296,69 @@
 
 /**
  将当前字符串转化为颜色值
-
+ 
  @return 颜色值
  */
 - (UIColor *)ylt_colorFromHexString;
+
+/**
+ 字符串是否包含特殊字符
+ 
+ @return YES:包含 NO:不包含
+ */
+-(BOOL)ylt_isIncludeSpecialCharact;
+
+/**
+ 是否包含emoji表情
+ 
+ @return YES:包含 NO:不包含
+ */
+- (BOOL)ylt_stringContainsEmoji;
+
+/**
+ 去除掉首尾的空白字符和换行字符
+ 
+ @return 替换后的字符串
+ */
+- (NSString *)ylt_removeLinefeedAndSpace;
+/**
+ 去除掉首尾的空白字符和换行字符
+ 
+ @return 替换后的字符串
+ */
+- (NSString *)ylt_removeRiskBlankAndLinefeed;
+
+/**
+ 格式化金额，金额三位一个逗号
+ 
+ @param amount 需要给格式化的数字
+ @return 格式化结果
+ */
++ (NSString *)ylt_amountFormatWithAmount:(CGFloat)amount;
+
+/**
+ 去掉浮点型小数点，取绝对值
+ 
+ @param temp 浮点数
+ @return 格式化结果
+ */
++ (NSString *)ylt_stringByRMBFloat:(CGFloat)temp;
+
+/**
+ 手机号码4-7位隐藏为星
+ 
+ @param phoneNum 手机号
+ @return 隐藏后的结果
+ */
++ (NSString *)ylt_phoneNumToAsterisk:(NSString *)phoneNum;
+
+/**
+ 获取到所有子字符串的位置
+ 
+ @param searchString 子串
+ @param str 目标字串
+ @return 位置结果
+ */
++ (NSArray *)ylt_rangesOfString:(NSString *)searchString inString:(NSString *)str;
 
 @end

@@ -6,9 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIViewController+YLT_BaseVC.h"
-#import <YLT_BaseLib/YLT_BaseLib.h>
-#import <ReactiveObjc/ReactiveObjc.h>
+#import "YLT_BaseView.h"
 
 @interface YLT_BaseVC : UIViewController
 

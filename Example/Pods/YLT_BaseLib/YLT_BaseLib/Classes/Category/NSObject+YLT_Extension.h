@@ -8,7 +8,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-
 @interface NSObject (YLT_Extension)
 
 /**
@@ -33,6 +32,29 @@
  @param newSelector 替换的方法
  */
 + (void)ylt_swizzleInstanceMethod:(SEL)origSelector withMethod:(SEL)newSelector;
+
+/**
+ *  存储对象
+ *
+ *  @param key key
+ */
+- (void)ylt_storeValueWithKey:(NSString *)key;
+
+/**
+ *  获取对象
+ *
+ *  @param key key
+ *
+ *  @return 对象
+ */
++ (id)ylt_valueByKey:(NSString *)key;
+
+/**
+ *  移除对象
+ *
+ *  @param key key
+ */
++ (void)ylt_removeValueForKey:(NSString *)key;
 
 
 @end

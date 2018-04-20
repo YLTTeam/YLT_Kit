@@ -109,7 +109,6 @@
  */
 + (NSArray *)ylt_readFromGroupForKey:(NSString *)key;
 
-
 /**
  移除所有的当前Model的对象
  

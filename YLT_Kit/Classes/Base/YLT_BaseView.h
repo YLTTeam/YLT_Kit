@@ -1,21 +1,11 @@
-#ifdef __OBJC__
-#import <UIKit/UIKit.h>
-#else
-#ifndef FOUNDATION_EXPORT
-#if defined(__cplusplus)
-#define FOUNDATION_EXPORT extern "C"
-#else
-#define FOUNDATION_EXPORT extern
-#endif
-#endif
-#endif
+//
+//  YLT_BaseView.h
+//  AFNetworking
+//
+//  Created by 项普华 on 2018/4/20.
+//
 
-#import "YLT_BaseCollection.h"
-#import "YLT_BaseCollectionVC.h"
-#import "YLT_BaseTable.h"
-#import "YLT_BaseTableVC.h"
-#import "YLT_BaseVC.h"
-#import "YLT_BaseView.h"
+#import <UIKit/UIKit.h>
 #import "UIButton+YLT_Create.h"
 #import "UIImageView+YLT_Create.h"
 #import "UILabel+YLT_Create.h"
@@ -39,8 +29,7 @@
 #import "YLT_HorizontalFlowLayout.h"
 #import "YLT_TableRowModel.h"
 #import "YLT_TableSectionModel.h"
-#import "YLT_Kit.h"
 
-FOUNDATION_EXPORT double YLT_KitVersionNumber;
-FOUNDATION_EXPORT const unsigned char YLT_KitVersionString[];
+@interface YLT_BaseView : UIView
 
+@end
