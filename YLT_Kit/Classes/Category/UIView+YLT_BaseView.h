@@ -27,6 +27,10 @@
 #import <AFNetworking/AFNetworking.h>
 #endif
 
+#if __has_include(<UMMobClick/MobClick.h>)
+#import <UMMobClick/MobClick.h>
+#endif
+
 #if __has_include("PHTools.h")
 #import "PHTools.h"
 #endif
