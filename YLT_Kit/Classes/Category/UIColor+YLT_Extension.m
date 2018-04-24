@@ -397,6 +397,25 @@
             
             return [UIColor colorWithPatternImage:backgroundColorImage];
         }
+            break;
+        case YLT_UIGradientStyleTriangle: {
+            backgroundGradientLayer.colors = cgColors;
+            
+            [backgroundGradientLayer setStartPoint:CGPointMake(0.0, 1)];
+            [backgroundGradientLayer setEndPoint:CGPointMake(1.0, 0)];
+            if (c_locations) {
+                backgroundGradientLayer.locations = c_locations;
+            }else{
+                backgroundGradientLayer.locations = @[@0,@1];
+            }
+            UIGraphicsBeginImageContextWithOptions(backgroundGradientLayer.bounds.size,NO, [UIScreen mainScreen].scale);
+            [backgroundGradientLayer renderInContext:UIGraphicsGetCurrentContext()];
+            UIImage *backgroundColorImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            return [UIColor colorWithPatternImage:backgroundColorImage];
+        }
+            break;
             
         case YLT_UIGradientStyleTopToBottom:
         default: {

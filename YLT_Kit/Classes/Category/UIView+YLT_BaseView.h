@@ -13,6 +13,7 @@
 
 #if __has_include(<ReactiveObjc/ReactiveObjc.h>)
 #import <ReactiveObjC/ReactiveObjC.h>
+#import <ReactiveObjC/RACEXTScope.h>
 #endif
 
 #if __has_include(<SDWebImage/UIImageView+WebCache.h>)

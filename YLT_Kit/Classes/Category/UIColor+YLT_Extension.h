@@ -10,7 +10,8 @@
 typedef NS_ENUM (NSUInteger, UIGradientStyle) {
     YLT_UIGradientStyleLeftToRight,
     YLT_UIGradientStyleRadial,
-    YLT_UIGradientStyleTopToBottom
+    YLT_UIGradientStyleTopToBottom,
+    YLT_UIGradientStyleTriangle
 };
 
 @interface UIColor (YLT_Extension)
