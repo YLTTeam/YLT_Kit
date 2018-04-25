@@ -9,6 +9,7 @@
 #import "YLTViewController.h"
 #import <YLT_Kit/YLT_Kit.h>
 #import "YLTTableViewCell.h"
+#import <YLT_Kit/YLT_Kit.h>
 
 @interface Person : NSObject
 @property (nonatomic, strong) NSString *name;
@@ -29,9 +30,12 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor redColor];
-//    UIImageView.ylt_layout(self.view, ^(MASConstraintMaker *make) {
-//        make.edges.equalTo(self.view);
-//    }).ylt_convertToImageView().ylt_image([UIImage ylt_imageNamed:@"bg"]).ylt_contentMode(UIViewContentModeScaleAspectFit);
+    UIImageView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    })
+    .ylt_convertToImageView()
+    .ylt_image([[UIImage ylt_imageNamed:@"bg"] ylt_representation])
+    .ylt_contentMode(UIViewContentModeScaleAspectFit);
 //    UILabel
 //    .ylt_layout(self.view, ^(MASConstraintMaker *make) {
 //        make.edges.equalTo(self.view);
@@ -99,17 +103,17 @@
                                                                       headerView:UIView.ylt_create().ylt_backgroundColor([UIColor redColor])
                                                                     footerHeight:20
                                                                       footerView:UIView.ylt_create().ylt_backgroundColor([UIColor blackColor])];
-    UITableView
-    .ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    }, UITableViewStylePlain)
-    .ylt_tableHeader(header)
-    .ylt_tableFooter(footer)
-    .ylt_convertToTableView()
-    .ylt_cell(60, [YLTTableViewCell class])
-    .ylt_tableData(@[model, model1]).ylt_cellClick(^(UITableViewCell *cell, NSIndexPath *indexPath, id response) {
-        YLT_LogInfo(@"%@", response);
-    });
+//    UITableView
+//    .ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+//        make.edges.equalTo(self.view);
+//    }, UITableViewStylePlain)
+//    .ylt_tableHeader(header)
+//    .ylt_tableFooter(footer)
+//    .ylt_convertToTableView()
+//    .ylt_cell(60, [YLTTableViewCell class])
+//    .ylt_tableData(@[model, model1]).ylt_cellClick(^(UITableViewCell *cell, NSIndexPath *indexPath, id response) {
+//        YLT_LogInfo(@"%@", response);
+//    });
 }
 
 - (void)ylt_dismiss {

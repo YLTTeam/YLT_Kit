@@ -131,7 +131,7 @@
     return [self ylt_scaledToSize:size highQuality:NO];
 }
 
-- (UIImage*)ylt_scaledToSize:(CGSize)size highQuality:(BOOL)highQuality{
+- (UIImage*)ylt_scaledToSize:(CGSize)size highQuality:(BOOL)highQuality {
     UIImage *sourceImage = self;
     UIImage *newImage = nil;
     CGSize imageSize = sourceImage.size;
@@ -635,7 +635,7 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
  @return 优化后的图片，返回的一定是JPEG格式的
  */
 - (UIImage *)ylt_representation {
-    return [UIImage imageWithData:[UIImage ylt_representationData:UIImageJPEGRepresentation(self, 0.95) kb:512]];
+    return [UIImage imageWithData:[UIImage ylt_representationData:UIImageJPEGRepresentation(self, 0.95) kb:1024]];
 }
 
 /**
@@ -681,10 +681,11 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
  @return 压缩后的Data
  */
 + (NSData *)ylt_representationData:(NSData *)imageData kb:(NSUInteger)kb {
+    kb *= 1024;
     if (imageData.length <= kb) {
         return imageData;
     }
-    NSString *imageType = [self ylt_imageTypeFromData:imageData];
+    NSString *imageType = [[self ylt_imageTypeFromData:imageData] uppercaseString];
     if ([imageType isEqualToString:@"PNG"]) {
         while (imageData.length > kb) {
             @autoreleasepool {
@@ -699,7 +700,7 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
             @autoreleasepool {
                 CGFloat scale = ((CGFloat)kb)/((CGFloat)imageData.length);
                 UIImage *image = [UIImage imageWithData:imageData];
-                imageData = UIImageJPEGRepresentation([image ylt_scaledToSize:CGSizeMake(image.size.width*scale*2., image.size.height*scale*2.) highQuality:YES], 0.98);
+                imageData = UIImageJPEGRepresentation([image ylt_scaledToSize:CGSizeMake(image.size.width*scale, image.size.height*scale) highQuality:NO], 0.98);
             }
         }
         return imageData;
