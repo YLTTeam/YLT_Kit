@@ -44,7 +44,7 @@
 }
 
 - (CGFloat)ylt_centerX {
-    return (self.ylt_x+self.ylt_width)/2.;
+    return self.ylt_x+self.ylt_width/2.;
 }
 
 - (void)setYlt_centerX:(CGFloat)ylt_centerX {
@@ -52,7 +52,7 @@
 }
 
 - (CGFloat)ylt_centerY {
-    return (self.ylt_y+self.ylt_height)/2.;
+    return self.ylt_y+self.ylt_height/2.;
 }
 
 - (void)setYlt_centerY:(CGFloat)ylt_centerY {

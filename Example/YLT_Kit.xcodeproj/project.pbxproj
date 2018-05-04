@@ -40,7 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2C958ED96D62709C3D457D89 /* YLT_Kit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = YLT_Kit.podspec; path = ../YLT_Kit.podspec; sourceTree = "<group>"; };
+		2C958ED96D62709C3D457D89 /* YLT_Kit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = YLT_Kit.podspec; path = ../YLT_Kit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		35312F6B1FAFF758000BA4EE /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
 		5CC2E41596EFB3A285F0687B /* Pods-YLT_Kit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YLT_Kit_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-YLT_Kit_Example/Pods-YLT_Kit_Example.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* YLT_Kit_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YLT_Kit_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
