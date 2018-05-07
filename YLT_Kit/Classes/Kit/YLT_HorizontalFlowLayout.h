@@ -26,6 +26,7 @@
 @interface YLT_HorizontalFlowLayout : UICollectionViewFlowLayout
 
 @property (nonatomic, copy) NSMutableDictionary *ylt_sectionDic;
+
 @property (strong, nonatomic) NSMutableArray *ylt_allAttributes;
 
 /**
