@@ -91,12 +91,26 @@
 - (CGFloat)ylt_top {
     return self.ylt_y;
 }
+    
+- (void)setYlt_top:(CGFloat)ylt_top {
+    CGRect frame = self.frame;
+    self.ylt_y = ylt_top;
+    frame.origin.y = self.ylt_y;
+    self.frame = frame;
+}
 
 /**
  视图的 底点 max_y
  */
 - (CGFloat)ylt_bottom {
     return (self.ylt_y+self.ylt_height);
+}
+    
+- (void)setYlt_bottom:(CGFloat)ylt_bottom {
+    CGRect frame = self.frame;
+    self.ylt_y = ylt_bottom-frame.size.height;
+    frame.origin.y = self.ylt_y;
+    self.frame = frame;
 }
 
 /**
@@ -105,12 +119,26 @@
 - (CGFloat)ylt_left {
     return self.ylt_x;
 }
+    
+- (void)setYlt_left:(CGFloat)ylt_left {
+    CGRect frame = self.frame;
+    self.ylt_x = ylt_left;
+    frame.origin.x = self.ylt_x;
+    self.frame = frame;
+}
 
 /**
  视图的 右边 max_x
  */
 - (CGFloat)ylt_right {
     return (self.ylt_x+self.ylt_width);
+}
+    
+- (void)setYlt_right:(CGFloat)ylt_right {
+    CGRect frame = self.frame;
+    self.ylt_x = ylt_right-frame.size.width;
+    frame.origin.x = self.ylt_x;
+    self.frame = frame;
 }
 
 /**
