@@ -121,7 +121,7 @@
 #define YLT_RGB(r,g,b) YLT_RGBA(r,g,b,1.0f)
 #define YLT_HEXCOLOR(hex) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:1]
 #define YLT_HEXCOLORA(hex,a) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:a]
-#define YLT_StringColor(color) [color YLT_ColorFromHexString]
+#define YLT_StringColor(color) [color ylt_colorFromHexString]
 #define YLT_StringValue(str) [str ylt_isValid]?str:@""
 
 ///  通知处理
