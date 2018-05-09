@@ -164,4 +164,25 @@
  */
 + (NSData *)ylt_representationData:(NSData *)imageData kb:(NSUInteger)kb;
 
+/**
+ *  压图片大小
+ *
+ *  @param originImage  原图
+ *  @param maxLength 最长边
+ *
+ *  @return image
+ */
++ (UIImage *)ylt_representationImageSizeWithImage:(UIImage *)originImage maxLength:(CGFloat)maxLength;
+
+/**
+ *  压图片大小和质量
+ *
+ *  @param originImage 图片源
+ *  @param maxLength 最大宽高限制
+ *  @param maxKB 最大质量限制
+ *
+ *  @return data
+ */
++ (NSData *)ylt_representationImageSizeAndQualityWithImage:(UIImage *)originImage maxLength:(NSInteger)maxLength maxKB:(NSInteger)maxKB;
+
 @end

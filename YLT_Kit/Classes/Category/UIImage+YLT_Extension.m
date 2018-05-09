@@ -681,31 +681,117 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
  @return 压缩后的Data
  */
 + (NSData *)ylt_representationData:(NSData *)imageData kb:(NSUInteger)kb {
+    UIImage *image = [UIImage imageWithData:imageData];
+    if (!image) {
+        return nil;
+    }
     kb *= 1024;
-    if (imageData.length <= kb) {
-        return imageData;
+    CGFloat compression = 1;
+    NSData *compressedData = UIImageJPEGRepresentation(image, compression);
+    if (compressedData.length < kb) {
+        return compressedData;
     }
-    NSString *imageType = [[self ylt_imageTypeFromData:imageData] uppercaseString];
-    if ([imageType isEqualToString:@"PNG"]) {
-        while (imageData.length > kb) {
-            @autoreleasepool {
-                CGFloat scale = ((CGFloat)kb)/((CGFloat)imageData.length);
-                UIImage *image = [UIImage imageWithData:imageData];
-                imageData = UIImagePNGRepresentation([image ylt_scaledToSize:CGSizeMake(image.size.width*scale*2., image.size.height*scale*2.) highQuality:YES]);
-            }
+    
+    CGFloat max = 1;
+    CGFloat min = 0;
+    for (int i = 0; i < 10; ++i) {
+        compression = (max + min) / 2;
+        compressedData = UIImageJPEGRepresentation(image, compression);
+        if (compressedData.length < kb * 0.9) {
+            min = compression;
+        } else if (compressedData.length > kb) {
+            max = compression;
+        } else {
+            break;
         }
-        return imageData;
-    } else if ([imageType isEqualToString:@"JPEG"]) {
-        while (imageData.length > kb) {
-            @autoreleasepool {
-                CGFloat scale = ((CGFloat)kb)/((CGFloat)imageData.length);
-                UIImage *image = [UIImage imageWithData:imageData];
-                imageData = UIImageJPEGRepresentation([image ylt_scaledToSize:CGSizeMake(image.size.width*scale, image.size.height*scale) highQuality:NO], 0.98);
-            }
-        }
-        return imageData;
     }
-    return imageData;
+    
+    return compressedData;
+}
+
+/**
+ *  压图片大小
+ *
+ *  @param originImage  原图
+ *  @param maxLength 最长边
+ *
+ *  @return image
+ */
++ (UIImage *)ylt_representationImageSizeWithImage:(UIImage *)originImage maxLength:(CGFloat)maxLength {
+    if (!originImage) return nil;
+    UIImage *image = originImage;
+    CGSize scaleSize = CGSizeMake(originImage.size.width, originImage.size.height);
+    CGSize resultSize = [self getCompressSize:scaleSize maxLength:maxLength];
+    
+    if (!CGSizeEqualToSize(scaleSize, resultSize)) {
+        UIGraphicsBeginImageContext(CGSizeMake(resultSize.width, resultSize.height));
+        [originImage drawInRect:CGRectMake(0, 0, resultSize.width, resultSize.height)];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    
+    return image;
+}
+
+/**
+ *  压图片大小和质量
+ *
+ *  @param originImage 图片源
+ *  @param maxLength 最大宽高限制
+ *  @param maxKB 最大质量限制
+ *
+ *  @return data
+ */
++ (NSData *)ylt_representationImageSizeAndQualityWithImage:(UIImage *)originImage maxLength:(NSInteger)maxLength maxKB:(NSInteger)maxKB {
+    UIImage *image = [self ylt_representationImageSizeWithImage:originImage maxLength:maxLength];
+    NSData *data = [self ylt_representationData:UIImageJPEGRepresentation(image, 1.0) kb:maxKB];
+    
+    return data;
+}
+
++ (CGSize)getCompressSize:(CGSize)originSize maxLength:(NSInteger)maxLength {
+    CGSize result = originSize;
+    
+    NSInteger width  = originSize.width;
+    NSInteger height = originSize.height;
+    
+    float wTohRatio = ((float) width) / height;
+    
+    float scale = 0.0;
+    if (wTohRatio > 4.0) {
+        scale = ((float) width) / 2484;
+    } else if (wTohRatio < 0.25) {
+        scale = ((float) height) / 2484;
+    } else {
+        scale = ((float) MAX(width, height)) / maxLength;
+    }
+    
+    if (scale >= 1.5) {
+        scale = [self getCompressScale:scale];
+        NSInteger width  = originSize.width / scale;
+        NSInteger height = originSize.height / scale;
+        
+        result = CGSizeMake(width, height);
+        NSLog(@"输出图片尺寸压缩比为 %f", scale);
+    } else {
+        NSLog(@"按照原图尺寸输出，质量压缩'可能'达不到要求，请注意修改目标尺寸！！！");
+    }
+    
+    return result;
+}
+
++ (float)getCompressScale:(float)originScale {
+    float f = log2f(originScale);               // 计算以以2为底originScale的对数
+    float ceilF  = ceilf(f);                    // 向上取整
+    float floorF = floorf(f);                   // 向下取整
+    
+    float ceilScale  = powf(2, ceilF);          // 2的ceilF次幂
+    float floorScale = powf(2, floorF);         // 2的floorF次幂
+    
+    float dDuration1 = ceilScale - originScale;
+    float dDuration2 = originScale - floorScale;
+    
+    return dDuration1 <= dDuration2 ? ceilScale: floorScale; // 取最近的2次幂，小数四舍五入
 }
 
 @end
