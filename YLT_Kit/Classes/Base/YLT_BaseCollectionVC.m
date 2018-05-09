@@ -57,6 +57,7 @@
 }
 
 #pragma mark - viewWillAppear 中调用
+
 /**
  数据与视图的绑定
  主要负责数据与页面的绑定操作
@@ -65,6 +66,7 @@
 }
 
 #pragma mark - viewWillLayoutSubviews 中调用
+
 /**
  页面的布局
  视图加载完成需要更新布局的操作
@@ -73,6 +75,7 @@
 }
 
 #pragma mark - viewWillDisappear 中调用
+
 /**
  页面消失的调用
  当页面消失的时候的回调
