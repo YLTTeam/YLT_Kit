@@ -573,19 +573,27 @@ void SFLog(const char* file, const char* func, int line, NSString* fmt, ...)
 }
 + (instancetype) hookDictionaryWithObjects:(const id [])objects forKeys:(const id [])keys count:(NSUInteger)cnt
 {
-    NSInteger index = 0;
-    id ks[cnt];
-    id objs[cnt];
-    for (NSInteger i = 0; i < cnt ; ++i) {
-        if (keys[i] && objects[i]) {
-            ks[index] = keys[i];
-            objs[index] = objects[i];
-            ++index;
-        } else {
-            SFAssert(NO, @"NSDictionary invalid args hookDictionaryWithObject:[%@] forKey:[%@]", objects[i], keys[i]);
-        }
+    id data = nil;
+    @try {
+        data = [self hookDictionaryWithObjects:objects forKeys:keys count:cnt];
     }
-    return [self hookDictionaryWithObjects:objs forKeys:ks count:index];
+    @catch (NSException *exception) {
+        SFAssert(NO, @"exception is %@",exception);
+        NSUInteger index = 0;
+        id  _Nonnull __unsafe_unretained objs[cnt];
+        id  _Nonnull __unsafe_unretained ks[cnt];
+        for (int i = 0; i < cnt; i++) {
+            if (objects[i] && keys[i]) {
+                objs[index] = objects[i];
+                ks[index] = keys[i];
+                index++;
+            }
+        }
+        data = [self hookDictionaryWithObjects:objs forKeys:ks count:index];
+    }
+    @finally {
+        return data;
+    }
 }
 - (id) hookObjectForKey:(id)aKey
 {

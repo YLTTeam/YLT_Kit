@@ -61,6 +61,15 @@
  @return 存储结果
  */
 - (BOOL)ylt_saveForKey:(NSString *)key {
+    if ([NSString ylt_isBlankString:key]) {
+        YLT_LogWarn(@"KEY 不能为空");
+        return NO;
+    }
+    if (self == nil || ![self respondsToSelector:@selector(mj_keyValues)]) {
+        YLT_LogWarn(@"对象数据异常");
+        return NO;
+    }
+    
     NSDictionary *data = self.mj_keyValues;
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:key];
     return [[NSUserDefaults standardUserDefaults] synchronize];
@@ -86,6 +95,10 @@
         NSDictionary *data = nil;
         if ([[[NSUserDefaults standardUserDefaults] dictionaryRepresentation].allKeys containsObject:key]) {
             data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        }
+        if (![[self class] respondsToSelector:@selector(mj_objectWithKeyValues:)] || ![data isKindOfClass:[NSDictionary class]]) {
+            YLT_LogWarn(@"对象异常");
+            return nil;
         }
         id result = nil;
         if (data) {
@@ -124,6 +137,11 @@
             data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
         }
         if (data) {
+            if (![self respondsToSelector:@selector(mj_setKeyValues:)] || ![data isKindOfClass:[NSDictionary class]]) {
+                YLT_LogWarn(@"对象异常");
+                return NO;
+            }
+            
             @try {
                 [self mj_setKeyValues:data];
             } @catch (NSException *exception) {
@@ -153,6 +171,10 @@
  @return 结果
  */
 + (BOOL)ylt_removeForKey:(NSString *)key {
+    if ([NSString ylt_isBlankString:key]) {
+        YLT_LogWarn(@"KEY 不能为空");
+        return NO;
+    }
     if ([[[NSUserDefaults standardUserDefaults] dictionaryRepresentation].allKeys containsObject:key]) {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
         return [[NSUserDefaults standardUserDefaults] synchronize];
@@ -176,6 +198,14 @@
  @return 存储结果
  */
 - (BOOL)ylt_saveToGroupForKey:(NSString *)key {
+    if ([NSString ylt_isBlankString:key]) {
+        YLT_LogWarn(@"KEY 不能为空");
+        return NO;
+    }
+    if (![self respondsToSelector:@selector(mj_keyValues)]) {
+        YLT_LogWarn(@"对象异常");
+        return NO;
+    }
     NSMutableArray *list = [[NSMutableArray alloc] init];
     if ([[NSUserDefaults standardUserDefaults] objectForKey:key] && [[[NSUserDefaults standardUserDefaults] objectForKey:key] isKindOfClass:[NSArray class]]) {
         [list addObjectsFromArray:[[NSUserDefaults standardUserDefaults] objectForKey:key]];
@@ -201,6 +231,10 @@
  @return 数据
  */
 + (NSArray *)ylt_readFromGroupForKey:(NSString *)key {
+    if ([NSString ylt_isBlankString:key]) {
+        YLT_LogWarn(@"KEY 不能为空");
+        return NO;
+    }
     if ([[NSUserDefaults standardUserDefaults] objectForKey:key] && [[[NSUserDefaults standardUserDefaults] objectForKey:key] isKindOfClass:[NSArray class]]) {
         return [[NSUserDefaults standardUserDefaults] objectForKey:key];
     }

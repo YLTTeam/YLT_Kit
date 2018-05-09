@@ -47,8 +47,6 @@ YLT_ShareInstance(YLT_ModularManager);
     }];
 }
 
-
-
 + (void)applicationDidFinishLaunching:(UIApplication *)application {
     for (Class cls in [YLT_ModularManager shareInstance].modularList) {
         if ([cls respondsToSelector:@selector(applicationDidFinishLaunching:)]) {

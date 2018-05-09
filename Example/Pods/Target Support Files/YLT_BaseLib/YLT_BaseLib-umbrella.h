@@ -13,6 +13,7 @@
 #import "YLT_BaseMacro.h"
 #import "YLT_BaseModel.h"
 #import "YLT_BaseModular.h"
+#import "YLT_BaseRouter.h"
 #import "NSArray+YLT_Log.h"
 #import "NSDate+YLT_Extension.h"
 #import "NSDictionary+YLT_Log.h"
@@ -29,6 +30,7 @@
 #import "YLT_KeyChainHelper.h"
 #import "YLT_PhotoHelper.h"
 #import "YLT_ModularManager.h"
+#import "YLT_RouterManager.h"
 #import "YLT_Tools.h"
 #import "YLT_BaseLib.h"
 

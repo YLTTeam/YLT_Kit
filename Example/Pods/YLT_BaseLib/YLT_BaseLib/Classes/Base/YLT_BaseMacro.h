@@ -56,11 +56,11 @@
 #define YLT_AppDelegate        (AppDelegate *)[UIApplication sharedApplication].delegate
 #define YLT_RootViewController [UIApplication sharedApplication].delegate.window.rootViewController
 // NSString To NSURL
-#define YTL_URL(urlString)    [NSURL URLWithString:urlString]
+#define YLT_URL(urlString)    [NSURL URLWithString:urlString]
 #define YLT_NotificationCenter [NSNotificationCenter defaultCenter]
-#define YTL_FileManager        [NSFileManager defaultManager]
+#define YLT_FileManager        [NSFileManager defaultManager]
 //获取图片资源
-#define YTL_GetImage(imageName) [UIImage imageNamed:[NSString stringWithFormat:@"%@",imageName]]
+#define YLT_GetImage(imageName) [UIImage imageNamed:[NSString stringWithFormat:@"%@",imageName]]
 
 //获取屏幕宽高
 #define YLT_SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
@@ -71,8 +71,7 @@
 #define YLT_DOCUMENT_PATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define YLT_CACHE_PATH [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
-
-
+#define YLT_TipAlert(_S_, ...)     [[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:(_S_), ##__VA_ARGS__] message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show]
 
 #if DEBUG
 //输出日志信息
@@ -121,7 +120,7 @@
 #define YLT_RGB(r,g,b) YLT_RGBA(r,g,b,1.0f)
 #define YLT_HEXCOLOR(hex) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:1]
 #define YLT_HEXCOLORA(hex,a) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:a]
-#define YLT_StringColor(color) [color ylt_colorFromHexString]
+#define YLT_StringColor(color) [color YLT_ColorFromHexString]
 #define YLT_StringValue(str) [str ylt_isValid]?str:@""
 
 ///  通知处理

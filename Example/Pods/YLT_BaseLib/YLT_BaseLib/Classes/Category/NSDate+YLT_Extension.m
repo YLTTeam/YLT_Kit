@@ -179,7 +179,7 @@
     return [NSDate ylt_weekday:self];
 }
 
-+ (NSInteger)ylt_week {
+- (NSInteger)ylt_week {
     return [NSDate ylt_week:self];
 }
 
