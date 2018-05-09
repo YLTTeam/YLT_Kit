@@ -11,6 +11,7 @@
 #import <YLT_BaseLib/YLT_BaseLib.h>
 #import <AFNetworking/UIButton+AFNetworking.h>
 #import "UIImage+YLT_Extension.h"
+#import "NSString+YLT_Extension.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincomplete-implementation"
