@@ -19,7 +19,7 @@
 @implementation Person
 @end
 
-@interface YLTViewController ()
+@interface YLTViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (assign, nonatomic) NSInteger tag;
 @property (strong, nonatomic) Person *p;
 @end
@@ -29,13 +29,21 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor redColor];
-    UIImageView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    })
-    .ylt_convertToImageView()
-    .ylt_image([[UIImage ylt_imageNamed:@"bg"] ylt_representation])
-    .ylt_contentMode(UIViewContentModeScaleAspectFit);
+
+    
+//    UIImage *image = [UIImage imageNamed:@"bg.png"];
+//    CGFloat start = [[NSDate date] timeIntervalSince1970];
+//    NSData *res = [UIImage ylt_representationData:UIImageJPEGRepresentation(image, 0.9) kb:2048];
+//    CGFloat end = [[NSDate date] timeIntervalSince1970];
+//    NSLog(@"%f , imagesize:%zd, resSize:%zd", end-start, UIImageJPEGRepresentation(image, 0.9).length/1024, res.length/1024);
+    
+//    self.view.backgroundColor = [UIColor redColor];
+//    UIImageView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+//        make.edges.equalTo(self.view);
+//    })
+//    .ylt_convertToImageView()
+//    .ylt_image([[UIImage ylt_imageNamed:@"bg"] ylt_representation])
+//    .ylt_contentMode(UIViewContentModeScaleAspectFit);
 //    UILabel
 //    .ylt_layout(self.view, ^(MASConstraintMaker *make) {
 //        make.edges.equalTo(self.view);
@@ -116,6 +124,18 @@
 //    });
 }
 
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+//    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *image = [UIImage imageNamed:@"bg.png"];
+    NSData *data = UIImageJPEGRepresentation(image, 1.0);
+//    UIImage *image = [UIImage imageNamed:@"bg.png"];
+    CGFloat start = [[NSDate date] timeIntervalSince1970];
+    NSData *res = [UIImage ylt_representationImage:image kb:2048];
+    CGFloat end = [[NSDate date] timeIntervalSince1970];
+    NSLog(@"%f , imagesize:%zd, resSize:%zd", end-start, data.length/1024, res.length/1024);
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)ylt_dismiss {
 }
 
@@ -132,13 +152,17 @@
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    self.tag = self.tag+1;
-    self.p = [Person new];
-    if (self.tag%2==0) {
-        self.p.name = @"bg";
-    } else {
-        self.p.name = @"icon";
-    }
+    UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
+    imagepicker.delegate = self;
+    imagepicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    [self presentViewController:imagepicker animated:YES completion:nil];
+//    self.tag = self.tag+1;
+//    self.p = [Person new];
+//    if (self.tag%2==0) {
+//        self.p.name = @"bg";
+//    } else {
+//        self.p.name = @"icon";
+//    }
 //    self.p.age = self.tag;
 }
 

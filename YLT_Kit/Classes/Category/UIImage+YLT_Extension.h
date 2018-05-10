@@ -158,11 +158,20 @@
 /**
  图片压缩算法处理
 
- @param imageData 图片压缩前的数据 PNG的使用 UIImagePNGRepresentation JPEG使用 UIImageJPEGRepresentation
+ @param imageData 图片压缩前的数据
  @param kb 大小
  @return 压缩后的Data
  */
 + (NSData *)ylt_representationData:(NSData *)imageData kb:(NSUInteger)kb;
+
+/**
+ 图片压缩算法处理
+ 
+ @param image 图片压缩前的数据
+ @param kb 大小
+ @return 压缩后的Data
+ */
++ (NSData *)ylt_representationImage:(UIImage *)image kb:(NSUInteger)kb;
 
 /**
  *  压图片大小

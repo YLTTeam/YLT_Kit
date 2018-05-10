@@ -682,6 +682,17 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
  */
 + (NSData *)ylt_representationData:(NSData *)imageData kb:(NSUInteger)kb {
     UIImage *image = [UIImage imageWithData:imageData];
+    return [self ylt_representationImage:image kb:kb];
+}
+
+/**
+ 图片压缩算法处理
+ 
+ @param image 图片压缩前的数据
+ @param kb 大小
+ @return 压缩后的Data
+ */
++ (NSData *)ylt_representationImage:(UIImage *)image kb:(NSUInteger)kb {
     if (!image) {
         return nil;
     }
@@ -692,19 +703,21 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
         return compressedData;
     }
     
-    CGFloat max = 1;
-    CGFloat min = 0;
-    for (int i = 0; i < 10; ++i) {
+    CGFloat max = 1.;
+    CGFloat min = (CGFloat)kb/(CGFloat)compressedData.length*2.;
+    NSInteger count = 0;
+    do {
         compression = (max + min) / 2;
         compressedData = UIImageJPEGRepresentation(image, compression);
-        if (compressedData.length < kb * 0.9) {
+        if (compressedData.length < kb * 0.8) {
             min = compression;
         } else if (compressedData.length > kb) {
             max = compression;
         } else {
             break;
         }
-    }
+        count++;
+    } while ((compressedData.length < kb*0.8 || compressedData.length > kb) && count <= 10);
     
     return compressedData;
 }
