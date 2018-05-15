@@ -764,10 +764,8 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
 
 + (CGSize)getCompressSize:(CGSize)originSize maxLength:(NSInteger)maxLength {
     CGSize result = originSize;
-    
     NSInteger width  = originSize.width;
     NSInteger height = originSize.height;
-    
     float wTohRatio = ((float) width) / height;
     
     float scale = 0.0;
