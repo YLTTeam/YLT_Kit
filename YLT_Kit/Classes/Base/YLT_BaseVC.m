@@ -30,7 +30,6 @@
     YLT_LogInfo(@"Dealloc %@", NSStringFromClass([self class]));
 }
 
-
 #pragma mark - ViewDidLoad 中调用
 /**
  Setup
