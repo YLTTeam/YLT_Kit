@@ -8,6 +8,7 @@
 #import "UIImage+YLT_Extension.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <AVFoundation/AVFoundation.h>
+#import <YLT_BaseLib/YLT_BaseLib.h>
 
 @implementation UIImage (YLT_Extension)
 
@@ -788,9 +789,9 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
         NSInteger height = originSize.height / scale;
         
         result = CGSizeMake(width, height);
-        NSLog(@"输出图片尺寸压缩比为 %f", scale);
+//        YLT_Log(@"输出图片尺寸压缩比为 %f", scale);
     } else {
-        NSLog(@"按照原图尺寸输出，质量压缩'可能'达不到要求，请注意修改目标尺寸！！！");
+//        YLT_Log(@"按照原图尺寸输出，质量压缩'可能'达不到要求，请注意修改目标尺寸！！！");
     }
     
     return result;
