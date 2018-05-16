@@ -635,7 +635,7 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
  @return 优化后的图片，返回的一定是JPEG格式的
  */
 - (UIImage *)ylt_representation {
-    return [UIImage imageWithData:[UIImage ylt_representationImageSizeAndQualityWithImage:self maxLength:2048 maxKB:1024]];
+    return [UIImage imageWithData:[UIImage ylt_representationImageSizeAndQualityWithImage:self maxLength:1024 maxKB:1024]];
 }
 
 /**
