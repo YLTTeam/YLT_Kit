@@ -20,6 +20,7 @@
 @end
 
 @interface YLTViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@property (strong, nonatomic) UIImageView *imageview;
 @property (assign, nonatomic) NSInteger tag;
 @property (strong, nonatomic) Person *p;
 @end
@@ -54,13 +55,13 @@
 //    .ylt_fontSize(40)
 //    .ylt_signal(RACObserve(self, tag));
 //
-//   UIImageView
-//    .ylt_layout(self.view, ^(MASConstraintMaker *make) {
-//        make.edges.equalTo(self.view);
-//    })
-//    .ylt_convertToImageView()
-////    .ylt_image([[UIImage ylt_imageNamed:@"bg"] YLT_DrawCircleImage])
-//    .ylt_contentMode(UIViewContentModeScaleAspectFit)
+   self.imageview = UIImageView
+    .ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    })
+    .ylt_convertToImageView()
+    .ylt_image([[UIImage ylt_imageNamed:@"bg"] ylt_drawCircleImage])
+    .ylt_contentMode(UIViewContentModeScaleAspectFit);
 //    .ylt_signal(RACObserve(self, p.name));;//.ylt_tap(self, @selector(tapAction:));
 ////    self.ylt_params
 //    self.ylt_callback(@{});
@@ -125,15 +126,15 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
-//    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    UIImage *image = [UIImage imageNamed:@"bg.png"];
-    NSData *data = UIImageJPEGRepresentation(image, 1.0);
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
 //    UIImage *image = [UIImage imageNamed:@"bg.png"];
+    NSData *data = UIImageJPEGRepresentation(image, 1.0);
     CGFloat start = [[NSDate date] timeIntervalSince1970];
-    NSData *res = [UIImage ylt_representationImage:image kb:2048];
+    image = [image ylt_representation];
     CGFloat end = [[NSDate date] timeIntervalSince1970];
-    NSLog(@"%f , imagesize:%zd, resSize:%zd", end-start, data.length/1024, res.length/1024);
+    NSLog(@"%f , imagesize:%zd, resSize:%zd", end-start, data.length/1024, UIImageJPEGRepresentation(image, 1.0).length/1024);
     [picker dismissViewControllerAnimated:YES completion:nil];
+    self.imageview.image = image;
 }
 
 - (void)ylt_dismiss {

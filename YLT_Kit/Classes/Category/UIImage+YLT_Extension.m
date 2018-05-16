@@ -635,7 +635,7 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
  @return 优化后的图片，返回的一定是JPEG格式的
  */
 - (UIImage *)ylt_representation {
-    return [UIImage imageWithData:[UIImage ylt_representationData:UIImageJPEGRepresentation(self, 0.95) kb:1024]];
+    return [UIImage imageWithData:[UIImage ylt_representationImageSizeAndQualityWithImage:self maxLength:2048 maxKB:1024]];
 }
 
 /**
@@ -703,21 +703,26 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
         return compressedData;
     }
     
+    CGFloat scale = ((CGFloat)kb)/((CGFloat)compressedData.length)*4.;
+    scale = (scale>0.9) ? 0.9 : scale;
+    image = [UIImage imageWithData:UIImageJPEGRepresentation(image, scale)];
     CGFloat max = 1.;
-    CGFloat min = (CGFloat)kb/(CGFloat)compressedData.length*2.;
+    CGFloat min = 0;
     NSInteger count = 0;
     do {
-        compression = (max + min) / 2;
-        compressedData = UIImageJPEGRepresentation(image, compression);
-        if (compressedData.length < kb * 0.8) {
-            min = compression;
-        } else if (compressedData.length > kb) {
-            max = compression;
-        } else {
-            break;
+        @autoreleasepool {
+            compression = (max + min) / 2;
+            compressedData = UIImageJPEGRepresentation(image, compression);
+            if (compressedData.length < kb * 0.8) {
+                min = compression;
+            } else if (compressedData.length > kb) {
+                max = compression;
+            } else {
+                break;
+            }
+            count++;
         }
-        count++;
-    } while ((compressedData.length < kb*0.8 || compressedData.length > kb) && count <= 10);
+    } while ((compressedData.length < kb*0.8 || compressedData.length > kb) && count <= 6);
     
     return compressedData;
 }
@@ -757,7 +762,7 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
  */
 + (NSData *)ylt_representationImageSizeAndQualityWithImage:(UIImage *)originImage maxLength:(NSInteger)maxLength maxKB:(NSInteger)maxKB {
     UIImage *image = [self ylt_representationImageSizeWithImage:originImage maxLength:maxLength];
-    NSData *data = [self ylt_representationData:UIImageJPEGRepresentation(image, 1.0) kb:maxKB];
+    NSData *data = [self ylt_representationData:UIImageJPEGRepresentation(image, 0.95) kb:maxKB];
     
     return data;
 }
