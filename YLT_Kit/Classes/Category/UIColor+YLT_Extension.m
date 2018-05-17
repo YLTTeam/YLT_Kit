@@ -327,6 +327,9 @@
 // Returns a UIColor by scanning the string for a hex number and passing that to +[UIColor colorWithRGBHex:]
 // Skips any leading whitespace and ignores any trailing characters
 + (UIColor *)ylt_colorWithHexString:(NSString *)stringToConvert {
+    stringToConvert = [stringToConvert stringByReplacingOccurrencesOfString:@"#" withString:@""];
+    stringToConvert = [stringToConvert stringByReplacingOccurrencesOfString:@"0x" withString:@""];
+    stringToConvert = [stringToConvert stringByReplacingOccurrencesOfString:@"0X" withString:@""];
     NSScanner *scanner = [NSScanner scannerWithString:stringToConvert];
     unsigned hexNum;
     if (![scanner scanHexInt:&hexNum]) return nil;
