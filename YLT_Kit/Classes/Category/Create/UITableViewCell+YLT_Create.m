@@ -25,8 +25,8 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style ylt_reuseIdentifier:(NSString *)reuseIdentifier {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-    if ([self respondsToSelector:@selector(YLT_cellStyle)]) {
-        style = (UITableViewCellStyle)[self performSelector:@selector(YLT_CellStyle) withObject:nil];
+    if ([self respondsToSelector:@selector(ylt_cellStyle)]) {
+        style = (UITableViewCellStyle)[self performSelector:@selector(ylt_cellStyle) withObject:nil];
     }
 #pragma clang diagnostic pop
     self = [self initWithStyle:style ylt_reuseIdentifier:reuseIdentifier];
@@ -54,8 +54,8 @@
         self.cellData = bindData;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-        if ([self respondsToSelector:@selector(YLT_IndexPath:bindData:)]) {
-            [self performSelector:@selector(YLT_IndexPath:bindData:) withObject:indexPath withObject:bindData];
+        if ([self respondsToSelector:@selector(ylt_indexPath:bindData:)]) {
+            [self performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:bindData];
         }
 #pragma clang diagnostic pop
         return self;
@@ -70,8 +70,8 @@
         @strongify(self);
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-        if ([self respondsToSelector:@selector(YLT_configUI)]) {
-            [self performSelector:@selector(YLT_configUI) withObject:nil];
+        if ([self respondsToSelector:@selector(ylt_configUI)]) {
+            [self performSelector:@selector(ylt_configUI) withObject:nil];
         }
 #pragma clang diagnostic pop
         return self;
