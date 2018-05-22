@@ -149,14 +149,32 @@
 
 - (void)tapAction:(UITapGestureRecognizer *)tap {
     NSLog(@"tap");
-
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
-    imagepicker.delegate = self;
-    imagepicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    [self presentViewController:imagepicker animated:YES completion:nil];
+    __block YLT_BaseWebVC *vc = [YLT_BaseWebVC webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index.html"];
+    [[vc.webView webView] evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        NSString *userAgent = result;
+        NSString *newUserAgent = [userAgent stringByAppendingString:@" ios/jkbs/1.2.3"];
+
+        NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:newUserAgent, @"UserAgent", nil];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [[vc.webView webView] setCustomUserAgent:newUserAgent];
+        //        echo(@"%@",[[NSUserDefaults standardUserDefaults] stringForKey:@"UserAgent"]);
+        
+        //    判断网址类型
+    }];
+    [vc addObserverNames:@[@"getUserInfo1", @"getUserInfo"] callback:^(WKScriptMessage *message) {
+        YLT_Log(@"%@ %@", message.name, message.body);
+        [vc sendString:@"hello world" toMethodName:@"callback"];
+    }];
+    [self presentViewController:vc animated:YES completion:nil];
+//    UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
+//    imagepicker.delegate = self;
+//    imagepicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+//    [self presentViewController:imagepicker animated:YES completion:nil];
+    
 //    self.tag = self.tag+1;
 //    self.p = [Person new];
 //    if (self.tag%2==0) {

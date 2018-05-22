@@ -16,6 +16,7 @@
 #import "YLT_BaseTableVC.h"
 #import "YLT_BaseVC.h"
 #import "YLT_BaseView.h"
+#import "YLT_BaseWebVC.h"
 #import "UIButton+YLT_Create.h"
 #import "UIImageView+YLT_Create.h"
 #import "UILabel+YLT_Create.h"

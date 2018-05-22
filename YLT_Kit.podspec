@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
 
   s.source_files = 'YLT_Kit/Classes/**/*'
-  s.frameworks = 'UIKit', 'AVFoundation', 'AssetsLibrary'
+  s.frameworks = 'UIKit', 'AVFoundation', 'AssetsLibrary', 'WebKit'
   s.dependency 'AFNetworking'
   s.dependency 'ReactiveObjC'
   s.dependency 'Masonry'
