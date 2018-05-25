@@ -7,12 +7,13 @@
 //
 
 #import "YLTAppDelegate.h"
+#import <YLT_Kit/YLT_Kit.h>
 
 @implementation YLTAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    BOOL has = [NSURLProtocol registerClass:[YLT_URLProtocol class]];
     return YES;
 }
 

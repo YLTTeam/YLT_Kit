@@ -126,7 +126,7 @@
 // 如果设置为不允许响应，web内容就不会传过来
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
     NSString *hostname = navigationResponse.response.URL.host.lowercaseString;
-    decisionHandler(WKNavigationActionPolicyAllow);
+    decisionHandler(WKNavigationResponsePolicyAllow);
     YLT_LogInfo(@"%@", hostname);
 }
 
@@ -157,6 +157,11 @@
 
 // 导航失败时会回调
 - (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
+    [self.webView evaluateJavaScript:@"document.title" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if ([result isKindOfClass:[NSString class]] && ((NSString *) result).ylt_isValid && self.ylt_currentVC) {
+            self.ylt_currentVC.title = result;
+        }
+    }];
     YLT_LogInfo(@"%@", webView);
 }
 
