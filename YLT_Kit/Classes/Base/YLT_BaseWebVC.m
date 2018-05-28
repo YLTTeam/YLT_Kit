@@ -102,7 +102,7 @@
  @return 网页视图
  */
 + (YLT_BaseWebView *)webViewFrame:(CGRect)frame URLString:(NSString *)urlString {
-    YLT_BaseWebView *webView = [[[self class] alloc] initWithFrame:frame];
+    YLT_BaseWebView *webView = [[self alloc] initWithFrame:frame];
     webView.url = [NSURL URLWithString:urlString];
     return webView;
 }
@@ -115,7 +115,7 @@
  @return 网页视图
  */
 + (YLT_BaseWebView *)webViewFrame:(CGRect)frame filePath:(NSString *)filePath {
-    YLT_BaseWebView *webView = [[[self class] alloc] initWithFrame:frame];
+    YLT_BaseWebView *webView = [[self alloc] initWithFrame:frame];
     webView.url = [NSURL fileURLWithPath:filePath];
     return webView;
 }
