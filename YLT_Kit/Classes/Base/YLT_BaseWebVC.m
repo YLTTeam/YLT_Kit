@@ -25,6 +25,13 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        _webView = [[WKWebView alloc] initWithFrame:self.bounds configuration:self.configuration];
+        [self addSubview:self.webView];
+        self.webView.UIDelegate = self;
+        self.webView.navigationDelegate = self;
+        [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self);
+        }];
     }
     return self;
 }
@@ -97,7 +104,6 @@
 + (YLT_BaseWebView *)webViewFrame:(CGRect)frame URLString:(NSString *)urlString {
     YLT_BaseWebView *webView = [[[self class] alloc] initWithFrame:frame];
     webView.url = [NSURL URLWithString:urlString];
-    
     return webView;
 }
 
@@ -130,14 +136,14 @@
 // 类型，在请求先判断能不能跳转（请求）
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     NSString *hostname = navigationAction.request.URL.host.lowercaseString;
-//    if (navigationAction.navigationType == WKNavigationTypeLinkActivated && ![hostname containsString:@".baidu.com"]) {
-//        // 对于跨域，需要手动跳转
-//        [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
-//        // 不允许web内跳转
-//        decisionHandler(WKNavigationActionPolicyCancel);
-//    } else {
-//        decisionHandler(WKNavigationActionPolicyAllow);
-//    }
+    //    if (navigationAction.navigationType == WKNavigationTypeLinkActivated && ![hostname containsString:@".baidu.com"]) {
+    //        // 对于跨域，需要手动跳转
+    //        [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
+    //        // 不允许web内跳转
+    //        decisionHandler(WKNavigationActionPolicyCancel);
+    //    } else {
+    //        decisionHandler(WKNavigationActionPolicyAllow);
+    //    }
     decisionHandler(WKNavigationActionPolicyAllow);
     YLT_LogInfo(@"%@", hostname);
 }
@@ -207,19 +213,6 @@
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
-- (WKWebView *)webView {
-    if (!_webView) {
-        _webView = [[WKWebView alloc] initWithFrame:self.bounds configuration:self.configuration];
-        [self addSubview:_webView];
-        _webView.UIDelegate = self;
-        _webView.navigationDelegate = self;
-        [_webView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self);
-        }];
-    }
-    return _webView;
-}
-
 - (WKWebViewConfiguration *)configuration {
     if (!_configuration) {
         _configuration = [[WKWebViewConfiguration alloc] init];
@@ -250,10 +243,14 @@
 
 @implementation YLT_BaseWebVC
 
-@synthesize webView = _webView;
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _webView = [[YLT_BaseWebView alloc] initWithFrame:self.view.frame];
+    self.webView.url = self.url;
+    [self.view addSubview:self.webView];
+    [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
 }
 
 /**
@@ -263,7 +260,7 @@
  @return 控制器
  */
 + (YLT_BaseWebVC *)ylt_webVCFromURLString:(NSString *)urlString {
-    YLT_BaseWebVC *vc = [[[self class] alloc] init];
+    YLT_BaseWebVC *vc = [[self alloc] init];
     vc.url = [NSURL URLWithString:urlString];
     return vc;
 }
@@ -275,7 +272,7 @@
  @return 控制器
  */
 + (YLT_BaseWebVC *)ylt_webVCFromFilePath:(NSString *)filePath {
-    YLT_BaseWebVC *vc = [[[self class] alloc] init];
+    YLT_BaseWebVC *vc = [[self alloc] init];
     vc.url = [NSURL fileURLWithPath:filePath];
     return vc;
 }
@@ -322,21 +319,5 @@
 }
 
 #pragma mark - getter
-
-- (void)setUrl:(NSURL *)url {
-    _url = url;
-    self.webView.url = url;
-}
-
-- (YLT_BaseWebView *)webView {
-    if (!_webView) {
-        _webView = [[YLT_BaseWebView alloc] initWithFrame:self.view.frame];
-        [self.view addSubview:_webView];
-        [_webView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.view);
-        }];
-    }
-    return _webView;
-}
 
 @end
