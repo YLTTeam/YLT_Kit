@@ -67,11 +67,10 @@
 /**
  网页视图
  */
-@property (nonatomic, strong, readonly) YLT_BaseWebView *webView;
 
 /**
  根据地址生成网页视图
-
+ 
  @param urlString 路径
  @return 控制器
  */

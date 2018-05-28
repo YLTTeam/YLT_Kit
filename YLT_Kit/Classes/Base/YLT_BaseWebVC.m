@@ -20,16 +20,11 @@
 
 @implementation YLT_BaseWebView
 
+@synthesize webView = _webView;
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        _webView = [[WKWebView alloc] initWithFrame:self.bounds configuration:self.configuration];
-        [self addSubview:self.webView];
-        self.webView.UIDelegate = self;
-        self.webView.navigationDelegate = self;
-        [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self);
-        }];
     }
     return self;
 }
@@ -210,6 +205,19 @@
 - (void)setUrl:(NSURL *)url {
     _url = url;
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
+}
+
+- (WKWebView *)webView {
+    if (!_webView) {
+        _webView = [[WKWebView alloc] initWithFrame:self.bounds configuration:self.configuration];
+        [self addSubview:_webView];
+        _webView.UIDelegate = self;
+        _webView.navigationDelegate = self;
+        [_webView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self);
+        }];
+    }
+    return _webView;
 }
 
 - (WKWebViewConfiguration *)configuration {
