@@ -155,26 +155,29 @@
     [NSURLProtocol ylt_registerScheme:@"http"];
     [NSURLProtocol ylt_registerScheme:@"https"];
     
-    __block YLT_BaseWebVC *vc = [YLT_BaseWebVC webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index.html"];
-    [vc addObserverNames:@[@"getUserInfo1", @"getUserInfo"] callback:^(WKScriptMessage *message) {
+    __block YLT_BaseWebVC *vc = [YLT_BaseWebVC ylt_webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index.html"];
+    [[vc.webView webView] evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        NSString *userAgent = result;
+        NSString *newUserAgent = [userAgent stringByAppendingString:@" black_magic "];
+        
+        NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:newUserAgent, @"UserAgent", nil];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [[vc.webView webView] setCustomUserAgent:newUserAgent];
+        //        echo(@"%@",[[NSUserDefaults standardUserDefaults] stringForKey:@"UserAgent"]);
+        
+        //    判断网址类型
+    }];
+
+    
+    [vc addObserverNames:@[@"getUserInfo1", @"getUserInfo", @"startNativeView"] callback:^(WKScriptMessage *message) {
         YLT_Log(@"%@ %@", message.name, message.body);
-        [vc sendMethodName:@"native_callback" param:nil];
+        [vc sendMethodName:@"native_callback" param:@"test", @"hello", nil];
     }];
     
+
     [self presentViewController:vc animated:YES completion:nil];
     
-    //    [[vc.webView webView] evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-    //        NSString *userAgent = result;
-    //        NSString *newUserAgent = [userAgent stringByAppendingString:@" ios/jkbs/1.2.3"];
-    //
-    //        NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:newUserAgent, @"UserAgent", nil];
-    //        [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
-    //        [[NSUserDefaults standardUserDefaults] synchronize];
-    //        [[vc.webView webView] setCustomUserAgent:newUserAgent];
-    //        //        echo(@"%@",[[NSUserDefaults standardUserDefaults] stringForKey:@"UserAgent"]);
-    //
-    //        //    判断网址类型
-    //    }];
 //    UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
 //    imagepicker.delegate = self;
 //    imagepicker.sourceType = UIImagePickerControllerSourceTypeCamera;

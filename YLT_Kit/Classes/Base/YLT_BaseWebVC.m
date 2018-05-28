@@ -242,17 +242,7 @@
 
 @implementation YLT_BaseWebVC
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        _webView = [[YLT_BaseWebView alloc] initWithFrame:self.view.frame];
-        [self.view addSubview:_webView];
-        [_webView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.view);
-        }];
-    }
-    return self;
-}
+@synthesize webView = _webView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -264,7 +254,7 @@
  @param urlString 路径
  @return 控制器
  */
-+ (YLT_BaseWebVC *)webVCFromURLString:(NSString *)urlString {
++ (YLT_BaseWebVC *)ylt_webVCFromURLString:(NSString *)urlString {
     YLT_BaseWebVC *vc = [[[self class] alloc] init];
     vc.url = [NSURL URLWithString:urlString];
     return vc;
@@ -276,7 +266,7 @@
  @param filePath 路径
  @return 控制器
  */
-+ (YLT_BaseWebVC *)webVCFromFilePath:(NSString *)filePath {
++ (YLT_BaseWebVC *)ylt_webVCFromFilePath:(NSString *)filePath {
     YLT_BaseWebVC *vc = [[[self class] alloc] init];
     vc.url = [NSURL fileURLWithPath:filePath];
     return vc;
@@ -328,6 +318,17 @@
 - (void)setUrl:(NSURL *)url {
     _url = url;
     self.webView.url = url;
+}
+
+- (YLT_BaseWebView *)webView {
+    if (!_webView) {
+        _webView = [[YLT_BaseWebView alloc] initWithFrame:self.view.frame];
+        [self.view addSubview:_webView];
+        [_webView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.view);
+        }];
+    }
+    return _webView;
 }
 
 @end
