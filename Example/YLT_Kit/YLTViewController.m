@@ -158,9 +158,7 @@
     __block YLT_BaseWebVC *vc = [YLT_BaseWebVC webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index.html"];
     [vc addObserverNames:@[@"getUserInfo1", @"getUserInfo"] callback:^(WKScriptMessage *message) {
         YLT_Log(@"%@ %@", message.name, message.body);
-        [vc sendMethodName:@"native_callback" param:@"test", @"hello worlf", nil];
-//        [vc sendString:<#(NSString *)#> toMethodName:<#(NSString *)#>]
-//        [vc sendString:@"hello world chenxue" toMethodName:@"native_callback"];
+        [vc sendMethodName:@"native_callback" param:nil];
     }];
     
     [self presentViewController:vc animated:YES completion:nil];

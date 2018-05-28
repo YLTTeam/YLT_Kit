@@ -314,7 +314,7 @@
         [sender appendFormat:@")"];
         va_end(args);
     } else {
-        [sender appendFormat:@"%@(null)", jsMedhodName];
+        [sender appendFormat:@"%@('null')", jsMedhodName];
     }
     [self.webView sendParams:sender];
 }
