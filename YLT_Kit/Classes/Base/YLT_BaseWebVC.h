@@ -22,10 +22,10 @@
 /**
  OC给JS发送数据 （OC调用JS的方法）
  
- @param string 数据
  @param jsMedhodName 方法名
+ @param param 数据
  */
-- (void)sendString:(NSString *)string toMethodName:(NSString *)jsMedhodName;
+- (void)sendMethodName:(NSString *)jsMedhodName param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION;
 
 @end
 

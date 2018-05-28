@@ -53,12 +53,37 @@
 /**
  OC给JS发送数据 （OC调用JS的方法）
  
- @param string 数据
  @param jsMedhodName 方法名
+ @param param 数据
  */
-- (void)sendString:(NSString *)string toMethodName:(NSString *)jsMedhodName {
-    NSString *sender = [NSString stringWithFormat:@"%@('%@')", jsMedhodName, string];
-    [self.webView evaluateJavaScript:sender completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+- (void)sendMethodName:(NSString *)jsMedhodName param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION {
+    NSMutableString *sender = [NSMutableString new];
+    if (param.ylt_isValid) {
+        va_list args;
+        NSString *arg;
+        va_start(args, param);
+        [sender appendFormat:@"%@('%@'", jsMedhodName, param];
+        arg = va_arg(args, NSString *);
+        while(arg) {
+            [sender appendFormat:@", '%@'", arg];
+            arg = va_arg(args, NSString *);
+        }
+        [sender appendFormat:@")"];
+        va_end(args);
+    } else {
+        [sender appendFormat:@"%@(null)", jsMedhodName];
+    }
+    
+    [self sendParams:sender];
+}
+
+/**
+ OC给JS发送数据 （OC调用JS的方法）
+ 
+ @param params 数据
+ */
+- (void)sendParams:(NSString *)params {
+    [self.webView evaluateJavaScript:params completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if (error) {
             YLT_LogError(@"%@", error);
         } else {
@@ -267,14 +292,31 @@
     [self.webView addObserverNames:names callback:callback];
 }
 
+
 /**
  OC给JS发送数据 （OC调用JS的方法）
  
- @param string 数据
  @param jsMedhodName 方法名
+ @param param 数据
  */
-- (void)sendString:(NSString *)string toMethodName:(NSString *)jsMedhodName {
-    [self.webView sendString:string toMethodName:jsMedhodName];
+- (void)sendMethodName:(NSString *)jsMedhodName param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION {
+    NSMutableString *sender = [NSMutableString new];
+    if (param.ylt_isValid) {
+        va_list args;
+        NSString *arg;
+        va_start(args, param);
+        [sender appendFormat:@"%@('%@'", jsMedhodName, param];
+        arg = va_arg(args, NSString *);
+        while(arg) {
+            [sender appendFormat:@", '%@'", arg];
+            arg = va_arg(args, NSString *);
+        }
+        [sender appendFormat:@")"];
+        va_end(args);
+    } else {
+        [sender appendFormat:@"%@(null)", jsMedhodName];
+    }
+    [self.webView sendParams:sender];
 }
 
 - (void)dealloc {
