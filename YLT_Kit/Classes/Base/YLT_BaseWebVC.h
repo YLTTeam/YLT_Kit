@@ -67,7 +67,7 @@
 /**
  网页视图
  */
-@property (nonatomic, strong, readonly, getter=webView) YLT_BaseWebView *webView;
+@property (nonatomic, strong, readonly) YLT_BaseWebView *webView;
 
 /**
  根据地址生成网页视图
