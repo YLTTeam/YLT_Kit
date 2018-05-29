@@ -101,7 +101,7 @@
  @param urlString 网页地址
  @return 网页视图
  */
-+ (YLT_BaseWebView *)webViewFrame:(CGRect)frame URLString:(NSString *)urlString {
++ (YLT_BaseWebView *)ylt_webViewFrame:(CGRect)frame URLString:(NSString *)urlString {
     YLT_BaseWebView *webView = [[self alloc] initWithFrame:frame];
     webView.url = [NSURL URLWithString:urlString];
     return webView;
@@ -114,7 +114,7 @@
  @param filePath 本地路径
  @return 网页视图
  */
-+ (YLT_BaseWebView *)webViewFrame:(CGRect)frame filePath:(NSString *)filePath {
++ (YLT_BaseWebView *)ylt_webViewFrame:(CGRect)frame filePath:(NSString *)filePath {
     YLT_BaseWebView *webView = [[self alloc] initWithFrame:frame];
     webView.url = [NSURL fileURLWithPath:filePath];
     return webView;

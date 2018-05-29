@@ -39,16 +39,13 @@
     if ([self respondsToSelector:@selector(ylt_request)]) {
         [self performSelector:@selector(ylt_request)];
     }
+    if ([self respondsToSelector:@selector(ylt_bindData)]) {
+        [self performSelector:@selector(ylt_bindData)];
+    }
 }
 
 - (void)ylt_viewWillAppear:(BOOL)animated {
     [self ylt_viewWillAppear:animated];
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        if ([self respondsToSelector:@selector(ylt_bindData)]) {
-            [self performSelector:@selector(ylt_bindData)];
-        }
-    });
 }
 
 - (void)ylt_viewWillLayoutSubviews {

@@ -49,7 +49,7 @@
  @param urlString 网页地址
  @return 网页视图
  */
-+ (YLT_BaseWebView *)webViewFrame:(CGRect)frame URLString:(NSString *)urlString;
++ (YLT_BaseWebView *)ylt_webViewFrame:(CGRect)frame URLString:(NSString *)urlString;
 
 /**
  根据地址生成网页视图
@@ -58,7 +58,7 @@
  @param filePath 本地路径
  @return 网页视图
  */
-+ (YLT_BaseWebView *)webViewFrame:(CGRect)frame filePath:(NSString *)filePath;
++ (YLT_BaseWebView *)ylt_webViewFrame:(CGRect)frame filePath:(NSString *)filePath;
 
 @end
 
