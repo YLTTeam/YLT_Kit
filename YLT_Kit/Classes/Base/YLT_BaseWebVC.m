@@ -13,6 +13,10 @@
  加载路径
  */
 @property (nonatomic, strong) NSURL *url;
+/**
+ 进度条
+ */
+@property (nonatomic, strong) CALayer *progressLayer;
 
 @property (nonatomic, copy) void(^callback)(WKScriptMessage *message);
 
@@ -31,6 +35,21 @@
         self.webView.navigationDelegate = self;
         [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self);
+        }];
+        
+        _progressLayer = [CALayer layer];
+        self.progressLayer.frame = CGRectMake(0, 0, 0, 2);
+        self.progressLayer.backgroundColor = [UIColor blueColor].CGColor;
+        [self.layer addSublayer:self.progressLayer];
+        @weakify(self);
+        [[self.webView rac_valuesForKeyPath:@"estimatedProgress" observer:self] subscribeNext:^(id  _Nullable x) {
+            @strongify(self);
+            self.progressLayer.frame = CGRectMake(0, 0, YLT_SCREEN_WIDTH*[x floatValue], 2);
+            //进度条完成则隐藏
+            if ([x floatValue] == 1.0f) {
+                self.progressLayer.opacity = 0;
+                self.progressLayer.frame = CGRectMake(0, 0, 0, 2);
+            }
         }];
     }
     return self;
@@ -251,6 +270,7 @@
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
+//    self.pro
 }
 
 /**
