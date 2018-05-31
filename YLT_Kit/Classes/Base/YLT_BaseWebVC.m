@@ -222,6 +222,22 @@
     YLT_LogInfo(@"%@", webView);
 }
 
+/// js 出现警告框时候调用
+- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler {
+    if (message.ylt_isValid) {
+        YLT_TipAlert(message);
+    }
+    completionHandler();
+}
+
+/// js 出现确认框时候调用
+- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler {
+    if (message.ylt_isValid) {
+        YLT_TipAlert(message);
+    }
+    completionHandler(YES);
+}
+
 #pragma mark - WKUIDelegate
 
 

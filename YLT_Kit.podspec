@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YLT_Kit'
-  s.version          = '0.1.17'
+  s.version          = '0.1.18'
   s.summary          = 'YLT_Kit. 基础的kit框架'
 
   s.description      = <<-DESC
@@ -22,5 +22,5 @@ Pod::Spec.new do |s|
   s.dependency 'Masonry'
   s.dependency 'YLT_BaseLib'
   s.dependency 'SDWebImage'
-
+  
 end
