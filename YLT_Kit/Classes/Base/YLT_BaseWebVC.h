@@ -27,6 +27,14 @@
  */
 - (void)ylt_sendMethodName:(NSString *)jsMedhodName param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION;
 
+/**
+ OC给JS发送JS数据 （OC调用JS的方法）
+ 
+ @param function js方法名
+ @param param 参数
+ */
+- (void)ylt_sendFunction:(NSString *)function param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION;
+
 @end
 
 

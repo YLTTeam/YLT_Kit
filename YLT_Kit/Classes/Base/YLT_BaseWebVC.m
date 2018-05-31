@@ -99,6 +99,32 @@
 }
 
 /**
+ OC给JS发送JS数据 （OC调用JS的方法）
+ 
+ @param function js方法名
+ @param param 参数
+ */
+- (void)ylt_sendFunction:(NSString *)function param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION {
+    NSMutableString *sender = [NSMutableString new];
+    if (param.ylt_isValid) {
+        va_list args;
+        NSString *arg;
+        va_start(args, param);
+        [sender appendFormat:@"(%@)('%@'", function, param];
+        arg = va_arg(args, NSString *);
+        while(arg) {
+            [sender appendFormat:@", '%@'", arg];
+            arg = va_arg(args, NSString *);
+        }
+        [sender appendFormat:@")"];
+        va_end(args);
+    }  else {
+        [sender appendFormat:@"(%@)()", function];
+    }
+    [self sendParams:sender];
+}
+
+/**
  OC给JS发送数据 （OC调用JS的方法）
  
  @param params 数据
@@ -286,7 +312,7 @@
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
-//    self.pro
+    //    self.pro
 }
 
 /**
@@ -346,6 +372,32 @@
         va_end(args);
     } else {
         [sender appendFormat:@"%@('null')", jsMedhodName];
+    }
+    [self.webView sendParams:sender];
+}
+
+/**
+ OC给JS发送JS数据 （OC调用JS的方法）
+ 
+ @param function js方法名
+ @param param 参数
+ */
+- (void)ylt_sendFunction:(NSString *)function param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION {
+    NSMutableString *sender = [NSMutableString new];
+    if (param.ylt_isValid) {
+        va_list args;
+        NSString *arg;
+        va_start(args, param);
+        [sender appendFormat:@"(%@)('%@'", function, param];
+        arg = va_arg(args, NSString *);
+        while(arg) {
+            [sender appendFormat:@", '%@'", arg];
+            arg = va_arg(args, NSString *);
+        }
+        [sender appendFormat:@")"];
+        va_end(args);
+    }  else {
+        [sender appendFormat:@"(%@)()", function];
     }
     [self.webView sendParams:sender];
 }
