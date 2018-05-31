@@ -170,9 +170,9 @@
     }];
 
     
-    [vc addObserverNames:@[@"getUserInfo1", @"getUserInfo", @"startNativeView"] callback:^(WKScriptMessage *message) {
+    [vc ylt_addObserverNames:@[@"getUserInfo1", @"getUserInfo", @"startNativeView"] callback:^(WKScriptMessage *message) {
         YLT_Log(@"%@ %@", message.name, message.body);
-        [vc sendMethodName:@"native_callback" param:@"test", @"hello", nil];
+        [vc ylt_sendMethodName:@"native_callback" param:@"test", @"hello", nil];
     }];
     
 

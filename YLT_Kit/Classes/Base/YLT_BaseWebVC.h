@@ -17,7 +17,7 @@
  @param names 方法名
  @param callback 监听到js调用的回调
  */
-- (void)addObserverNames:(NSArray<NSString *> *)names callback:(void(^)(WKScriptMessage *message))callback;
+- (void)ylt_addObserverNames:(NSArray<NSString *> *)names callback:(void(^)(WKScriptMessage *message))callback;
 
 /**
  OC给JS发送数据 （OC调用JS的方法）
@@ -25,7 +25,7 @@
  @param jsMedhodName 方法名
  @param param 数据
  */
-- (void)sendMethodName:(NSString *)jsMedhodName param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION;
+- (void)ylt_sendMethodName:(NSString *)jsMedhodName param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION;
 
 @end
 

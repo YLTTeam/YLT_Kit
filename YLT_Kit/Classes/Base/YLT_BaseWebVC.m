@@ -61,7 +61,7 @@
  @param names 方法名
  @param callback 监听到js调用的回调
  */
-- (void)addObserverNames:(NSArray<NSString *> *)names callback:(void(^)(WKScriptMessage *message))callback {
+- (void)ylt_addObserverNames:(NSArray<NSString *> *)names callback:(void(^)(WKScriptMessage *message))callback {
     for (NSString *name in names) {
         if (name.ylt_isValid) {
             [self.configuration.userContentController removeScriptMessageHandlerForName:name];
@@ -77,7 +77,7 @@
  @param jsMedhodName 方法名
  @param param 数据
  */
-- (void)sendMethodName:(NSString *)jsMedhodName param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION {
+- (void)ylt_sendMethodName:(NSString *)jsMedhodName param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION {
     NSMutableString *sender = [NSMutableString new];
     if (param.ylt_isValid) {
         va_list args;
@@ -319,8 +319,8 @@
  @param names 方法名
  @param callback 监听到js调用的回调
  */
-- (void)addObserverNames:(NSArray<NSString *> *)names callback:(void(^)(WKScriptMessage *message))callback {
-    [self.webView addObserverNames:names callback:callback];
+- (void)ylt_addObserverNames:(NSArray<NSString *> *)names callback:(void(^)(WKScriptMessage *message))callback {
+    [self.webView ylt_addObserverNames:names callback:callback];
 }
 
 
@@ -330,7 +330,7 @@
  @param jsMedhodName 方法名
  @param param 数据
  */
-- (void)sendMethodName:(NSString *)jsMedhodName param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION {
+- (void)ylt_sendMethodName:(NSString *)jsMedhodName param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION {
     NSMutableString *sender = [NSMutableString new];
     if (param.ylt_isValid) {
         va_list args;
