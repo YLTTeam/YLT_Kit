@@ -58,6 +58,16 @@
 @interface UIViewController (YLT_BaseVC)<HookBaseVCProtocol>
 
 /**
+ 上一个页面传入的参数
+ */
+@property (nonatomic, strong) id ylt_params;
+
+/**
+ 页面回调
+ */
+@property (nonatomic, copy) void(^ylt_callback)(id response);
+
+/**
  创建控制器
  
  @return 控制器

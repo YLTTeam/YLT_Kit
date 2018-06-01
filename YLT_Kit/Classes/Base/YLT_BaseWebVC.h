@@ -46,6 +46,11 @@
 @property (nonatomic, strong, readonly) WKWebView *webView;
 
 /**
+ 加载失败的占位图
+ */
+@property (nonatomic, strong) UIView *loadingFailedView;
+
+/**
  网络视图参数配置
  */
 @property (nonatomic, strong) WKWebViewConfiguration *configuration;

@@ -6,6 +6,8 @@
 //
 
 #import "YLT_BaseWebVC.h"
+#import "UIView+YLT_Create.h"
+#import <MJRefresh/MJRefresh.h>
 
 @interface YLT_BaseWebView ()
 
@@ -37,6 +39,11 @@
             make.edges.equalTo(self);
         }];
         
+        self.webView.scrollView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
+            [self.webView.scrollView.mj_header endRefreshing];
+            [self.webView reloadFromOrigin];
+        }];
+        
         _progressLayer = [CALayer layer];
         self.progressLayer.frame = CGRectMake(0, 0, 0, 2);
         self.progressLayer.backgroundColor = [UIColor blueColor].CGColor;
@@ -45,7 +52,7 @@
         [[self.webView rac_valuesForKeyPath:@"estimatedProgress" observer:self] subscribeNext:^(id  _Nullable x) {
             @strongify(self);
             self.progressLayer.frame = CGRectMake(0, 0, YLT_SCREEN_WIDTH*[x floatValue], 2);
-            //进度条完成则隐藏
+            // 进度条完成则隐藏
             if ([x floatValue] == 1.0f) {
                 self.progressLayer.opacity = 0;
                 self.progressLayer.frame = CGRectMake(0, 0, 0, 2);
@@ -269,6 +276,14 @@
 
 #pragma mark - getter
 
+- (UIView *)loadingFailedView {
+    if (!_loadingFailedView) {
+        _loadingFailedView = UIView.ylt_create().ylt_frame(CGRectMake(YLT_SCREEN_WIDTH/4., (YLT_SCREEN_HEIGHT-YLT_SCREEN_WIDTH/2.)/2., YLT_SCREEN_WIDTH/2., YLT_SCREEN_WIDTH/2.))
+        .ylt_backgroundColor([UIColor redColor]);
+    }
+    return _loadingFailedView;
+}
+
 - (void)setUrl:(NSURL *)url {
     _url = url;
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
@@ -312,7 +327,6 @@
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
-    //    self.pro
 }
 
 /**

@@ -161,5 +161,29 @@
     return vc;
 }
 
+#pragma mark - getter
+
+- (void)setYlt_params:(id)ylt_params {
+    objc_setAssociatedObject(self, @selector(ylt_params), ylt_params, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (id)ylt_params {
+    return objc_getAssociatedObject(self, @selector(ylt_params));
+}
+
+- (void)setYlt_callback:(void (^)(id))ylt_callback {
+    objc_setAssociatedObject(self, @selector(ylt_callback), ylt_callback, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (void(^)(id))ylt_callback {
+    void (^callback)(id) = objc_getAssociatedObject(self, @selector(ylt_callback));
+    if (!callback) {
+        callback = ^(id response) {
+            NSLog(@"%@", response);
+        };
+    }
+    return callback;
+}
+
 #pragma clang diagnostic pop
 @end

@@ -24,6 +24,7 @@
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		C719CCBE20C0E155003A90A2 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = C719CCBD20C0E155003A90A2 /* index.html */; };
 		C73E8E98207463C0007176C9 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C73E8E97207463BF007176C9 /* icon.png */; };
 		C73E8EA82074AC52007176C9 /* YLTTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C73E8EA72074AC52007176C9 /* YLTTableViewCell.m */; };
 		D42DF06A6940F48A108C7B69 /* Pods_YLT_Kit_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7211C2DE754D0DD5C43DDEC /* Pods_YLT_Kit_Tests.framework */; };
@@ -67,6 +68,7 @@
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		89E5505AFD616A9C2F656C86 /* Pods_YLT_Kit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YLT_Kit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C719CCBD20C0E155003A90A2 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		C73E8E97207463BF007176C9 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		C73E8EA62074AC52007176C9 /* YLTTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YLTTableViewCell.h; sourceTree = "<group>"; };
 		C73E8EA72074AC52007176C9 /* YLTTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YLTTableViewCell.m; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 		6003F593195388D20070C39A /* Example for YLT_Kit */ = {
 			isa = PBXGroup;
 			children = (
+				C719CCBD20C0E155003A90A2 /* index.html */,
 				C73E8EA62074AC52007176C9 /* YLTTableViewCell.h */,
 				C73E8EA72074AC52007176C9 /* YLTTableViewCell.m */,
 				C73E8E97207463BF007176C9 /* icon.png */,
@@ -293,6 +296,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C719CCBE20C0E155003A90A2 /* index.html in Resources */,
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
@@ -405,6 +409,7 @@
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${BUILT_PRODUCTS_DIR}/FastCoding/FastCoding.framework",
 				"${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework",
+				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
 				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
 				"${BUILT_PRODUCTS_DIR}/RMUniversalAlert/RMUniversalAlert.framework",
 				"${BUILT_PRODUCTS_DIR}/ReactiveObjC/ReactiveObjC.framework",
@@ -421,6 +426,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FastCoding.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJExtension.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RMUniversalAlert.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveObjC.framework",

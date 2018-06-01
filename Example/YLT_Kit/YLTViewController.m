@@ -155,7 +155,7 @@
     [NSURLProtocol ylt_registerScheme:@"http"];
     [NSURLProtocol ylt_registerScheme:@"https"];
     
-    __block YLT_BaseWebVC *vc = [YLT_BaseWebVC ylt_webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index.html"];
+    __block YLT_BaseWebVC *vc = [YLT_BaseWebVC ylt_webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index2.html"];
     [[vc.webView webView] evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         NSString *userAgent = result;
         NSString *newUserAgent = [userAgent stringByAppendingString:@" black_magic "];
@@ -175,8 +175,8 @@
         [vc ylt_sendMethodName:@"native_callback" param:@"test", @"hello", nil];
     }];
     
-
-    [self presentViewController:vc animated:YES completion:nil];
+    UINavigationController *root = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:root animated:YES completion:nil];
     
 //    UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
 //    imagepicker.delegate = self;
