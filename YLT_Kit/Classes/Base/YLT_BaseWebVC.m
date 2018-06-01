@@ -41,7 +41,7 @@
         
         self.webView.scrollView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
             [self.webView.scrollView.mj_header endRefreshing];
-            [self reload];
+            [self ylt_reload];
         }];
         
         _progressLayer = [CALayer layer];
@@ -263,7 +263,7 @@
 
 // 9.0才能使用，web内容处理中断时会触发
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
-    [self reload];
+    [self ylt_reload];
     YLT_LogInfo(@"%@", webView);
 }
 
@@ -290,15 +290,36 @@
 
 - (void)tapAction:(UIGestureRecognizer *)sender {
     if (_loadingFailedView && _loadingFailedView.superview) {
-        [self reload];
+        [self ylt_reload];
     }
 }
 
-- (void)reload {
+/**
+ 刷新页面
+ */
+- (void)ylt_reload {
     if (self.webView.URL) {
         [self.webView reload];
     } else if(self.url) {
         [self.webView loadRequest:[NSURLRequest requestWithURL:self.url]];
+    }
+}
+
+/**
+ 清理缓存
+ */
+- (void)ylt_cleanCache {
+    if (iOS9Later) {
+        NSArray *types = @[WKWebsiteDataTypeMemoryCache, WKWebsiteDataTypeDiskCache];
+        NSSet *websiteDataTypes = [NSSet setWithArray:types];
+        NSDate *date = [NSDate dateWithTimeIntervalSince1970:0];
+        [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:websiteDataTypes modifiedSince:date completionHandler:^{
+        }];
+    } else {
+        NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask,YES) objectAtIndex:0];
+        NSString *cookiesFolderPath = [libraryPathstringByAppendingString:@"/Cookies"];
+        NSError *errors;
+        [[NSFileManager defaultManager] removeItemAtPath:cookiesFolderPath error:&errors];
     }
 }
 
@@ -453,7 +474,24 @@
     [self.webView sendParams:sender];
 }
 
+/**
+ 刷新页面
+ */
+- (void)ylt_reload {
+    [self.webView ylt_reload];
+}
+
+/**
+ 清理缓存
+ */
+- (void)ylt_cleanCache {
+    [self.webView ylt_cleanCache];
+}
+
 - (void)dealloc {
+    [self.webView.webView stopLoading];
+    self.webView.webView.UIDelegate = nil;
+    self.webView.webView.navigationDelegate = nil;
     [self.webView.configuration.userContentController removeAllUserScripts];
 }
 

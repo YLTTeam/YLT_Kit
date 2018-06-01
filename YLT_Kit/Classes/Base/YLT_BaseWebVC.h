@@ -35,6 +35,16 @@
  */
 - (void)ylt_sendFunction:(NSString *)function param:(NSString *)param, ...NS_REQUIRES_NIL_TERMINATION;
 
+/**
+ 刷新页面
+ */
+- (void)ylt_reload;
+
+/**
+ 清理缓存
+ */
+- (void)ylt_cleanCache;
+
 @end
 
 
