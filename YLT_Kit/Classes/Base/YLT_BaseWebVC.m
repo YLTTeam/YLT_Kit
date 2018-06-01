@@ -309,7 +309,7 @@
  清理缓存
  */
 - (void)ylt_cleanCache {
-    if (iOS9Later) {
+    if (@available(iOS 9.0, *)) {
         NSArray *types = @[WKWebsiteDataTypeMemoryCache, WKWebsiteDataTypeDiskCache];
         NSSet *websiteDataTypes = [NSSet setWithArray:types];
         NSDate *date = [NSDate dateWithTimeIntervalSince1970:0];
