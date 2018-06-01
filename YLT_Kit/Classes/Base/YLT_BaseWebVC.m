@@ -317,7 +317,7 @@
         }];
     } else {
         NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask,YES) objectAtIndex:0];
-        NSString *cookiesFolderPath = [libraryPathstringByAppendingString:@"/Cookies"];
+        NSString *cookiesFolderPath = [libraryPath stringByAppendingString:@"/Cookies"];
         NSError *errors;
         [[NSFileManager defaultManager] removeItemAtPath:cookiesFolderPath error:&errors];
     }
