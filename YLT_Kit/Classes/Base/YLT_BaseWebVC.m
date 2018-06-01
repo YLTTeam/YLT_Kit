@@ -41,7 +41,7 @@
         
         self.webView.scrollView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
             [self.webView.scrollView.mj_header endRefreshing];
-            [self.webView reloadFromOrigin];
+            [self reload];
         }];
         
         _progressLayer = [CALayer layer];
@@ -58,6 +58,8 @@
                 self.progressLayer.frame = CGRectMake(0, 0, 0, 2);
             }
         }];
+    
+        self.ylt_tap(self, @selector(tapAction:));
     }
     return self;
 }
@@ -211,6 +213,7 @@
 // 开始导航跳转时会回调
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
     YLT_LogInfo(@"%@", webView);
+    [_loadingFailedView removeFromSuperview];
 }
 
 // 接收到重定向时会回调
@@ -221,25 +224,33 @@
 // 导航失败时会回调
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
     YLT_LogInfo(@"%@", webView);
+    if (!webView.URL) {
+        [self addSubview:self.loadingFailedView];
+    }
 }
 
 // 页面内容到达main frame时回调
 - (void)webView:(WKWebView *)webView didCommitNavigation:(null_unspecified WKNavigation *)navigation {
     YLT_LogInfo(@"%@", webView);
+    [_loadingFailedView removeFromSuperview];
 }
 
 // 导航完成时，会回调（也就是页面载入完成了）
 - (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation {
     YLT_LogInfo(@"%@", webView);
-}
-
-// 导航失败时会回调
-- (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
     [self.webView evaluateJavaScript:@"document.title" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if ([result isKindOfClass:[NSString class]] && ((NSString *) result).ylt_isValid && self.ylt_currentVC) {
             self.ylt_currentVC.title = result;
         }
     }];
+    [_loadingFailedView removeFromSuperview];
+}
+
+// 导航失败时会回调
+- (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
+    if (!webView.URL) {
+        [self addSubview:self.loadingFailedView];
+    }
     YLT_LogInfo(@"%@", webView);
 }
 
@@ -252,6 +263,7 @@
 
 // 9.0才能使用，web内容处理中断时会触发
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
+    [self reload];
     YLT_LogInfo(@"%@", webView);
 }
 
@@ -274,12 +286,37 @@
 #pragma mark - WKUIDelegate
 
 
+#pragma mark - action
+
+- (void)tapAction:(UIGestureRecognizer *)sender {
+    if (_loadingFailedView && _loadingFailedView.superview) {
+        [self reload];
+    }
+}
+
+- (void)reload {
+    if (self.webView.URL) {
+        [self.webView reload];
+    } else if(self.url) {
+        [self.webView loadRequest:[NSURLRequest requestWithURL:self.url]];
+    }
+}
+
 #pragma mark - getter
 
 - (UIView *)loadingFailedView {
     if (!_loadingFailedView) {
-        _loadingFailedView = UIView.ylt_create().ylt_frame(CGRectMake(YLT_SCREEN_WIDTH/4., (YLT_SCREEN_HEIGHT-YLT_SCREEN_WIDTH/2.)/2., YLT_SCREEN_WIDTH/2., YLT_SCREEN_WIDTH/2.))
-        .ylt_backgroundColor([UIColor redColor]);
+        _loadingFailedView =
+        UIView.ylt_create()
+        .ylt_frame(CGRectMake(YLT_SCREEN_WIDTH/4., (YLT_SCREEN_HEIGHT-YLT_SCREEN_WIDTH/2.)/2., YLT_SCREEN_WIDTH/2., YLT_SCREEN_WIDTH/2.))
+        .ylt_backgroundColor([UIColor clearColor]);
+        
+        UILabel.ylt_createFrame(_loadingFailedView, _loadingFailedView.bounds)
+        .ylt_convertToLabel()
+        .ylt_lineNum(2)
+        .ylt_text(@"加载失败\n点击重试")
+        .ylt_textColor(YLT_HEXCOLOR(0x666666))
+        .ylt_textAlignment(NSTextAlignmentCenter);
     }
     return _loadingFailedView;
 }
