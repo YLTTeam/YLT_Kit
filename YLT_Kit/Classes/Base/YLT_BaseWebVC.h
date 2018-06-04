@@ -98,7 +98,7 @@
  @param urlString 路径
  @return 控制器
  */
-+ (YLT_BaseWebVC *)ylt_webVCFromURLString:(NSString *)urlString;
++ (instancetype *)ylt_webVCFromURLString:(NSString *)urlString;
 
 /**
  根据地址生成网页视图
@@ -106,6 +106,6 @@
  @param filePath 路径
  @return 控制器
  */
-+ (YLT_BaseWebVC *)ylt_webVCFromFilePath:(NSString *)filePath;
++ (instancetype *)ylt_webVCFromFilePath:(NSString *)filePath;
 
 @end
