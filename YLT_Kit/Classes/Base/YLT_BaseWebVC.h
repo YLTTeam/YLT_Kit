@@ -72,7 +72,7 @@
  @param urlString 网页地址
  @return 网页视图
  */
-+ (YLT_BaseWebView *)ylt_webViewFrame:(CGRect)frame URLString:(NSString *)urlString;
++ (instancetype)ylt_webViewFrame:(CGRect)frame URLString:(NSString *)urlString;
 
 /**
  根据地址生成网页视图
@@ -81,7 +81,7 @@
  @param filePath 本地路径
  @return 网页视图
  */
-+ (YLT_BaseWebView *)ylt_webViewFrame:(CGRect)frame filePath:(NSString *)filePath;
++ (instancetype)ylt_webViewFrame:(CGRect)frame filePath:(NSString *)filePath;
 
 @end
 
@@ -98,7 +98,7 @@
  @param urlString 路径
  @return 控制器
  */
-+ (instancetype *)ylt_webVCFromURLString:(NSString *)urlString;
++ (instancetype)ylt_webVCFromURLString:(NSString *)urlString;
 
 /**
  根据地址生成网页视图
@@ -106,6 +106,6 @@
  @param filePath 路径
  @return 控制器
  */
-+ (instancetype *)ylt_webVCFromFilePath:(NSString *)filePath;
++ (instancetype)ylt_webVCFromFilePath:(NSString *)filePath;
 
 @end

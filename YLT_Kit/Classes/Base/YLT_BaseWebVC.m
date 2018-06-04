@@ -155,7 +155,7 @@
  @param urlString 网页地址
  @return 网页视图
  */
-+ (YLT_BaseWebView *)ylt_webViewFrame:(CGRect)frame URLString:(NSString *)urlString {
++ (instancetype)ylt_webViewFrame:(CGRect)frame URLString:(NSString *)urlString {
     YLT_BaseWebView *webView = [[self alloc] initWithFrame:frame];
     webView.url = [NSURL URLWithString:urlString];
     return webView;
@@ -168,7 +168,7 @@
  @param filePath 本地路径
  @return 网页视图
  */
-+ (YLT_BaseWebView *)ylt_webViewFrame:(CGRect)frame filePath:(NSString *)filePath {
++ (instancetype)ylt_webViewFrame:(CGRect)frame filePath:(NSString *)filePath {
     YLT_BaseWebView *webView = [[self alloc] initWithFrame:frame];
     webView.url = [NSURL fileURLWithPath:filePath];
     return webView;
@@ -393,7 +393,7 @@
  @param urlString 路径
  @return 控制器
  */
-+ (instancetype *)ylt_webVCFromURLString:(NSString *)urlString {
++ (instancetype)ylt_webVCFromURLString:(NSString *)urlString {
     YLT_BaseWebVC *vc = [[self alloc] init];
     vc.url = [NSURL URLWithString:urlString];
     return vc;
@@ -405,7 +405,7 @@
  @param filePath 路径
  @return 控制器
  */
-+ (instancetype *)ylt_webVCFromFilePath:(NSString *)filePath {
++ (instancetype)ylt_webVCFromFilePath:(NSString *)filePath {
     YLT_BaseWebVC *vc = [[self alloc] init];
     vc.url = [NSURL fileURLWithPath:filePath];
     return vc;
