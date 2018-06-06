@@ -377,6 +377,9 @@
 
 @implementation YLT_BaseWebVC
 
+@synthesize backBtn = _backBtn;
+@synthesize closeBtn = _closeBtn;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     _webView = [[YLT_BaseWebView alloc] initWithFrame:self.view.frame];
@@ -385,6 +388,9 @@
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:self.backBtn];
+    UIBarButtonItem *closeItem = [[UIBarButtonItem alloc] initWithCustomView:self.closeBtn];
+    self.navigationItem.leftBarButtonItems = @[backItem, closeItem];
 }
 
 /**
@@ -496,5 +502,61 @@
 }
 
 #pragma mark - getter
+
+- (UIButton *)backBtn {
+    if (!_backBtn) {
+        @weakify(self);
+        _backBtn = UIButton
+        .ylt_create()
+        .ylt_convertToButton()
+        .ylt_normalTitle(@"返回")
+        .ylt_buttonClickBlock(^(UIButton *sender) {
+            @strongify(self);
+            if (self.webView.webView.canGoBack) {
+                [self.webView.webView goBack];
+            } else {
+                if (self.navigationController.viewControllers.firstObject == self) {
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                } else {
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+            }
+        });
+        _backBtn.titleLabel.font = [UIFont systemFontOfSize:16.];
+        [_backBtn sizeToFit];
+    }
+    return _backBtn;
+}
+
+- (UIButton *)closeBtn {
+    if (!_closeBtn) {
+        @weakify(self);
+        _closeBtn = UIButton
+        .ylt_create()
+        .ylt_convertToButton()
+        .ylt_normalTitle(@"关闭")
+        .ylt_buttonClickBlock(^(UIButton *sender) {
+            @strongify(self);
+            if (self.navigationController.viewControllers.firstObject == self) {
+                [self dismissViewControllerAnimated:YES completion:nil];
+            } else {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+        });
+        _closeBtn.titleLabel.font = [UIFont systemFontOfSize:16.];
+        [_closeBtn sizeToFit];
+        RAC(_closeBtn, hidden) = [RACObserve(self.webView.webView, canGoBack) map:^id _Nullable(NSNumber *canGoBackNum) {
+            @strongify(self);
+//            if (canGoBackNum.boolValue) {
+//                [self.backBtn setTitle:@"返回" forState:UIControlStateNormal];
+//            } else {
+//                [self.backBtn setTitle:@"" forState:UIControlStateNormal];
+//            }
+//            [self.backBtn sizeToFit];
+            return @(!canGoBackNum.boolValue);
+        }];
+    }
+    return _closeBtn;
+}
 
 @end

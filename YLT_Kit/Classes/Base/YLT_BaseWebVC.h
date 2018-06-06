@@ -93,6 +93,16 @@
 @property (nonatomic, strong, readonly) YLT_BaseWebView *webView;
 
 /**
+ 返回按钮
+ */
+@property (nonatomic, strong, readonly) UIButton *backBtn;
+
+/**
+ 关闭按钮
+ */
+@property (nonatomic, strong, readonly) UIButton *closeBtn;
+
+/**
  根据地址生成网页视图
  
  @param urlString 路径

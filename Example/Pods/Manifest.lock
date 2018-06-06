@@ -39,7 +39,7 @@ PODS:
     - FMDB
     - MJExtension
     - RMUniversalAlert
-  - YLT_Kit (0.1.20):
+  - YLT_Kit (0.1.24):
     - AFNetworking
     - Masonry
     - MJRefresh
@@ -68,7 +68,7 @@ SPEC CHECKSUMS:
   UIAlertController+Blocks: 80e28b92523fb58aba4d1bccec013d5a0b0bddb2
   UIAlertView+Blocks: a46c99c5144f6c5dbc7d62fd2a0678daceec89a3
   YLT_BaseLib: d19e9f391ab035fcfca528e5dc834f8af52eaad6
-  YLT_Kit: 45ae36c1fc9187f2715de80a662f9596137b45ba
+  YLT_Kit: 118762c8e1487280bb7c89c2fb6b0781f68dd729
 
 PODFILE CHECKSUM: 65a474d3ca23e64c48d267336e751acf6a3ca453
 
