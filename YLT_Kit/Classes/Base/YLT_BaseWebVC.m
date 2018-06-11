@@ -19,6 +19,10 @@
  进度条
  */
 @property (nonatomic, strong) CALayer *progressLayer;
+/**
+ 使用web的标题
+ */
+@property (nonatomic, assign) BOOL useWebTitle;
 
 @property (nonatomic, copy) void(^callback)(WKScriptMessage *message);
 
@@ -238,11 +242,13 @@
 // 导航完成时，会回调（也就是页面载入完成了）
 - (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation {
     YLT_LogInfo(@"%@", webView);
-    [self.webView evaluateJavaScript:@"document.title" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-        if ([result isKindOfClass:[NSString class]] && ((NSString *) result).ylt_isValid && self.ylt_currentVC) {
-            self.ylt_currentVC.title = result;
-        }
-    }];
+    if (self.useWebTitle) {
+        [self.webView evaluateJavaScript:@"document.title" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+            if ([result isKindOfClass:[NSString class]] && ((NSString *) result).ylt_isValid && self.ylt_currentVC) {
+                self.ylt_currentVC.title = result;
+            }
+        }];
+    }
     [_loadingFailedView removeFromSuperview];
 }
 
@@ -302,6 +308,20 @@
         [self.webView reload];
     } else if(self.url) {
         [self.webView loadRequest:[NSURLRequest requestWithURL:self.url]];
+    }
+}
+
+/**
+ 设置标题
+ 
+ @param useWebTitle 是否使用web的标题
+ @param title 标题
+ */
+- (void)ylt_useWebTitle:(BOOL)useWebTitle title:(NSString *)title {
+    self.useWebTitle = useWebTitle;
+    self.ylt_currentVC.title = @"";
+    if (!self.useWebTitle && title.ylt_isValid) {
+        self.ylt_currentVC.title = title;
     }
 }
 

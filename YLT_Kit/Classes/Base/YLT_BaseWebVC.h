@@ -41,6 +41,14 @@
 - (void)ylt_reload;
 
 /**
+ 设置标题
+
+ @param useWebTitle 是否使用web的标题
+ @param title 标题
+ */
+- (void)ylt_useWebTitle:(BOOL)useWebTitle title:(NSString *)title;
+
+/**
  清理缓存
  */
 + (void)ylt_cleanCache;
