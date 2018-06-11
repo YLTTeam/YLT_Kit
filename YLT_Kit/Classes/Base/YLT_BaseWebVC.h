@@ -43,7 +43,7 @@
 /**
  清理缓存
  */
-- (void)ylt_cleanCache;
++ (void)ylt_cleanCache;
 
 @end
 

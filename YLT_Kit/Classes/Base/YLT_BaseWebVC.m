@@ -308,7 +308,7 @@
 /**
  清理缓存
  */
-- (void)ylt_cleanCache {
++ (void)ylt_cleanCache {
     if (@available(iOS 9.0, *)) {
         NSArray *types = @[WKWebsiteDataTypeMemoryCache, WKWebsiteDataTypeDiskCache];
         NSSet *websiteDataTypes = [NSSet setWithArray:types];
@@ -490,8 +490,8 @@
 /**
  清理缓存
  */
-- (void)ylt_cleanCache {
-    [self.webView ylt_cleanCache];
++ (void)ylt_cleanCache {
+    [YLT_BaseWebView ylt_cleanCache];
 }
 
 - (void)dealloc {
