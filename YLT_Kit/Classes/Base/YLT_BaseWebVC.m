@@ -8,6 +8,7 @@
 #import "YLT_BaseWebVC.h"
 #import "UIView+YLT_Create.h"
 #import <MJRefresh/MJRefresh.h>
+#import <ReactiveObjC/ReactiveObjC.h>
 
 @interface YLT_BaseWebView ()
 
@@ -43,7 +44,9 @@
             make.edges.equalTo(self);
         }];
         
+        @weakify(self);
         self.webView.scrollView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
+            @strongify(self);
             [self.webView.scrollView.mj_header endRefreshing];
             [self ylt_reload];
         }];
@@ -52,7 +55,6 @@
         self.progressLayer.frame = CGRectMake(0, 0, 0, 2);
         self.progressLayer.backgroundColor = [UIColor blueColor].CGColor;
         [self.layer addSublayer:self.progressLayer];
-        @weakify(self);
         [[self.webView rac_valuesForKeyPath:@"estimatedProgress" observer:self] subscribeNext:^(id  _Nullable x) {
             @strongify(self);
             self.progressLayer.frame = CGRectMake(0, 0, YLT_SCREEN_WIDTH*[x floatValue], 2);
