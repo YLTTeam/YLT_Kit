@@ -45,11 +45,6 @@
         }];
         
         @weakify(self);
-        self.webView.scrollView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
-            @strongify(self);
-            [self.webView.scrollView.mj_header endRefreshing];
-            [self ylt_reload];
-        }];
         
         _progressLayer = [CALayer layer];
         self.progressLayer.frame = CGRectMake(0, 0, 0, 2);
@@ -314,16 +309,25 @@
 }
 
 /**
- 设置标题
+ 设置标题 配置页面信息
  
  @param useWebTitle 是否使用web的标题
+ @param pullRefresh 是否可以下拉刷新
  @param title 标题
  */
-- (void)ylt_useWebTitle:(BOOL)useWebTitle title:(NSString *)title {
+- (void)ylt_useWebTitle:(BOOL)useWebTitle pullRefresh:(BOOL)pullRefresh title:(NSString *)title {
     self.notUseWebTitle = !useWebTitle;
     self.ylt_currentVC.title = @"";
     if (!self.notUseWebTitle && title.ylt_isValid) {
         self.ylt_currentVC.title = title;
+    }
+    if (pullRefresh) {
+        @weakify(self);
+        self.webView.scrollView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
+            @strongify(self);
+            [self.webView.scrollView.mj_header endRefreshing];
+            [self ylt_reload];
+        }];
     }
 }
 

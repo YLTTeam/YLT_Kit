@@ -41,12 +41,13 @@
 - (void)ylt_reload;
 
 /**
- 设置标题
+ 设置标题 配置页面信息
 
  @param useWebTitle 是否使用web的标题
+ @param pullRefresh 是否可以下拉刷新
  @param title 标题
  */
-- (void)ylt_useWebTitle:(BOOL)useWebTitle title:(NSString *)title;
+- (void)ylt_useWebTitle:(BOOL)useWebTitle pullRefresh:(BOOL)pullRefresh title:(NSString *)title;
 
 /**
  清理缓存
