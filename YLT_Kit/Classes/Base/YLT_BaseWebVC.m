@@ -23,7 +23,7 @@
 /**
  使用web的标题
  */
-@property (nonatomic, assign) BOOL useWebTitle;
+@property (nonatomic, assign) BOOL notUseWebTitle;
 
 @property (nonatomic, copy) void(^callback)(WKScriptMessage *message);
 
@@ -244,7 +244,7 @@
 // 导航完成时，会回调（也就是页面载入完成了）
 - (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation {
     YLT_LogInfo(@"%@", webView);
-    if (self.useWebTitle) {
+    if (!self.notUseWebTitle) {
         [self.webView evaluateJavaScript:@"document.title" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
             if ([result isKindOfClass:[NSString class]] && ((NSString *) result).ylt_isValid && self.ylt_currentVC) {
                 self.ylt_currentVC.title = result;
@@ -320,9 +320,9 @@
  @param title 标题
  */
 - (void)ylt_useWebTitle:(BOOL)useWebTitle title:(NSString *)title {
-    self.useWebTitle = useWebTitle;
+    self.notUseWebTitle = !useWebTitle;
     self.ylt_currentVC.title = @"";
-    if (!self.useWebTitle && title.ylt_isValid) {
+    if (!self.notUseWebTitle && title.ylt_isValid) {
         self.ylt_currentVC.title = title;
     }
 }
@@ -401,15 +401,11 @@
 
 @synthesize backBtn = _backBtn;
 @synthesize closeBtn = _closeBtn;
+@synthesize webView = _webView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _webView = [[YLT_BaseWebView alloc] initWithFrame:self.view.frame];
     self.webView.url = self.url;
-    [self.view addSubview:self.webView];
-    [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    }];
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:self.backBtn];
     UIBarButtonItem *closeItem = [[UIBarButtonItem alloc] initWithCustomView:self.closeBtn];
     self.navigationItem.leftBarButtonItems = @[backItem, closeItem];
@@ -579,6 +575,17 @@
         }];
     }
     return _closeBtn;
+}
+
+- (YLT_BaseWebView *)webView {
+    if (!_webView) {
+        _webView = [[YLT_BaseWebView alloc] init];
+        [self.view addSubview:self.webView];
+        [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.view);
+        }];
+    }
+    return _webView;
 }
 
 @end

@@ -55,13 +55,13 @@
 //    .ylt_fontSize(40)
 //    .ylt_signal(RACObserve(self, tag));
 //
-   self.imageview = UIImageView
-    .ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    })
-    .ylt_convertToImageView()
-    .ylt_image([[UIImage ylt_imageNamed:@"bg"] ylt_drawCircleImage])
-    .ylt_contentMode(UIViewContentModeScaleAspectFit);
+//   self.imageview = UIImageView
+//    .ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+//        make.edges.equalTo(self.view);
+//    })
+//    .ylt_convertToImageView()
+//    .ylt_image([[UIImage ylt_imageNamed:@"bg"] ylt_drawCircleImage])
+//    .ylt_contentMode(UIViewContentModeScaleAspectFit);
 //    .ylt_signal(RACObserve(self, p.name));;//.ylt_tap(self, @selector(tapAction:));
 ////    self.ylt_params
 //    self.ylt_callback(@{});
@@ -90,28 +90,28 @@
 //    self.ylt_params = [NSString stringWithFormat:@"回调参数 %zd", self.navigationController.viewControllers.count];
 //    YLT_LogInfo(@"---- %@   %zd", self.ylt_params, self.navigationController.viewControllers.count);
     
-    UIView *header =
-    UIView
-    .ylt_create()
-    .ylt_backgroundColor([UIColor redColor])
-    .ylt_frame(CGRectMake(0, 0, YLT_SCREEN_WIDTH, 50));
-
-    UIView *footer =
-    UIView
-    .ylt_create()
-    .ylt_backgroundColor([UIColor blueColor])
-    .ylt_frame(CGRectMake(0, 0, YLT_SCREEN_HEIGHT, 100));
-
-    YLT_TableSectionModel *model =
-    [YLT_TableSectionModel ylt_createSectionData:@[@"sdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfds", @"2", @"3"]
-                                    headerString:@"header"
-                                    footerString:nil];
-
-    YLT_TableSectionModel *model1 = [YLT_TableSectionModel ylt_createSectionData:@[@"sdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfdssdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfds", @"2", @"3"]
-                                                                    headerHeight:80
-                                                                      headerView:UIView.ylt_create().ylt_backgroundColor([UIColor redColor])
-                                                                    footerHeight:20
-                                                                      footerView:UIView.ylt_create().ylt_backgroundColor([UIColor blackColor])];
+//    UIView *header =
+//    UIView
+//    .ylt_create()
+//    .ylt_backgroundColor([UIColor redColor])
+//    .ylt_frame(CGRectMake(0, 0, YLT_SCREEN_WIDTH, 50));
+//
+//    UIView *footer =
+//    UIView
+//    .ylt_create()
+//    .ylt_backgroundColor([UIColor blueColor])
+//    .ylt_frame(CGRectMake(0, 0, YLT_SCREEN_HEIGHT, 100));
+//
+//    YLT_TableSectionModel *model =
+//    [YLT_TableSectionModel ylt_createSectionData:@[@"sdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfds", @"2", @"3"]
+//                                    headerString:@"header"
+//                                    footerString:nil];
+//
+//    YLT_TableSectionModel *model1 = [YLT_TableSectionModel ylt_createSectionData:@[@"sdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfdssdfasdfasdfasdfdsafdsfsdfasdfsdfsadfasddfsadfsdfsdfsdfsdfdsfdsfsdfdsfds", @"2", @"3"]
+//                                                                    headerHeight:80
+//                                                                      headerView:UIView.ylt_create().ylt_backgroundColor([UIColor redColor])
+//                                                                    footerHeight:20
+//                                                                      footerView:UIView.ylt_create().ylt_backgroundColor([UIColor blackColor])];
 //    UITableView
 //    .ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
 //        make.edges.equalTo(self.view);
@@ -155,28 +155,30 @@
     [NSURLProtocol ylt_registerScheme:@"http"];
     [NSURLProtocol ylt_registerScheme:@"https"];
     
-    __block YLT_BaseWebVC *vc = [YLT_BaseWebVC ylt_webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index2.html"];
-    [[vc.webView webView] evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-        NSString *userAgent = result;
-        NSString *newUserAgent = [userAgent stringByAppendingString:@" black_magic "];
-        
-        NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:newUserAgent, @"UserAgent", nil];
-        [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [[vc.webView webView] setCustomUserAgent:newUserAgent];
-        //        echo(@"%@",[[NSUserDefaults standardUserDefaults] stringForKey:@"UserAgent"]);
-        
-        //    判断网址类型
-    }];
-
+    YLT_BaseWebVC *vc = [YLT_BaseWebVC ylt_webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index2.html"];
+//    [[vc.webView webView] evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+//        NSString *userAgent = result;
+//        NSString *newUserAgent = [userAgent stringByAppendingString:@" black_magic "];
+//
+//        NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:newUserAgent, @"UserAgent", nil];
+//        [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//        [[vc.webView webView] setCustomUserAgent:newUserAgent];
+//        //        echo(@"%@",[[NSUserDefaults standardUserDefaults] stringForKey:@"UserAgent"]);
+//
+//        //    判断网址类型
+//    }];
     
+    @weakify(vc);
     [vc ylt_addObserverNames:@[@"getUserInfo1", @"getUserInfo", @"startNativeView"] callback:^(WKScriptMessage *message) {
+        @strongify(vc);
         YLT_Log(@"%@ %@", message.name, message.body);
         [vc ylt_sendMethodName:@"native_callback" param:@"test", @"hello", nil];
     }];
     
-    UINavigationController *root = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self presentViewController:root animated:YES completion:nil];
+    [self.navigationController pushViewController:vc animated:YES];
+//    UINavigationController *root = [[UINavigationController alloc] initWithRootViewController:vc];
+//    [self presentViewController:root animated:YES completion:nil];
     
 //    UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
 //    imagepicker.delegate = self;
