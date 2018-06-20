@@ -26,6 +26,10 @@ YLT_ShareInstance(YLT_WKProcessPool);
  */
 @property (nonatomic, strong) NSURL *url;
 /**
+ 观察的对象名称列表
+ */
+@property (nonatomic, strong) NSMutableArray *observers;
+/**
  进度条
  */
 @property (nonatomic, strong) CALayer *progressLayer;
@@ -54,7 +58,6 @@ YLT_ShareInstance(YLT_WKProcessPool);
         }];
         
         @weakify(self);
-        
         _progressLayer = [CALayer layer];
         self.progressLayer.frame = CGRectMake(0, 0, 0, 2);
         self.progressLayer.backgroundColor = [UIColor blueColor].CGColor;
@@ -74,6 +77,10 @@ YLT_ShareInstance(YLT_WKProcessPool);
     return self;
 }
 
+- (void)dealloc {
+    YLT_Log(@"--- BaseWebView dealloc");
+}
+
 /**
  JS给OC发送数据 （JS调用OC的方法）
  
@@ -85,9 +92,19 @@ YLT_ShareInstance(YLT_WKProcessPool);
         if (name.ylt_isValid) {
             [self.configuration.userContentController removeScriptMessageHandlerForName:name];
             [self.configuration.userContentController addScriptMessageHandler:self name:name];
+            [self.observers addObject:name];
         }
     }
     self.callback = callback;
+}
+
+/**
+ 移除所有的message handler
+ */
+- (void)ylt_removeObserverAllName {
+    [self.observers enumerateObjectsUsingBlock:^(NSString *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.configuration.userContentController removeScriptMessageHandlerForName:obj];
+    }];
 }
 
 /**
@@ -398,6 +415,13 @@ YLT_ShareInstance(YLT_WKProcessPool);
     return _configuration;
 }
 
+- (NSMutableArray *)observers {
+    if (!_observers) {
+        _observers = [[NSMutableArray alloc] init];
+    }
+    return _observers;
+}
+
 @end
 
 
@@ -530,6 +554,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
     self.webView.webView.UIDelegate = nil;
     self.webView.webView.navigationDelegate = nil;
     [self.webView.configuration.userContentController removeAllUserScripts];
+    [self.webView ylt_removeObserverAllName];
 }
 
 #pragma mark - getter

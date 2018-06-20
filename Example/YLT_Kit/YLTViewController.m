@@ -179,7 +179,6 @@
     [self.navigationController pushViewController:vc animated:YES];
 //    UINavigationController *root = [[UINavigationController alloc] initWithRootViewController:vc];
 //    [self presentViewController:root animated:YES completion:nil];
-    
 //    UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
 //    imagepicker.delegate = self;
 //    imagepicker.sourceType = UIImagePickerControllerSourceTypeCamera;
