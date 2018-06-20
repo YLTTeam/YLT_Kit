@@ -10,6 +10,15 @@
 #import <MJRefresh/MJRefresh.h>
 #import <ReactiveObjC/ReactiveObjC.h>
 
+@interface YLT_WKProcessPool : WKProcessPool
+YLT_ShareInstanceHeader(YLT_WKProcessPool);
+@end
+
+@implementation YLT_WKProcessPool
+YLT_ShareInstance(YLT_WKProcessPool);
+@end
+
+
 @interface YLT_BaseWebView ()
 
 /**
@@ -59,7 +68,7 @@
                 self.progressLayer.frame = CGRectMake(0, 0, 0, 2);
             }
         }];
-    
+        
         self.ylt_tap(self, @selector(tapAction:));
     }
     return self;
@@ -384,7 +393,7 @@
         preferences.javaScriptEnabled = YES;
         _configuration.preferences = preferences;
         // web内容处理池，由于没有属性可以设置，也没有方法可以调用，不用手动创建
-        _configuration.processPool = [[WKProcessPool alloc] init];
+        _configuration.processPool = [YLT_WKProcessPool shareInstance];
     }
     return _configuration;
 }
@@ -569,12 +578,12 @@
         [_closeBtn sizeToFit];
         RAC(_closeBtn, hidden) = [RACObserve(self.webView.webView, canGoBack) map:^id _Nullable(NSNumber *canGoBackNum) {
             @strongify(self);
-//            if (canGoBackNum.boolValue) {
-//                [self.backBtn setTitle:@"返回" forState:UIControlStateNormal];
-//            } else {
-//                [self.backBtn setTitle:@"" forState:UIControlStateNormal];
-//            }
-//            [self.backBtn sizeToFit];
+            //            if (canGoBackNum.boolValue) {
+            //                [self.backBtn setTitle:@"返回" forState:UIControlStateNormal];
+            //            } else {
+            //                [self.backBtn setTitle:@"" forState:UIControlStateNormal];
+            //            }
+            //            [self.backBtn sizeToFit];
             return @(!canGoBackNum.boolValue);
         }];
     }
