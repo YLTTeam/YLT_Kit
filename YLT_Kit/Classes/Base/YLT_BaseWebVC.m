@@ -99,12 +99,21 @@ YLT_ShareInstance(YLT_WKProcessPool);
 }
 
 /**
- 移除所有的message handler
+ 移除观察的名称
+ 
+ @param names 名称列表
  */
-- (void)ylt_removeObserverAllName {
-    [self.observers enumerateObjectsUsingBlock:^(NSString *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+- (void)ylt_removeObserverMessageHandlersForNames:(NSArray<NSString *> *)names {
+    [names enumerateObjectsUsingBlock:^(NSString *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [self.configuration.userContentController removeScriptMessageHandlerForName:obj];
     }];
+}
+
+/**
+ 移除所有的message handler
+ */
+- (void)ylt_removeAllObserMessageHandlers {
+    [self ylt_removeObserverMessageHandlersForNames:self.observers];
 }
 
 /**
@@ -482,6 +491,21 @@ YLT_ShareInstance(YLT_WKProcessPool);
     [self.webView ylt_addObserverNames:names callback:callback];
 }
 
+/**
+ 移除观察的名称
+ 
+ @param names 名称列表
+ */
+- (void)ylt_removeObserverMessageHandlersForNames:(NSArray<NSString *> *)names {
+    [self.webView ylt_removeObserverMessageHandlersForNames:names];
+}
+
+/**
+ 移除所有的观察名称
+ */
+- (void)ylt_removeAllObserMessageHandlers {
+    [self.webView ylt_removeAllObserMessageHandlers];
+}
 
 /**
  OC给JS发送数据 （OC调用JS的方法）
@@ -554,7 +578,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
     self.webView.webView.UIDelegate = nil;
     self.webView.webView.navigationDelegate = nil;
     [self.webView.configuration.userContentController removeAllUserScripts];
-    [self.webView ylt_removeObserverAllName];
+    [self.webView ylt_removeAllObserMessageHandlers];
 }
 
 #pragma mark - getter

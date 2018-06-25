@@ -20,6 +20,18 @@
 - (void)ylt_addObserverNames:(NSArray<NSString *> *)names callback:(void(^)(WKScriptMessage *message))callback;
 
 /**
+ 移除观察的名称
+
+ @param names 名称列表
+ */
+- (void)ylt_removeObserverMessageHandlersForNames:(NSArray<NSString *> *)names;
+
+/**
+ 移除所有的观察名称
+ */
+- (void)ylt_removeAllObserMessageHandlers;
+
+/**
  OC给JS发送数据 （OC调用JS的方法）
  
  @param jsMedhodName 方法名
