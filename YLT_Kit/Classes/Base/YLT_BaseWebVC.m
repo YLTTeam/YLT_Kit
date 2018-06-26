@@ -250,11 +250,17 @@ YLT_ShareInstance(YLT_WKProcessPool);
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
     YLT_LogInfo(@"%@", webView);
     [_loadingFailedView removeFromSuperview];
+    if (self.ylt_webViewDidStart) {
+        self.ylt_webViewDidStart(webView, navigation);
+    }
 }
 
 // 接收到重定向时会回调
 - (void)webView:(WKWebView *)webView didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
     YLT_LogInfo(@"%@", webView);
+    if (self.ylt_webViewDidReceiveServerRedirect) {
+        self.ylt_webViewDidReceiveServerRedirect(webView, navigation);
+    }
 }
 
 // 导航失败时会回调
@@ -263,12 +269,18 @@ YLT_ShareInstance(YLT_WKProcessPool);
     if (!webView.URL) {
         [self addSubview:self.loadingFailedView];
     }
+    if (self.ylt_webViewDidFail) {
+        self.ylt_webViewDidFail(webView, navigation, error);
+    }
 }
 
 // 页面内容到达main frame时回调
 - (void)webView:(WKWebView *)webView didCommitNavigation:(null_unspecified WKNavigation *)navigation {
     YLT_LogInfo(@"%@", webView);
     [_loadingFailedView removeFromSuperview];
+    if (self.ylt_webViewDidCommit) {
+        self.ylt_webViewDidCommit(webView, navigation);
+    }
 }
 
 // 导航完成时，会回调（也就是页面载入完成了）
@@ -282,20 +294,29 @@ YLT_ShareInstance(YLT_WKProcessPool);
         }];
     }
     [_loadingFailedView removeFromSuperview];
+    if (self.ylt_webViewDidFinish) {
+        self.ylt_webViewDidFinish(webView, navigation);
+    }
 }
 
 // 导航失败时会回调
 - (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
+    YLT_LogInfo(@"%@", webView);
     if (!webView.URL) {
         [self addSubview:self.loadingFailedView];
     }
-    YLT_LogInfo(@"%@", webView);
+    if (self.ylt_webViewDidError) {
+        self.ylt_webViewDidError(webView, navigation, error);
+    }
 }
 
 // 对于HTTPS的都会触发此代理，如果不要求验证，传默认就行
 // 如果需要证书验证，与使用AFN进行HTTPS证书验证是一样的
 - (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler {
     YLT_LogInfo(@"%@", webView);
+    if (self.ylt_webViewDidReceiveAuthenticationChallenge) {
+        self.ylt_webViewDidReceiveAuthenticationChallenge(webView, challenge);
+    }
     completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
 }
 
@@ -303,12 +324,19 @@ YLT_ShareInstance(YLT_WKProcessPool);
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
     [self ylt_reload];
     YLT_LogInfo(@"%@", webView);
+    [self ylt_reload];
+    if (self.ylt_webViewContentProcessDidTerminate) {
+        self.ylt_webViewContentProcessDidTerminate(webView);
+    }
 }
 
 /// js 出现警告框时候调用
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler {
     if (message.ylt_isValid) {
         YLT_TipAlert(message);
+    }
+    if (self.ylt_webViewJSAlertMessage) {
+        self.ylt_webViewJSAlertMessage(webView, message, frame);
     }
     completionHandler();
 }
@@ -317,6 +345,9 @@ YLT_ShareInstance(YLT_WKProcessPool);
 - (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler {
     if (message.ylt_isValid) {
         YLT_TipAlert(message);
+    }
+    if (self.ylt_webViewJSConfirmMessage) {
+        self.ylt_webViewJSConfirmMessage(webView, message, frame);
     }
     completionHandler(YES);
 }

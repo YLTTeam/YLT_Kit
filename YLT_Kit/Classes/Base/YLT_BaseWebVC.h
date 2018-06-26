@@ -54,7 +54,7 @@
 
 /**
  设置标题 配置页面信息
-
+ 
  @param useWebTitle 是否使用web的标题
  @param pullRefresh 是否可以下拉刷新
  @param title 标题
@@ -85,6 +85,56 @@
  网络视图参数配置
  */
 @property (nonatomic, strong) WKWebViewConfiguration *configuration;
+
+/**
+ 开始导航跳转时会回调
+ */
+@property (nonatomic, copy) void(^ylt_webViewDidStart)(WKWebView *webView, WKNavigation *navigation);
+
+/**
+ 接收到重定向时会回调
+ */
+@property (nonatomic, copy) void(^ylt_webViewDidReceiveServerRedirect)(WKWebView *webView, WKNavigation *navigation);
+
+/**
+ 导航失败时会回调
+ */
+@property (nonatomic, copy) void(^ylt_webViewDidFail)(WKWebView *webView, WKNavigation *navigation, NSError *error);
+
+/**
+ 页面内容到达main frame时回调
+ */
+@property (nonatomic, copy) void(^ylt_webViewDidCommit)(WKWebView *webView, WKNavigation *navigation);
+
+/**
+ 导航完成时，会回调（也就是页面载入完成了）
+ */
+@property (nonatomic, copy) void(^ylt_webViewDidFinish)(WKWebView *webView, WKNavigation *navigation);
+
+/**
+ 导航失败时会回调
+ */
+@property (nonatomic, copy) void(^ylt_webViewDidError)(WKWebView *webView, WKNavigation *navigation, NSError *error);
+
+/**
+ 对于HTTPS的都会触发此代理，如果不要求验证，传默认就行, 如果需要证书验证，与使用AFN进行HTTPS证书验证是一样的
+ */
+@property (nonatomic, copy) void(^ylt_webViewDidReceiveAuthenticationChallenge)(WKWebView *webView, NSURLAuthenticationChallenge *challenge);
+
+/**
+ 9.0才能使用，web内容处理中断时会触发
+ */
+@property (nonatomic, copy) void(^ylt_webViewContentProcessDidTerminate)(WKWebView *webView);
+
+/**
+ js 出现警告框时候调
+ */
+@property (nonatomic, copy) void(^ylt_webViewJSAlertMessage)(WKWebView *webView, NSString *message, WKFrameInfo *frame);
+
+/**
+ js 出现确认框时候调用
+ */
+@property (nonatomic, copy) void(^ylt_webViewJSConfirmMessage)(WKWebView *webView, NSString *message, WKFrameInfo *frame);
 
 /**
  根据地址生成网页视图
