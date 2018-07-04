@@ -21,7 +21,7 @@
 
 /**
  移除观察的名称
-
+ 
  @param names 名称列表
  */
 - (void)ylt_removeObserverMessageHandlersForNames:(NSArray<NSString *> *)names;
@@ -75,12 +75,14 @@
  网页视图
  */
 @property (nonatomic, strong, readonly) WKWebView *webView;
-
 /**
  加载失败的占位图
  */
 @property (nonatomic, strong) UIView *loadingFailedView;
-
+/**
+ 网络请求的预加载
+ */
+@property (nonatomic, strong) NSMutableURLRequest *(^preloadingRequest)(NSURL *url);
 /**
  网络视图参数配置
  */
@@ -157,12 +159,6 @@
 @end
 
 @interface YLT_BaseWebVC : YLT_BaseVC<YLT_WebProtocl>
-
-/**
- url
- */
-@property (nonatomic, strong) NSURL *url;
-
 /**
  网页视图
  */

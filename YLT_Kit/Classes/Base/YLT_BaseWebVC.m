@@ -20,7 +20,6 @@ YLT_ShareInstance(YLT_WKProcessPool);
 
 
 @interface YLT_BaseWebView ()
-
 /**
  加载路径
  */
@@ -322,7 +321,6 @@ YLT_ShareInstance(YLT_WKProcessPool);
 
 // 9.0才能使用，web内容处理中断时会触发
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
-    [self ylt_reload];
     YLT_LogInfo(@"%@", webView);
     [self ylt_reload];
     if (self.ylt_webViewContentProcessDidTerminate) {
@@ -436,7 +434,14 @@ YLT_ShareInstance(YLT_WKProcessPool);
 
 - (void)setUrl:(NSURL *)url {
     _url = url;
-    [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
+    NSURLRequest *request = nil;
+    if (self.preloadingRequest) {
+        request = self.preloadingRequest(url);
+    }
+    if (!request) {
+        request = [NSURLRequest requestWithURL:url];
+    }
+    [self.webView loadRequest:request];
 }
 
 - (WKWebViewConfiguration *)configuration {
@@ -466,7 +471,10 @@ YLT_ShareInstance(YLT_WKProcessPool);
 
 
 @interface YLT_BaseWebVC ()
-
+/**
+ url
+ */
+@property (nonatomic, strong) NSURL *url;
 @end
 
 @implementation YLT_BaseWebVC
