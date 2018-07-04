@@ -467,11 +467,6 @@ YLT_ShareInstance(YLT_WKProcessPool);
 
 @interface YLT_BaseWebVC ()
 
-/**
- url
- */
-@property (nonatomic, strong) NSURL *url;
-
 @end
 
 @implementation YLT_BaseWebVC

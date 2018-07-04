@@ -159,6 +159,11 @@
 @interface YLT_BaseWebVC : YLT_BaseVC<YLT_WebProtocl>
 
 /**
+ url
+ */
+@property (nonatomic, strong) NSURL *url;
+
+/**
  网页视图
  */
 @property (nonatomic, strong, readonly) YLT_BaseWebView *webView;
