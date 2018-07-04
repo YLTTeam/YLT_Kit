@@ -80,10 +80,6 @@
  */
 @property (nonatomic, strong) UIView *loadingFailedView;
 /**
- 网络请求的预加载
- */
-@property (nonatomic, strong) NSMutableURLRequest *(^preloadingRequest)(NSURL *url);
-/**
  网络视图参数配置
  */
 @property (nonatomic, strong) WKWebViewConfiguration *configuration;

@@ -434,13 +434,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
 
 - (void)setUrl:(NSURL *)url {
     _url = url;
-    NSURLRequest *request = nil;
-    if (self.preloadingRequest) {
-        request = self.preloadingRequest(url);
-    }
-    if (!request) {
-        request = [NSURLRequest requestWithURL:url];
-    }
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:request];
 }
 
