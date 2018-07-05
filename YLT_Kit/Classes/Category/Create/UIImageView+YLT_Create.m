@@ -29,7 +29,7 @@
                 [self setImageWithURL:(NSURL *)image];
             }
             else if ([image isKindOfClass:[NSString class]]) {
-                if ([((NSString *)image) ylt_isValid]) {
+                if ([((NSString *)image) ylt_isURL]) {
                     [self setImageWithURL:[NSURL URLWithString:(NSString *)image]];
                 }
                 else {
