@@ -10,6 +10,11 @@
 #import <AVFoundation/AVFoundation.h>
 #import <YLT_BaseLib/YLT_BaseLib.h>
 
+NS_INLINE CGRect TC_CGRectFloorIntegral(CGRect rect)
+{
+    return CGRectMake((size_t)rect.origin.x, (size_t)rect.origin.y, (size_t)rect.size.width, (size_t)rect.size.height);
+}
+
 @implementation UIImage (YLT_Extension)
 
 /**
@@ -163,7 +168,7 @@
     return newImage;
 }
 
-+ (UIImage * __nonnull)ylt_fixOrientation:(UIImage *)aImage {
++ (UIImage *)ylt_fixOrientation:(UIImage *)aImage {
     if (aImage.imageOrientation == UIImageOrientationUp)
         return aImage;
     CGAffineTransform transform = CGAffineTransformIdentity;
@@ -235,7 +240,7 @@
     return img;
 }
 
-+ (UIImage* __nonnull) ylt_thumbnailImageForVideo:(NSURL *)videoURL {
++ (UIImage*) ylt_thumbnailImageForVideo:(NSURL *)videoURL {
     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
     NSParameterAssert(asset);
     AVAssetImageGenerator *assetImageGenerator =[[AVAssetImageGenerator alloc] initWithAsset:asset];
@@ -620,7 +625,7 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
 }
 
 
-//- (UIImage * __nonnull)ylt_pngImageDataWithKB:(NSUInteger)KB {
+//- (UIImage *)ylt_pngImageDataWithKB:(NSUInteger)KB {
 //    int scale=1;
 //    //   等比例缩放
 //    NSData *imageAfterProcessing = UIImagePNGRepresentation(self);
@@ -789,9 +794,9 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
         NSInteger height = originSize.height / scale;
         
         result = CGSizeMake(width, height);
-//        YLT_Log(@"输出图片尺寸压缩比为 %f", scale);
+        //        YLT_Log(@"输出图片尺寸压缩比为 %f", scale);
     } else {
-//        YLT_Log(@"按照原图尺寸输出，质量压缩'可能'达不到要求，请注意修改目标尺寸！！！");
+        //        YLT_Log(@"按照原图尺寸输出，质量压缩'可能'达不到要求，请注意修改目标尺寸！！！");
     }
     
     return result;
@@ -809,6 +814,108 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
     float dDuration2 = originScale - floorScale;
     
     return dDuration1 <= dDuration2 ? ceilScale: floorScale; // 取最近的2次幂，小数四舍五入
+}
+
+// 根据 orientation 映射到 CGImage的 pixel rect
+- (CGRect)calibrateRect:(CGRect)rect inImage:(UIImage *)image
+{
+    CGFloat width = CGImageGetWidth(image.CGImage);
+    CGFloat height = CGImageGetHeight(image.CGImage);
+    
+    // 左下角为旋转原点
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    
+    switch (image.imageOrientation) {
+        case UIImageOrientationUp:
+            
+            break;
+            
+        case UIImageOrientationDown:
+            
+            transform = CGAffineTransformTranslate(transform, width, height);
+            transform = CGAffineTransformRotate(transform, M_PI);
+            break;
+            
+        case UIImageOrientationLeft: // rotate right
+            
+            transform = CGAffineTransformTranslate(transform, width, 0.0);
+            transform = CGAffineTransformRotate(transform, M_PI_2);
+            break;
+            
+        case UIImageOrientationRight: // rotate left
+            
+            transform = CGAffineTransformTranslate(transform, 0.0, height);
+            transform = CGAffineTransformRotate(transform, -M_PI_2);
+            break;
+            
+        case UIImageOrientationUpMirrored: // flip H
+            
+            transform = CGAffineTransformTranslate(transform, width, 0.0);
+            transform = CGAffineTransformScale(transform, -1.0, 1.0);
+            break;
+            
+        case UIImageOrientationDownMirrored: // flip V
+            
+            transform = CGAffineTransformTranslate(transform, 0.0, height);
+            transform = CGAffineTransformScale(transform, 1.0, -1.0);
+            break;
+            
+        case UIImageOrientationLeftMirrored: // flip V, rotate right
+            
+            transform = CGAffineTransformScale(transform, 1.0, -1.0);
+            transform = CGAffineTransformRotate(transform, -M_PI_2);
+            break;
+            
+        case UIImageOrientationRightMirrored: // flip H, rotate right
+            
+            transform = CGAffineTransformTranslate(transform, width, height);
+            transform = CGAffineTransformScale(transform, -1.0, 1.0);
+            transform = CGAffineTransformRotate(transform, -M_PI_2);
+            break;
+            
+        default:
+            break;
+    }
+    
+    return TC_CGRectFloorIntegral(CGRectApplyAffineTransform(rect, transform));
+}
+
+/**
+ 裁剪图片
+ 
+ @param rect 裁剪区域
+ @return 裁剪后图片
+ */
+- (UIImage *)ylt_clipImageWithSize:(CGRect)rect {
+    CGRect pixelRect = rect;
+    CGFloat scale = self.scale;
+    pixelRect.origin.x *= scale;
+    pixelRect.origin.y *= scale;
+    pixelRect.size.width *= scale;
+    pixelRect.size.height *= scale;
+    
+    CGRect fixRect = [self calibrateRect:pixelRect inImage:self];
+    CGSize size = CGSizeMake(CGImageGetWidth(self.CGImage), CGImageGetHeight(self.CGImage));
+    CGContextRef ctx = [UIImage createImageContext:fixRect.size];
+    if (fixRect.size.width * fixRect.size.height <= 256 * 256) {
+        CGContextSetInterpolationQuality(ctx, kCGInterpolationHigh);
+    } else {
+        CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
+    }
+    CGContextDrawImage(ctx, CGRectMake(-fixRect.origin.x, fixRect.origin.y+fixRect.size.height-size.height, size.width, size.height), self.CGImage);
+    CGImageRef imgRef = CGBitmapContextCreateImage(ctx);
+    CGContextRelease(ctx);
+    
+    UIImage *output = self;
+    if (NULL != imgRef && imgRef != self.CGImage) {
+        output = [UIImage imageWithCGImage:imgRef scale:output.scale orientation:output.imageOrientation];
+    }
+    
+    CGImageRelease(imgRef);
+    
+    return output;
+    
+    return self;
 }
 
 @end

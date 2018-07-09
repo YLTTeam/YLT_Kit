@@ -74,7 +74,7 @@
  @param size 目标size
  @return 压缩图
  */
-- (UIImage*)ylt_scaledToSize:(CGSize)size;
+- (UIImage *)ylt_scaledToSize:(CGSize)size;
 
 /**
  压缩到指定大小size,并保证图片清晰度和质量好于上面方法
@@ -83,7 +83,7 @@
  @param highQuality 是否保证质量
  @return 压缩图
  */
-- (UIImage*)ylt_scaledToSize:(CGSize)size highQuality:(BOOL)highQuality;
+- (UIImage *)ylt_scaledToSize:(CGSize)size highQuality:(BOOL)highQuality;
 
 /**
  修正图片方向
@@ -91,7 +91,7 @@
  @param aImage 原图
  @return 修正图
  */
-+ (UIImage * __nonnull)ylt_fixOrientation:(UIImage *)aImage;
++ (UIImage *)ylt_fixOrientation:(UIImage *)aImage;
 
 /**
  获取视频的帧图
@@ -99,7 +99,7 @@
  @param videoURL 视频url
  @return 视频帧图
  */
-+ (UIImage* __nonnull) ylt_thumbnailImageForVideo:(NSURL *)videoURL;
++ (UIImage *) ylt_thumbnailImageForVideo:(NSURL *)videoURL;
 
 /**
  获取原图
@@ -142,14 +142,14 @@
 
 /**
  图片的默认优化算法
-
+ 
  @return 优化后的图片，返回的一定是JPEG格式的 最大控制在512KB范围内
  */
 - (UIImage *)ylt_representation;
 
 /**
  获取图片的类型
-
+ 
  @param imageData 图片数据
  @return 类型名称 PNG、JPEG等
  */
@@ -157,7 +157,7 @@
 
 /**
  图片压缩算法处理
-
+ 
  @param imageData 图片压缩前的数据
  @param kb 大小
  @return 压缩后的Data
@@ -193,5 +193,13 @@
  *  @return data
  */
 + (NSData *)ylt_representationImageSizeAndQualityWithImage:(UIImage *)originImage maxLength:(NSInteger)maxLength maxKB:(NSInteger)maxKB;
+
+/**
+ 裁剪图片
+ 
+ @param rect 裁剪区域
+ @return 裁剪后图片
+ */
+- (UIImage *)ylt_clipImageWithSize:(CGRect)rect;
 
 @end
