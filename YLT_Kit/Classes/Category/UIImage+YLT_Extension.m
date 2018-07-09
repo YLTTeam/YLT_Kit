@@ -897,7 +897,7 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
  @param rect 裁剪区域
  @return 裁剪后图片
  */
-- (UIImage *)ylt_cropImageWithSize:(CGRect)rect {
+- (UIImage *)ylt_cropImageWithRect:(CGRect)rect {
     CGRect pixelRect = rect;
     CGFloat scale = self.scale;
     pixelRect.origin.x *= scale;
