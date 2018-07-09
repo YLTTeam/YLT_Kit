@@ -15,6 +15,8 @@ NS_INLINE CGRect TC_CGRectFloorIntegral(CGRect rect)
     return CGRectMake((size_t)rect.origin.x, (size_t)rect.origin.y, (size_t)rect.size.width, (size_t)rect.size.height);
 }
 
+static CGBitmapInfo const kTCDefaultBitMapOrder = kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst;
+
 @implementation UIImage (YLT_Extension)
 
 /**
@@ -878,6 +880,15 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
     }
     
     return TC_CGRectFloorIntegral(CGRectApplyAffineTransform(rect, transform));
+}
+
++ (CGContextRef)createImageContext:(CGSize)size
+{
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(NULL, (size_t)size.width, (size_t)size.height, 8, ((size_t)size.width) * 4, colorSpace, kTCDefaultBitMapOrder);
+    CGColorSpaceRelease(colorSpace);
+    
+    return context;
 }
 
 /**
