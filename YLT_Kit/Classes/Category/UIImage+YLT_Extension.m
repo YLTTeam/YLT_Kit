@@ -921,12 +921,9 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
     if (NULL != imgRef && imgRef != self.CGImage) {
         output = [UIImage imageWithCGImage:imgRef scale:output.scale orientation:output.imageOrientation];
     }
-    
     CGImageRelease(imgRef);
     
     return output;
-    
-    return self;
 }
 
 @end
