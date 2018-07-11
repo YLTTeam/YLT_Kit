@@ -8,6 +8,8 @@
 #ifndef YLT_BaseMacro_h
 #define YLT_BaseMacro_h
 
+#import <LGAlertView/LGAlertView.h>
+
 /// iOS设备信息
 #define iPad ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
 #define iPhone ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
@@ -53,7 +55,7 @@
 /// 获取系统对象
 #define YLT_Application        [UIApplication sharedApplication]
 #define YLT_AppWindow          [UIApplication sharedApplication].keyWindow
-#define YLT_AppDelegate        (AppDelegate *)[UIApplication sharedApplication].delegate
+#define YLT_AppDelegate        [UIApplication sharedApplication].delegate
 #define YLT_RootViewController [UIApplication sharedApplication].delegate.window.rootViewController
 // NSString To NSURL
 #define YLT_URL(urlString)    [NSURL URLWithString:urlString]
@@ -66,12 +68,14 @@
 #define YLT_SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define YLT_SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 #define YLT_SCREEN_BOUNDS [UIScreen mainScreen].bounds
+//宽度比例
+#define YLT_Scale_Width(width) (width) * YLT_SCREEN_WIDTH / 375.0
 
 // iOS沙盒目录
 #define YLT_DOCUMENT_PATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define YLT_CACHE_PATH [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
-#define YLT_TipAlert(_S_, ...)     [[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:(_S_), ##__VA_ARGS__] message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show]
+#define YLT_TipAlert(_S_, ...) [[LGAlertView alertViewWithTitle:[NSString stringWithFormat:(_S_), ##__VA_ARGS__] message:nil style:LGAlertViewStyleAlert buttonTitles:nil cancelButtonTitle:@"确定" destructiveButtonTitle:nil actionHandler:nil cancelHandler:nil destructiveHandler:^(LGAlertView * _Nonnull alertView) {}] show];
 
 #if DEBUG
 //输出日志信息
@@ -196,5 +200,23 @@
 #define YLT_BACK(block)  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block)
 #define YLT_BACKDelay(x, block) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(x * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block)
 
+/// 警告消除宏
+#define YLT_ArgumentToString(macro) #macro
+#define YLT_ClangWarningConcat(warning_name) YLT_ArgumentToString(clang diagnostic ignored warning_name)
+// 参数可直接传入 clang 的 warning 名，warning 列表参考：http://fuckingclangwarnings.com/
+#define YLT_BeginIgnoreClangWarning(warningName) _Pragma("clang diagnostic push") _Pragma(YLT_ClangWarningConcat(#warningName))
+#define YLT_EndIgnoreClangWarning _Pragma("clang diagnostic pop")
+
+#define YLT_BeginIgnorePerformSelectorLeaksWarning YLT_BeginIgnoreClangWarning(-Warc-performSelector-leaks)
+#define YLT_EndIgnorePerformSelectorLeaksWarning YLT_EndIgnoreClangWarning
+
+#define YLT_BeginIgnoreAvailabilityWarning YLT_BeginIgnoreClangWarning(-Wpartial-availability)
+#define YLT_EndIgnoreAvailabilityWarning YLT_EndIgnoreClangWarning
+
+#define YLT_BeginIgnoreDeprecatedWarning YLT_BeginIgnoreClangWarning(-Wdeprecated-declarations)
+#define YLT_EndIgnoreDeprecatedWarning YLT_EndIgnoreClangWarning
+
+#define YLT_BeginIgnoreUndeclaredSelecror YLT_BeginIgnoreClangWarning(-Wundeclared-selector)
+#define YLT_EndIgnoreUndeclaredSelecror YLT_EndIgnoreClangWarning
 
 #endif /* YLT_BaseMacro_h */

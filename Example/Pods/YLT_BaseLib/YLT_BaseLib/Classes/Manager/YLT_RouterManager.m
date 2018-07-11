@@ -28,12 +28,25 @@
  @return 回参
  */
 + (id)ylt_routerToURL:(NSString *)routerURL arg:(id)arg completion:(void(^)(NSError *error, id response))completion {
+    return [self ylt_routerToURL:routerURL isClassMethod:NO arg:arg completion:completion];
+}
+
+/**
+ 路由
+ 
+ @param routerURL 路由的URL 参数带到URL后面  NSString *routerURL = @"ylt://classname/selectorname?username=alex&password=123456";
+ @param isClassMethod 是否是类方法：默认NO
+ @param arg 参数
+ @param completion 回调
+ @return 回参
+ */
++ (id)ylt_routerToURL:(NSString *)routerURL isClassMethod:(BOOL)isClassMethod arg:(id)arg completion:(void(^)(NSError *error, id response))completion {
     if ([routerURL hasPrefix:YLT_ROUTER_PREFIX]) {
         NSDictionary *urlParams = [self analysisURL:routerURL];
         NSString *clsname = ([urlParams.allKeys containsObject:ROUTER_CLS_NAME])?urlParams[ROUTER_CLS_NAME]:@"";
         NSString *selname = ([urlParams.allKeys containsObject:ROUTER_SEL_NAME])?urlParams[ROUTER_SEL_NAME]:@"";
         NSDictionary *params = ([urlParams.allKeys containsObject:ROUTER_ARG_DATA])?urlParams[ROUTER_ARG_DATA]:nil;
-        return [self ylt_routerToClassname:clsname selname:selname param:params arg:arg completion:completion];
+        return [self ylt_routerToClassname:clsname selname:selname isClassMethod:isClassMethod param:params arg:arg completion:completion];
     } else if ([routerURL hasPrefix:@"http://"] || [routerURL hasPrefix:@"https://"]) {
         YLT_LogWarn(@"webview 待开发");
     } else {
@@ -52,6 +65,20 @@
  @return 回参
  */
 + (id)ylt_routerToClassname:(NSString *)clsname selname:(NSString *)selname arg:(id)arg completion:(void(^)(NSError *error, id response))completion {
+    return [self ylt_routerToClassname:clsname selname:selname isClassMethod:NO arg:arg completion:completion];
+}
+
+/**
+ 路由
+ 
+ @param clsname 路由到对应的classname
+ @param selname 方法名对应的字串 后面可以带参数
+ @param isClassMethod 是否是类方法：默认NO
+ @param arg 参数
+ @param completion 回调
+ @return 回参
+ */
++ (id)ylt_routerToClassname:(NSString *)clsname selname:(NSString *)selname isClassMethod:(BOOL)isClassMethod arg:(id)arg completion:(void(^)(NSError *error, id response))completion {
     NSString *sel = selname;
     NSDictionary *params = @{};
     if ([sel containsString:@"?"]) {
@@ -59,7 +86,7 @@
         NSString *paramString = [[selname componentsSeparatedByString:@"?"] lastObject];
         params = [self generateParamsString:paramString];
     }
-    return [self ylt_routerToClassname:clsname selname:sel param:params arg:arg completion:completion];
+    return [self ylt_routerToClassname:clsname selname:sel isClassMethod:isClassMethod param:params arg:arg completion:completion];
 }
 
 /**
@@ -67,24 +94,19 @@
  
  @param clsname 路由到对应的classname
  @param selname 方法名对应的字串
+ @param isClassMethod 是否是类方法
  @param arg 参数
  @param completion 回调
  @return 回参
  */
-+ (id)ylt_routerToClassname:(NSString *)clsname selname:(NSString *)selname param:(NSDictionary *)param arg:(id)arg completion:(void(^)(NSError *error, id response))completion {
++ (id)ylt_routerToClassname:(NSString *)clsname selname:(NSString *)selname isClassMethod:(BOOL)isClassMethod param:(NSDictionary *)param arg:(id)arg completion:(void(^)(NSError *error, id response))completion {
     //路由的对象类
     Class cls = NSClassFromString(clsname);
     if (!clsname.ylt_isValid || (cls == NULL)) {
         YLT_LogError(@"路由的类异常");
         return nil;
     }
-    
-    id instance = [[cls alloc] init];
     selname = (selname.ylt_isValid?selname:@"ylt_router:");
-    if (![instance respondsToSelector:NSSelectorFromString(selname)]) {
-        YLT_LogError(@"路由的方法异常");
-        return nil;
-    }
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
     if (param) {
         [params addEntriesFromDictionary:param];
@@ -97,13 +119,38 @@
     if (completion) {
         [params setObject:completion forKey:YLT_ROUTER_COMPLETION];
     }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
+    
+    id instance = nil;
+    if (isClassMethod) {//类方法
+        instance = cls;
+    } else {
+        instance = [[cls alloc] init];
+    }
+    NSArray *sels = [selname componentsSeparatedByString:@"."];
+    for (NSInteger i = 0; i < sels.count-1; i++) {
+        NSString *sel = sels[i];
+        if (sel.ylt_isValid) {
+            YLT_BeginIgnoreUndeclaredSelecror
+            YLT_BeginIgnorePerformSelectorLeaksWarning
+            if ([instance respondsToSelector:NSSelectorFromString(sel)]) {
+                instance = [instance performSelector:NSSelectorFromString(sel)];
+            }
+            YLT_EndIgnoreUndeclaredSelecror
+            YLT_EndIgnorePerformSelectorLeaksWarning
+        }
+    }
+    selname = sels.lastObject;
+    if (![instance respondsToSelector:NSSelectorFromString(selname)]) {
+        YLT_LogError(@"路由的方法异常");
+        return nil;
+    }
+    
+    YLT_BeginIgnoreUndeclaredSelecror
     if ([instance respondsToSelector:@selector(setYlt_router_params:)]) {
         [instance performSelector:@selector(setYlt_router_params:) withObject:params];
     }
     return [self safePerformAction:NSSelectorFromString(selname) target:instance params:params];
-#pragma clang diagnostic pop
+    YLT_EndIgnoreUndeclaredSelecror
 }
 
 
@@ -175,7 +222,7 @@
 
 + (NSDictionary *)analysisURL:(NSString *)routerURL {
     NSMutableDictionary *result = [NSMutableDictionary new];
-    NSString *regex = @"ylt://([a-zA-Z0-9_]{1,})/([a-zA-Z0-9_:]{1,})[?]{0,1}([a-zA-Z0-9_=&]{0,})";
+    NSString *regex = @"ylt://([a-zA-Z0-9_]{1,})/([a-zA-Z0-9_.:]{1,})[?]{0,1}([a-zA-Z0-9_=&]{0,})";
     NSError *error;
     NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:regex options:NSRegularExpressionCaseInsensitive error:&error];
     NSArray *matches = [expression matchesInString:routerURL options:NSMatchingReportProgress range:NSMakeRange(0, routerURL.length)];

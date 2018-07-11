@@ -9,6 +9,7 @@
 #import <sys/types.h>
 #import <sys/sysctl.h>
 #import <objc/message.h>
+#import "YLT_BaseMacro.h"
 #import <MJExtension/MJExtension.h>
 #import <FastCoding/FastCoder.h>
 
@@ -155,6 +156,10 @@
     NSParameterAssert(key);
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+    YLT_LogError(@"设置的值VALUE:%@ 没有对应的KEY:%@", value, key);
 }
 
 #pragma mark -

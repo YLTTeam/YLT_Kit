@@ -216,7 +216,7 @@
 + (BOOL)ylt_isEmailString:(NSString *)sender {
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-    return [emailTest evaluateWithObject:self];
+    return [emailTest evaluateWithObject:sender];
 }
 
 /**
@@ -357,7 +357,7 @@
 + (BOOL)ylt_isURL:(NSString *)sender {
     NSString *pattern = @"^(http||https)://([\\w-]+\.)+[\\w-]+(/[\\w-./?%&=]*)?$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", pattern];
-    if ([pred evaluateWithObject:self]) {
+    if ([pred evaluateWithObject:sender]) {
         //        BOOL res = [[NSURL URLWithString:self] checkResourceIsReachableAndReturnError:nil];
         return YES;
     }
@@ -373,7 +373,7 @@
 + (BOOL)ylt_isLocalPath:(NSString *)sender {
     NSString *pattern = @"/var/mobile/Applications/";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH %@", pattern];
-    return [pred evaluateWithObject:self];
+    return [pred evaluateWithObject:sender];
 }
 
 /**

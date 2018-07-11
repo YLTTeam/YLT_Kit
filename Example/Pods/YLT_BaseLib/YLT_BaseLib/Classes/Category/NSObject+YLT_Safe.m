@@ -11,6 +11,9 @@
 
 @end
 
+
+#if DEBUG
+#else
 #import <objc/runtime.h>
 
 void (^safeAssertCallback)(const char *, int, NSString *, ...);
@@ -359,182 +362,182 @@ void SFLog(const char* file, const char* func, int line, NSString* fmt, ...)
 }
 @end
 
-#pragma mark - NSArray
-@implementation NSArray (Safe)
-+ (void)load
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        /* 类方法不用在NSMutableArray里再swizz一次 */
-        [NSArray swizzleClassMethod:@selector(arrayWithObject:) withMethod:@selector(hookArrayWithObject:)];
-        [NSArray swizzleClassMethod:@selector(arrayWithObjects:count:) withMethod:@selector(hookArrayWithObjects:count:)];
-        
-        /* 数组有内容obj类型才是__NSArrayI */
-        NSArray* obj = [[NSArray alloc] initWithObjects:@0, @1, nil];
-        [obj swizzleInstanceMethod:@selector(objectAtIndex:) withMethod:@selector(hookObjectAtIndex:)];
-        [obj swizzleInstanceMethod:@selector(subarrayWithRange:) withMethod:@selector(hookSubarrayWithRange:)];
-        [obj swizzleInstanceMethod:@selector(objectAtIndexedSubscript:) withMethod:@selector(hookObjectAtIndexedSubscript:)];
-        
-        /* iOS10 以上，单个内容类型是__NSArraySingleObjectI */
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10.0){
-            obj = [[NSArray alloc] initWithObjects:@0, nil];
-            [obj swizzleInstanceMethod:@selector(objectAtIndex:) withMethod:@selector(hookObjectAtIndex:)];
-            [obj swizzleInstanceMethod:@selector(subarrayWithRange:) withMethod:@selector(hookSubarrayWithRange:)];
-            [obj swizzleInstanceMethod:@selector(objectAtIndexedSubscript:) withMethod:@selector(hookObjectAtIndexedSubscript:)];
-        }
-        
-        /* iOS9 以上，没内容类型是__NSArray0 */
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0){
-            obj = [[NSArray alloc] init];
-            [obj swizzleInstanceMethod:@selector(objectAtIndex:) withMethod:@selector(hookObjectAtIndex0:)];
-            [obj swizzleInstanceMethod:@selector(subarrayWithRange:) withMethod:@selector(hookSubarrayWithRange:)];
-            [obj swizzleInstanceMethod:@selector(objectAtIndexedSubscript:) withMethod:@selector(hookObjectAtIndexedSubscript:)];
-        }
-        
-    });
-}
-+ (instancetype) hookArrayWithObject:(id)anObject
-{
-    if (anObject) {
-        return [self hookArrayWithObject:anObject];
-    }
-    SFAssert(NO, @"NSArray invalid args hookArrayWithObject:[%@]", anObject);
-    return nil;
-}
-/* __NSArray0 没有元素，也不可以变 */
-- (id) hookObjectAtIndex0:(NSUInteger)index {
-    SFAssert(NO, @"NSArray invalid index:[%@]", @(index));
-    return nil;
-}
-- (id) hookObjectAtIndex:(NSUInteger)index {
-    if (index < self.count) {
-        return [self hookObjectAtIndex:index];
-    }
-    SFAssert(NO, @"NSArray invalid index:[%@]", @(index));
-    return nil;
-}
-- (id) hookObjectAtIndexedSubscript:(NSInteger)index {
-    if (index < self.count) {
-        return [self hookObjectAtIndexedSubscript:index];
-    }
-    SFAssert(NO, @"NSArray invalid index:[%@]", @(index));
-    return nil;
-}
-- (NSArray *)hookSubarrayWithRange:(NSRange)range
-{
-    if (range.location + range.length <= self.count){
-        return [self hookSubarrayWithRange:range];
-    }else if (range.location < self.count){
-        return [self hookSubarrayWithRange:NSMakeRange(range.location, self.count-range.location)];
-    }
-    return nil;
-}
-+ (instancetype)hookArrayWithObjects:(const id [])objects count:(NSUInteger)cnt
-{
-    NSInteger index = 0;
-    id objs[cnt];
-    for (NSInteger i = 0; i < cnt ; ++i) {
-        if (objects[i]) {
-            objs[index++] = objects[i];
-        }
-    }
-    return [self hookArrayWithObjects:objs count:index];
-}
-@end
-
-@implementation NSMutableArray(Safe)
-+ (void)load
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSMutableArray* obj = [[NSMutableArray alloc] init];
-        //对象方法 __NSArrayM 和 __NSArrayI 都有实现，都要swizz
-        [obj swizzleInstanceMethod:@selector(objectAtIndex:) withMethod:@selector(hookObjectAtIndex:)];
-        [obj swizzleInstanceMethod:@selector(objectAtIndexedSubscript:) withMethod:@selector(hookObjectAtIndexedSubscript:)];
-        
-        [obj swizzleInstanceMethod:@selector(addObject:) withMethod:@selector(hookAddObject:)];
-        [obj swizzleInstanceMethod:@selector(insertObject:atIndex:) withMethod:@selector(hookInsertObject:atIndex:)];
-        [obj swizzleInstanceMethod:@selector(removeObjectAtIndex:) withMethod:@selector(hookRemoveObjectAtIndex:)];
-        [obj swizzleInstanceMethod:@selector(replaceObjectAtIndex:withObject:) withMethod:@selector(hookReplaceObjectAtIndex:withObject:)];
-        [obj swizzleInstanceMethod:@selector(removeObjectsInRange:) withMethod:@selector(hookRemoveObjectsInRange:)];
-        [obj swizzleInstanceMethod:@selector(subarrayWithRange:) withMethod:@selector(hookSubarrayWithRange:)];
-    });
-}
-- (void) hookAddObject:(id)anObject {
-    if (anObject) {
-        [self hookAddObject:anObject];
-    } else {
-        SFAssert(NO, @"NSMutableArray invalid args hookAddObject:[%@]", anObject);
-    }
-}
-- (id) hookObjectAtIndex:(NSUInteger)index {
-    if (index < self.count) {
-        return [self hookObjectAtIndex:index];
-    }
-    SFAssert(NO, @"NSArray invalid index:[%@]", @(index));
-    return nil;
-}
-- (id) hookObjectAtIndexedSubscript:(NSInteger)index {
-    if (index < self.count) {
-        return [self hookObjectAtIndexedSubscript:index];
-    }
-    SFAssert(NO, @"NSArray invalid index:[%@]", @(index));
-    return nil;
-}
-- (void) hookInsertObject:(id)anObject atIndex:(NSUInteger)index {
-    if (anObject && index <= self.count) {
-        [self hookInsertObject:anObject atIndex:index];
-    } else {
-        if (!anObject) {
-            SFAssert(NO, @"NSMutableArray invalid args hookInsertObject:[%@] atIndex:[%@]", anObject, @(index));
-        }
-        if (index > self.count) {
-            SFAssert(NO, @"NSMutableArray hookInsertObject[%@] atIndex:[%@] out of bound:[%@]", anObject, @(index), @(self.count));
-        }
-    }
-}
-
-- (void) hookRemoveObjectAtIndex:(NSUInteger)index {
-    if (index < self.count) {
-        [self hookRemoveObjectAtIndex:index];
-    } else {
-        SFAssert(NO, @"NSMutableArray hookRemoveObjectAtIndex:[%@] out of bound:[%@]", @(index), @(self.count));
-    }
-}
-
-
-- (void) hookReplaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject {
-    if (index < self.count && anObject) {
-        [self hookReplaceObjectAtIndex:index withObject:anObject];
-    } else {
-        if (!anObject) {
-            SFAssert(NO, @"NSMutableArray invalid args hookReplaceObjectAtIndex:[%@] withObject:[%@]", @(index), anObject);
-        }
-        if (index >= self.count) {
-            SFAssert(NO, @"NSMutableArray hookReplaceObjectAtIndex:[%@] withObject:[%@] out of bound:[%@]", @(index), anObject, @(self.count));
-        }
-    }
-}
-
-- (void) hookRemoveObjectsInRange:(NSRange)range {
-    if (range.location + range.length <= self.count) {
-        [self hookRemoveObjectsInRange:range];
-    }else {
-        SFAssert(NO, @"NSMutableArray invalid args hookRemoveObjectsInRange:[%@]", NSStringFromRange(range));
-    }
-}
-
-- (NSArray *)hookSubarrayWithRange:(NSRange)range
-{
-    if (range.location + range.length <= self.count){
-        return [self hookSubarrayWithRange:range];
-    }else if (range.location < self.count){
-        return [self hookSubarrayWithRange:NSMakeRange(range.location, self.count-range.location)];
-    }
-    return nil;
-}
-
-@end
+//#pragma mark - NSArray
+//@implementation NSArray (Safe)
+//+ (void)load
+//{
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        /* 类方法不用在NSMutableArray里再swizz一次 */
+//        [NSArray swizzleClassMethod:@selector(arrayWithObject:) withMethod:@selector(hookArrayWithObject:)];
+//        [NSArray swizzleClassMethod:@selector(arrayWithObjects:count:) withMethod:@selector(hookArrayWithObjects:count:)];
+//        
+//        /* 数组有内容obj类型才是__NSArrayI */
+//        NSArray* obj = [[NSArray alloc] initWithObjects:@0, @1, nil];
+//        [obj swizzleInstanceMethod:@selector(objectAtIndex:) withMethod:@selector(hookObjectAtIndex:)];
+//        [obj swizzleInstanceMethod:@selector(subarrayWithRange:) withMethod:@selector(hookSubarrayWithRange:)];
+//        [obj swizzleInstanceMethod:@selector(objectAtIndexedSubscript:) withMethod:@selector(hookObjectAtIndexedSubscript:)];
+//        
+//        /* iOS10 以上，单个内容类型是__NSArraySingleObjectI */
+//        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10.0){
+//            obj = [[NSArray alloc] initWithObjects:@0, nil];
+//            [obj swizzleInstanceMethod:@selector(objectAtIndex:) withMethod:@selector(hookObjectAtIndex:)];
+//            [obj swizzleInstanceMethod:@selector(subarrayWithRange:) withMethod:@selector(hookSubarrayWithRange:)];
+//            [obj swizzleInstanceMethod:@selector(objectAtIndexedSubscript:) withMethod:@selector(hookObjectAtIndexedSubscript:)];
+//        }
+//        
+//        /* iOS9 以上，没内容类型是__NSArray0 */
+//        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0){
+//            obj = [[NSArray alloc] init];
+//            [obj swizzleInstanceMethod:@selector(objectAtIndex:) withMethod:@selector(hookObjectAtIndex0:)];
+//            [obj swizzleInstanceMethod:@selector(subarrayWithRange:) withMethod:@selector(hookSubarrayWithRange:)];
+//            [obj swizzleInstanceMethod:@selector(objectAtIndexedSubscript:) withMethod:@selector(hookObjectAtIndexedSubscript:)];
+//        }
+//        
+//    });
+//}
+//+ (instancetype) hookArrayWithObject:(id)anObject
+//{
+//    if (anObject) {
+//        return [self hookArrayWithObject:anObject];
+//    }
+//    SFAssert(NO, @"NSArray invalid args hookArrayWithObject:[%@]", anObject);
+//    return nil;
+//}
+///* __NSArray0 没有元素，也不可以变 */
+//- (id) hookObjectAtIndex0:(NSUInteger)index {
+//    SFAssert(NO, @"NSArray invalid index:[%@]", @(index));
+//    return nil;
+//}
+//- (id) hookObjectAtIndex:(NSUInteger)index {
+//    if (index < self.count) {
+//        return [self hookObjectAtIndex:index];
+//    }
+//    SFAssert(NO, @"NSArray invalid index:[%@]", @(index));
+//    return nil;
+//}
+//- (id) hookObjectAtIndexedSubscript:(NSInteger)index {
+//    if (index < self.count) {
+//        return [self hookObjectAtIndexedSubscript:index];
+//    }
+//    SFAssert(NO, @"NSArray invalid index:[%@]", @(index));
+//    return nil;
+//}
+//- (NSArray *)hookSubarrayWithRange:(NSRange)range
+//{
+//    if (range.location + range.length <= self.count){
+//        return [self hookSubarrayWithRange:range];
+//    }else if (range.location < self.count){
+//        return [self hookSubarrayWithRange:NSMakeRange(range.location, self.count-range.location)];
+//    }
+//    return nil;
+//}
+//+ (instancetype)hookArrayWithObjects:(const id [])objects count:(NSUInteger)cnt
+//{
+//    NSInteger index = 0;
+//    id objs[cnt];
+//    for (NSInteger i = 0; i < cnt ; ++i) {
+//        if (objects[i]) {
+//            objs[index++] = objects[i];
+//        }
+//    }
+//    return [self hookArrayWithObjects:objs count:index];
+//}
+//@end
+//
+//@implementation NSMutableArray(Safe)
+//+ (void)load
+//{
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        NSMutableArray* obj = [[NSMutableArray alloc] init];
+//        //对象方法 __NSArrayM 和 __NSArrayI 都有实现，都要swizz
+//        [obj swizzleInstanceMethod:@selector(objectAtIndex:) withMethod:@selector(hookObjectAtIndex:)];
+//        [obj swizzleInstanceMethod:@selector(objectAtIndexedSubscript:) withMethod:@selector(hookObjectAtIndexedSubscript:)];
+//        
+//        [obj swizzleInstanceMethod:@selector(addObject:) withMethod:@selector(hookAddObject:)];
+//        [obj swizzleInstanceMethod:@selector(insertObject:atIndex:) withMethod:@selector(hookInsertObject:atIndex:)];
+//        [obj swizzleInstanceMethod:@selector(removeObjectAtIndex:) withMethod:@selector(hookRemoveObjectAtIndex:)];
+//        [obj swizzleInstanceMethod:@selector(replaceObjectAtIndex:withObject:) withMethod:@selector(hookReplaceObjectAtIndex:withObject:)];
+//        [obj swizzleInstanceMethod:@selector(removeObjectsInRange:) withMethod:@selector(hookRemoveObjectsInRange:)];
+//        [obj swizzleInstanceMethod:@selector(subarrayWithRange:) withMethod:@selector(hookSubarrayWithRange:)];
+//    });
+//}
+//- (void) hookAddObject:(id)anObject {
+//    if (anObject) {
+//        [self hookAddObject:anObject];
+//    } else {
+//        SFAssert(NO, @"NSMutableArray invalid args hookAddObject:[%@]", anObject);
+//    }
+//}
+//- (id) hookObjectAtIndex:(NSUInteger)index {
+//    if (index < self.count) {
+//        return [self hookObjectAtIndex:index];
+//    }
+//    SFAssert(NO, @"NSArray invalid index:[%@]", @(index));
+//    return nil;
+//}
+//- (id) hookObjectAtIndexedSubscript:(NSInteger)index {
+//    if (index < self.count) {
+//        return [self hookObjectAtIndexedSubscript:index];
+//    }
+//    SFAssert(NO, @"NSArray invalid index:[%@]", @(index));
+//    return nil;
+//}
+//- (void) hookInsertObject:(id)anObject atIndex:(NSUInteger)index {
+//    if (anObject && index <= self.count) {
+//        [self hookInsertObject:anObject atIndex:index];
+//    } else {
+//        if (!anObject) {
+//            SFAssert(NO, @"NSMutableArray invalid args hookInsertObject:[%@] atIndex:[%@]", anObject, @(index));
+//        }
+//        if (index > self.count) {
+//            SFAssert(NO, @"NSMutableArray hookInsertObject[%@] atIndex:[%@] out of bound:[%@]", anObject, @(index), @(self.count));
+//        }
+//    }
+//}
+//
+//- (void) hookRemoveObjectAtIndex:(NSUInteger)index {
+//    if (index < self.count) {
+//        [self hookRemoveObjectAtIndex:index];
+//    } else {
+//        SFAssert(NO, @"NSMutableArray hookRemoveObjectAtIndex:[%@] out of bound:[%@]", @(index), @(self.count));
+//    }
+//}
+//
+//
+//- (void) hookReplaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject {
+//    if (index < self.count && anObject) {
+//        [self hookReplaceObjectAtIndex:index withObject:anObject];
+//    } else {
+//        if (!anObject) {
+//            SFAssert(NO, @"NSMutableArray invalid args hookReplaceObjectAtIndex:[%@] withObject:[%@]", @(index), anObject);
+//        }
+//        if (index >= self.count) {
+//            SFAssert(NO, @"NSMutableArray hookReplaceObjectAtIndex:[%@] withObject:[%@] out of bound:[%@]", @(index), anObject, @(self.count));
+//        }
+//    }
+//}
+//
+//- (void) hookRemoveObjectsInRange:(NSRange)range {
+//    if (range.location + range.length <= self.count) {
+//        [self hookRemoveObjectsInRange:range];
+//    }else {
+//        SFAssert(NO, @"NSMutableArray invalid args hookRemoveObjectsInRange:[%@]", NSStringFromRange(range));
+//    }
+//}
+//
+//- (NSArray *)hookSubarrayWithRange:(NSRange)range
+//{
+//    if (range.location + range.length <= self.count){
+//        return [self hookSubarrayWithRange:range];
+//    }else if (range.location < self.count){
+//        return [self hookSubarrayWithRange:NSMakeRange(range.location, self.count-range.location)];
+//    }
+//    return nil;
+//}
+//
+//@end
 
 #pragma mark - NSDictionary
 @implementation NSDictionary (Safe)
@@ -873,3 +876,5 @@ void SFLog(const char* file, const char* func, int line, NSString* fmt, ...)
     }
 }
 @end
+
+#endif

@@ -10,6 +10,19 @@
 @interface YLT_BaseModel : NSObject<NSCopying>
 
 /**
+ 源数据
+ */
+@property (nonatomic, strong) NSDictionary *ylt_sourceData;
+
+/**
+ 字典转模型
+
+ @param data 字典
+ @return 模型
+ */
++ (instancetype)ylt_objectWithKeyValues:(NSDictionary *)data;
+
+/**
  返回当前ORM映射
  */
 + (NSDictionary *)ylt_keyMapper;

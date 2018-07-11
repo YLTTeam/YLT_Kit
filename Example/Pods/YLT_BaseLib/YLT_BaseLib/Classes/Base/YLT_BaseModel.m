@@ -21,7 +21,20 @@
     return [[self class] mj_objectWithKeyValues:self.mj_keyValues];
 }
 
+/**
+ 字典转模型
+ 
+ @param data 字典
+ @return 模型
+ */
++ (instancetype)ylt_objectWithKeyValues:(NSDictionary *)data {
+    YLT_BaseModel *res = [self mj_objectWithKeyValues:data];
+    res.ylt_sourceData = data;
+    return res;
+}
+
 #pragma mark - ORM
+
 /**
  返回当前ORM映射
  */
@@ -253,5 +266,14 @@
     }
     return [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+#pragma mark - setter getter
+
+//- (id)ylt_sourceData {
+//    if (!_ylt_sourceData) {
+//        _ylt_sourceData = self.mj_keyValues;
+//    }
+//    return _ylt_sourceData;
+//}
 
 @end

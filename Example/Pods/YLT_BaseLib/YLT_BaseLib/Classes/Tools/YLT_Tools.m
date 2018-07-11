@@ -8,7 +8,7 @@
 
 #import "YLT_Tools.h"
 #import <MJExtension/MJExtension.h>
-#import <RMUniversalAlert/RMUniversalAlert.h>
+#import <LGAlertView/LGAlertView.h>
 
 @implementation YLT_Tools
 
@@ -50,12 +50,10 @@
  @param title 标题
  */
 + (void)ylt_showSettingTitle:(NSString *)title {
-    [RMUniversalAlert showAlertInViewController:self.ylt_currentVC withTitle:@"提示" message:title cancelButtonTitle:@"好的" destructiveButtonTitle:nil otherButtonTitles:(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)?@[@"设置"]:nil tapBlock:^(RMUniversalAlert * _Nonnull alert, NSInteger buttonIndex) {
-        if (buttonIndex != 0) {
-            UIApplication *app = [UIApplication sharedApplication];
-            [app openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-        }
-    }];
+    [[LGAlertView alertViewWithTitle:@"提示" message:title style:LGAlertViewStyleAlert buttonTitles:(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)?@[@"设置"]:nil cancelButtonTitle:@"好的" destructiveButtonTitle:nil actionHandler:^(LGAlertView * _Nonnull alertView, NSUInteger index, NSString * _Nullable title) {
+        UIApplication *app = [UIApplication sharedApplication];
+        [app openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    } cancelHandler:nil destructiveHandler:^(LGAlertView * _Nonnull alertView) {}] show];
 }
 
 

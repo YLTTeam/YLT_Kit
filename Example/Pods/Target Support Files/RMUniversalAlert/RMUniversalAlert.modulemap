@@ -1,6 +1,0 @@
-framework module RMUniversalAlert {
-  umbrella header "RMUniversalAlert-umbrella.h"
-
-  export *
-  module * { export * }
-}
