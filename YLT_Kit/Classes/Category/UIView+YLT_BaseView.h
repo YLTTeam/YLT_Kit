@@ -28,10 +28,6 @@
 #import <AFNetworking/AFNetworking.h>
 #endif
 
-#if __has_include(<UMMobClick/MobClick.h>)
-#import <UMMobClick/MobClick.h>
-#endif
-
 @interface UIView (YLT_BaseView)
 
 /**
