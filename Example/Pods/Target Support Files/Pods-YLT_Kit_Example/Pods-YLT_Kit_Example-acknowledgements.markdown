@@ -219,11 +219,6 @@ THE SOFTWARE.
 
 
 
-## UMengAnalytics-NO-IDFA
-
-Copyright 2011 - 2015 UMeng.com. All rights reserved.
-
-
 ## YLT_BaseLib
 
 Copyright (c) 2017 xphaijj0305@126.com <xiangph@qtec.cn>

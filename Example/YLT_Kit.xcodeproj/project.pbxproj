@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		35312F6C1FAFF758000BA4EE /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 35312F6B1FAFF758000BA4EE /* bg.png */; };
-		3F99B978780F7B557B4AEF42 /* libPods-YLT_Kit_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1138AF1B5AEAD6D78D957EB8 /* libPods-YLT_Kit_Tests.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -22,9 +21,10 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
-		647D36E2CC1B6AC452980226 /* libPods-YLT_Kit_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 400E5C91018306255E4FB0A6 /* libPods-YLT_Kit_Example.a */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
+		824C00E3CF03A57E2D96F591 /* Pods_YLT_Kit_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96A0C9D5525B1EA4C7D05992 /* Pods_YLT_Kit_Example.framework */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		975AF62FD73E2D3EFC646DD4 /* Pods_YLT_Kit_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48DBD8EF816AE524B1E32321 /* Pods_YLT_Kit_Tests.framework */; };
 		C719CCBE20C0E155003A90A2 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = C719CCBD20C0E155003A90A2 /* index.html */; };
 		C73E8E98207463C0007176C9 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C73E8E97207463BF007176C9 /* icon.png */; };
 		C73E8EA82074AC52007176C9 /* YLTTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C73E8EA72074AC52007176C9 /* YLTTableViewCell.m */; };
@@ -41,10 +41,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1138AF1B5AEAD6D78D957EB8 /* libPods-YLT_Kit_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YLT_Kit_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C958ED96D62709C3D457D89 /* YLT_Kit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = YLT_Kit.podspec; path = ../YLT_Kit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		35312F6B1FAFF758000BA4EE /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
-		400E5C91018306255E4FB0A6 /* libPods-YLT_Kit_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YLT_Kit_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		48DBD8EF816AE524B1E32321 /* Pods_YLT_Kit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YLT_Kit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CC2E41596EFB3A285F0687B /* Pods-YLT_Kit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YLT_Kit_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-YLT_Kit_Example/Pods-YLT_Kit_Example.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* YLT_Kit_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YLT_Kit_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -69,6 +68,7 @@
 		64B44E58B00B6A620745DDF0 /* Pods-YLT_Kit_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YLT_Kit_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YLT_Kit_Tests/Pods-YLT_Kit_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		96A0C9D5525B1EA4C7D05992 /* Pods_YLT_Kit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YLT_Kit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C719CCBD20C0E155003A90A2 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		C73E8E97207463BF007176C9 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		C73E8EA62074AC52007176C9 /* YLTTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YLTTableViewCell.h; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				647D36E2CC1B6AC452980226 /* libPods-YLT_Kit_Example.a in Frameworks */,
+				824C00E3CF03A57E2D96F591 /* Pods_YLT_Kit_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,7 +97,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				3F99B978780F7B557B4AEF42 /* libPods-YLT_Kit_Tests.a in Frameworks */,
+				975AF62FD73E2D3EFC646DD4 /* Pods_YLT_Kit_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,8 +143,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				400E5C91018306255E4FB0A6 /* libPods-YLT_Kit_Example.a */,
-				1138AF1B5AEAD6D78D957EB8 /* libPods-YLT_Kit_Tests.a */,
+				96A0C9D5525B1EA4C7D05992 /* Pods_YLT_Kit_Example.framework */,
+				48DBD8EF816AE524B1E32321 /* Pods_YLT_Kit_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -411,15 +411,12 @@
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${BUILT_PRODUCTS_DIR}/FastCoding/FastCoding.framework",
+				"${BUILT_PRODUCTS_DIR}/LGAlertView/LGAlertView.framework",
 				"${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
 				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
-				"${BUILT_PRODUCTS_DIR}/RMUniversalAlert/RMUniversalAlert.framework",
 				"${BUILT_PRODUCTS_DIR}/ReactiveObjC/ReactiveObjC.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
-				"${BUILT_PRODUCTS_DIR}/UIActionSheet+Blocks/UIActionSheet_Blocks.framework",
-				"${BUILT_PRODUCTS_DIR}/UIAlertController+Blocks/UIAlertController_Blocks.framework",
-				"${BUILT_PRODUCTS_DIR}/UIAlertView+Blocks/UIAlertView_Blocks.framework",
 				"${BUILT_PRODUCTS_DIR}/YLT_BaseLib/YLT_BaseLib.framework",
 				"${BUILT_PRODUCTS_DIR}/YLT_Kit/YLT_Kit.framework",
 			);
@@ -428,15 +425,12 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FastCoding.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LGAlertView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJExtension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RMUniversalAlert.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveObjC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIActionSheet_Blocks.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIAlertController_Blocks.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIAlertView_Blocks.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YLT_BaseLib.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YLT_Kit.framework",
 			);

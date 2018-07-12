@@ -26,19 +26,17 @@ PODS:
   - SDWebImage (4.4.1):
     - SDWebImage/Core (= 4.4.1)
   - SDWebImage/Core (4.4.1)
-  - UMengAnalytics-NO-IDFA (4.2.5)
   - YLT_BaseLib (0.1.14):
     - FastCoding
     - FMDB
     - LGAlertView
     - MJExtension
-  - YLT_Kit (0.1.29):
+  - YLT_Kit (0.1.30):
     - AFNetworking
     - Masonry
     - MJRefresh
     - ReactiveObjC
     - SDWebImage
-    - UMengAnalytics-NO-IDFA
     - YLT_BaseLib
 
 DEPENDENCIES:
@@ -58,10 +56,9 @@ SPEC CHECKSUMS:
   MJRefresh: b48380ae2b927b46c4ef000de9adb8dc748e1df7
   ReactiveObjC: 2a38ea15335de4119d8b17caf1db1484f61db902
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
-  UMengAnalytics-NO-IDFA: 16666e32edce5be44ae5b14aaaa7f3582e09d6ab
   YLT_BaseLib: 424d9369e24879c89e3025a3279eff9dc2760fa1
-  YLT_Kit: 7af0d12535eacbd5f981c8087668c44e6f7ee2d5
+  YLT_Kit: 3f42fb857f0123de9cd75fee999df20c31877258
 
-PODFILE CHECKSUM: b013758c430960f730f361a676ab367396790fc8
+PODFILE CHECKSUM: 65a474d3ca23e64c48d267336e751acf6a3ca453
 
 COCOAPODS: 1.4.0

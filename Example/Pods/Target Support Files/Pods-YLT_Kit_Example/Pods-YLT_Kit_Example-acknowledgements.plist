@@ -286,17 +286,6 @@ THE SOFTWARE.
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Copyright 2011 - 2015 UMeng.com. All rights reserved.
-</string>
-			<key>License</key>
-			<string>Copyright</string>
-			<key>Title</key>
-			<string>UMengAnalytics-NO-IDFA</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
 			<string>Copyright (c) 2017 xphaijj0305@126.com &lt;xiangph@qtec.cn&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
