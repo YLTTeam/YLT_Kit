@@ -602,11 +602,11 @@ YLT_ShareInstance(YLT_WKProcessPool);
 }
 
 - (void)dealloc {
-    [self.webView.webView stopLoading];
-    self.webView.webView.UIDelegate = nil;
-    self.webView.webView.navigationDelegate = nil;
-    [self.webView.configuration.userContentController removeAllUserScripts];
-    [self.webView ylt_removeAllObserMessageHandlers];
+    [_webView.webView stopLoading];
+    _webView.webView.UIDelegate = nil;
+    _webView.webView.navigationDelegate = nil;
+    [_webView.configuration.userContentController removeAllUserScripts];
+    [_webView ylt_removeAllObserMessageHandlers];
 }
 
 #pragma mark - getter
