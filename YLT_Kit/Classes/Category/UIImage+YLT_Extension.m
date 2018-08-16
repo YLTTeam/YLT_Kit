@@ -141,33 +141,37 @@ static CGBitmapInfo const kTCDefaultBitMapOrder = kCGBitmapByteOrder32Little | k
 
 - (UIImage*)ylt_scaledToSize:(CGSize)size highQuality:(BOOL)highQuality {
     UIImage *sourceImage = self;
-    UIImage *newImage = nil;
-    CGSize imageSize = sourceImage.size;
-    CGFloat scaleFactor = 0.0;
-    if (CGSizeEqualToSize(imageSize, size) == NO) {
-        CGFloat widthFactor = size.width / imageSize.width;
-        CGFloat heightFactor = size.height / imageSize.height;
-        if (widthFactor < heightFactor)
-            scaleFactor = heightFactor; // scale to fit height
-        else
-            scaleFactor = widthFactor; // scale to fit width
+    UIImage *newImage = self;
+    @try {
+        CGSize imageSize = sourceImage.size;
+        CGFloat scaleFactor = 0.0;
+        if (CGSizeEqualToSize(imageSize, size) == NO) {
+            CGFloat widthFactor = size.width / imageSize.width;
+            CGFloat heightFactor = size.height / imageSize.height;
+            if (widthFactor < heightFactor)
+                scaleFactor = heightFactor; // scale to fit height
+            else
+                scaleFactor = widthFactor; // scale to fit width
+        }
+        CGFloat targetWidth = imageSize.width* scaleFactor;
+        CGFloat targetHeight = imageSize.height* scaleFactor;
+        
+        size = CGSizeMake(floorf(targetWidth), floorf(targetHeight));
+        if (highQuality) {
+            UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+        }else{
+            UIGraphicsBeginImageContext(size); // this will crop
+        }
+        [sourceImage drawInRect:CGRectMake(0, 0, ceilf(targetWidth), ceilf(targetHeight))];
+        newImage = UIGraphicsGetImageFromCurrentImageContext();
+        if(newImage == nil){
+            newImage = sourceImage;
+        }
+        UIGraphicsEndImageContext();
+    } @catch (NSException *e) {
+    } @finally {
+        return newImage;
     }
-    CGFloat targetWidth = imageSize.width* scaleFactor;
-    CGFloat targetHeight = imageSize.height* scaleFactor;
-    
-    size = CGSizeMake(floorf(targetWidth), floorf(targetHeight));
-    if (highQuality) {
-        UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
-    }else{
-        UIGraphicsBeginImageContext(size); // this will crop
-    }
-    [sourceImage drawInRect:CGRectMake(0, 0, ceilf(targetWidth), ceilf(targetHeight))];
-    newImage = UIGraphicsGetImageFromCurrentImageContext();
-    if(newImage == nil){
-        newImage = sourceImage;
-    }
-    UIGraphicsEndImageContext();
-    return newImage;
 }
 
 + (UIImage *)ylt_fixOrientation:(UIImage *)aImage {
