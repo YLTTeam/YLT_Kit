@@ -1,6 +1,6 @@
 {
   "name": "YLT_Kit",
-  "version": "0.1.30",
+  "version": "0.1.32",
   "summary": "YLT_Kit. 基础的kit框架",
   "description": "平常使用的基础kit框架封装",
   "homepage": "https://github.com/YLTTeam/ylt_kit",
@@ -13,12 +13,13 @@
   },
   "source": {
     "git": "https://github.com/YLTTeam/ylt_kit.git",
-    "tag": "0.1.30"
+    "tag": "0.1.32"
   },
   "platforms": {
     "ios": "8.0"
   },
   "source_files": "YLT_Kit/Classes/**/*",
+  "public_header_files": "YLT_Kit/Classes/**/*.h",
   "frameworks": [
     "UIKit",
     "AVFoundation",

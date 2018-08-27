@@ -10,6 +10,13 @@
 
 @implementation UIView (YLT_Extension)
 
+/**
+ view的标识
+ */
++ (void)ylt_identify {
+    return NSStringFromClass(self);
+}
+
 - (void)ylt_shakeAnimation {
     CAKeyframeAnimation *animation = [CAKeyframeAnimation animation];
     animation.keyPath = @"position.x";

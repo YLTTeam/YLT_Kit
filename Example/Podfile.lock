@@ -31,7 +31,7 @@ PODS:
     - FMDB
     - LGAlertView
     - MJExtension
-  - YLT_Kit (0.1.30):
+  - YLT_Kit (0.1.32):
     - AFNetworking
     - Masonry
     - MJRefresh
@@ -42,9 +42,22 @@ PODS:
 DEPENDENCIES:
   - YLT_Kit (from `../`)
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - FastCoding
+    - FMDB
+    - LGAlertView
+    - Masonry
+    - MJExtension
+    - MJRefresh
+    - ReactiveObjC
+    - SDWebImage
+    - YLT_BaseLib
+
 EXTERNAL SOURCES:
   YLT_Kit:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -57,8 +70,8 @@ SPEC CHECKSUMS:
   ReactiveObjC: 2a38ea15335de4119d8b17caf1db1484f61db902
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
   YLT_BaseLib: 424d9369e24879c89e3025a3279eff9dc2760fa1
-  YLT_Kit: 3f42fb857f0123de9cd75fee999df20c31877258
+  YLT_Kit: 054fe954cf28481815990d6496a7e43166cc60ad
 
 PODFILE CHECKSUM: 65a474d3ca23e64c48d267336e751acf6a3ca453
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3

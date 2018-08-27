@@ -10,6 +10,11 @@
 @interface UIView (YLT_Extension)
 
 /**
+ view的标识
+ */
++ (void)ylt_identify;
+
+/**
  添加闪动动画
  */
 - (void)ylt_shakeAnimation;
