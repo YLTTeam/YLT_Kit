@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UIFont (YLT_Utils)
+
 + (UIFont *)ylt_mediumFont:(CGFloat)x;
 + (UIFont *)ylt_lightFont:(CGFloat)x;
 + (UIFont *)ylt_semiboldFont:(CGFloat)x;
@@ -17,4 +18,5 @@
 + (UIFont *)ylt_politicaBoldFont:(CGFloat)x;
 + (UIFont *)ylt_sfBoldFont:(CGFloat)x;
 + (UIFont *)ylt_sfRegularFont:(CGFloat)x;
+
 @end
