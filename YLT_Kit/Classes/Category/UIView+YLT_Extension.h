@@ -12,7 +12,7 @@
 /**
  view的标识
  */
-+ (void)ylt_identify;
++ (NSString *)ylt_identify;
 
 /**
  添加闪动动画

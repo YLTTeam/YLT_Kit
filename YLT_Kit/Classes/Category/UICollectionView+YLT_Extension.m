@@ -7,6 +7,7 @@
 
 #import "UICollectionView+YLT_Extension.h"
 #import <ReactiveObjC/ReactiveObjC.h>
+#import <YLT_BaseLib/YLT_BaseLib.h>
 
 @implementation UICollectionView (YLT_Extension)
 

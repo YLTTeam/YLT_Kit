@@ -13,7 +13,7 @@
 /**
  view的标识
  */
-+ (void)ylt_identify {
++ (NSString *)ylt_identify {
     return NSStringFromClass(self);
 }
 
