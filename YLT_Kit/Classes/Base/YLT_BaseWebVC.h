@@ -85,6 +85,16 @@
 @property (nonatomic, strong) WKWebViewConfiguration *configuration;
 
 /**
+ 请求开始前，会先调用此代理方法(类型，在请求先判断能不能跳转（请求）)
+ */
+@property (nonatomic, copy) void(^ylt_webViewDecidePolicyForNavigationAction)(WKWebView *webView, WKNavigationAction *navigationAction);
+
+/**
+ 在响应完成时，会回调此方法(如果设置为不允许响应，web内容就不会传过来)
+ */
+@property (nonatomic, copy) void(^ylt_webViewDecidePolicyForNavigationResponse)(WKWebView *webView, WKNavigationResponse *navigationResponse);
+
+/**
  开始导航跳转时会回调
  */
 @property (nonatomic, copy) void(^ylt_webViewDidStart)(WKWebView *webView, WKNavigation *navigation);

@@ -233,6 +233,9 @@ YLT_ShareInstance(YLT_WKProcessPool);
     //    } else {
     //        decisionHandler(WKNavigationActionPolicyAllow);
     //    }
+    if (self.ylt_webViewDecidePolicyForNavigationAction) {
+        self.ylt_webViewDecidePolicyForNavigationAction(webView, navigationAction);
+    }
     decisionHandler(WKNavigationActionPolicyAllow);
     YLT_LogInfo(@"%@", hostname);
 }
@@ -241,6 +244,9 @@ YLT_ShareInstance(YLT_WKProcessPool);
 // 如果设置为不允许响应，web内容就不会传过来
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
     NSString *hostname = navigationResponse.response.URL.host.lowercaseString;
+    if (self.ylt_webViewDecidePolicyForNavigationResponse) {
+        self.ylt_webViewDecidePolicyForNavigationResponse(webView, navigationResponse);
+    }
     decisionHandler(WKNavigationResponsePolicyAllow);
     YLT_LogInfo(@"%@", hostname);
 }
@@ -493,6 +499,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
  */
 + (instancetype)ylt_webVCFromURLString:(NSString *)urlString {
     YLT_BaseWebVC *vc = [[self alloc] init];
+    urlString = [urlString stringByReplacingOccurrencesOfString:@" " withString:@""];
     vc.url = [NSURL URLWithString:urlString];
     return vc;
 }
