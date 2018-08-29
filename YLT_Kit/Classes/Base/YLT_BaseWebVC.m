@@ -16,6 +16,10 @@ YLT_ShareInstanceHeader(YLT_WKProcessPool);
 
 @implementation YLT_WKProcessPool
 YLT_ShareInstance(YLT_WKProcessPool);
+
+- (void)ylt_init {
+}
+
 @end
 
 
