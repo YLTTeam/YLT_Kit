@@ -68,6 +68,11 @@
 @property (nonatomic, copy) void(^ylt_callback)(id response);
 
 /**
+ 页面回调
+ */
+@property (nonatomic, copy) void(^ylt_completion)(NSError *error, id response);
+
+/**
  创建控制器
  
  @return 控制器

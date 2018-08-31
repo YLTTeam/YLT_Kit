@@ -125,6 +125,12 @@
         instance = cls;
     } else {
         instance = [[cls alloc] init];
+        if ([instance respondsToSelector:@selector(setYlt_params:)]) {
+            [instance performSelector:@selector(setYlt_params:) withObject:params];
+        }
+        if (completion && [instance respondsToSelector:@selector(setYlt_completion:)]) {
+            [instance performSelector:@selector(setYlt_completion:) withObject:completion];
+        }
     }
     NSArray *sels = [selname componentsSeparatedByString:@"."];
     for (NSInteger i = 0; i < sels.count-1; i++) {
