@@ -179,10 +179,24 @@
     void (^callback)(id) = objc_getAssociatedObject(self, @selector(ylt_callback));
     if (!callback) {
         callback = ^(id response) {
-            NSLog(@"%@", response);
+            YLT_Log(@"%@", response);
         };
     }
     return callback;
+}
+
+- (void)setYlt_completion:(void (^)(NSError *, id))ylt_completion {
+    objc_setAssociatedObject(self, @selector(ylt_completion), ylt_completion, OBJC_ASSOCIATION_COPY);
+}
+
+- (void(^)(NSError *, id))ylt_completion {
+    void(^completion)(NSError *, id) = objc_getAssociatedObject(self, @selector(ylt_completion));
+    if (!completion) {
+        completion = ^(NSError *error, id response) {
+            YLT_Log(@"%@  %@", error, response);
+        };
+    }
+    return completion;
 }
 
 #pragma clang diagnostic pop

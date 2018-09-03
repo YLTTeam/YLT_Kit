@@ -125,12 +125,14 @@
         instance = cls;
     } else {
         instance = [[cls alloc] init];
+        YLT_BeginIgnoreUndeclaredSelecror
         if ([instance respondsToSelector:@selector(setYlt_params:)]) {
             [instance performSelector:@selector(setYlt_params:) withObject:params];
         }
         if (completion && [instance respondsToSelector:@selector(setYlt_completion:)]) {
             [instance performSelector:@selector(setYlt_completion:) withObject:completion];
         }
+        YLT_EndIgnoreClangWarning
     }
     NSArray *sels = [selname componentsSeparatedByString:@"."];
     for (NSInteger i = 0; i < sels.count-1; i++) {
@@ -175,12 +177,11 @@
     }
     const char* retType = [methodSig methodReturnType];
     NSUInteger count =  [methodSig numberOfArguments];
-    YLT_LogInfo(@"方法的 参数个数 - %zd",count);
     NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSig];
     if (count >= 3) {
         [invocation setArgument:&params atIndex:2];
-    }else {
-        YLT_LogError(@"Action：%@ 参数过多:%@",NSStringFromSelector(action),params);
+    } else {
+//        YLT_LogError(@"Action：%@ 参数过多:%@",NSStringFromSelector(action), params);
     }
     [invocation setSelector:action];
     [invocation setTarget:target];
