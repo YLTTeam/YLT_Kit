@@ -616,6 +616,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
     [_webView.webView stopLoading];
     _webView.webView.UIDelegate = nil;
     _webView.webView.navigationDelegate = nil;
+    _webView.webView.scrollView.delegate = nil;
     [_webView.configuration.userContentController removeAllUserScripts];
     [_webView ylt_removeAllObserMessageHandlers];
 }
