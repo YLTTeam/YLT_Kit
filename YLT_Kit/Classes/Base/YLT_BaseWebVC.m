@@ -606,6 +606,17 @@ YLT_ShareInstance(YLT_WKProcessPool);
 }
 
 /**
+ 设置标题 配置页面信息
+ 
+ @param useWebTitle 是否使用web的标题
+ @param pullRefresh 是否可以下拉刷新
+ @param title 标题
+ */
+- (void)ylt_useWebTitle:(BOOL)useWebTitle pullRefresh:(BOOL)pullRefresh title:(NSString *)title {
+    [self.webView ylt_useWebTitle:useWebTitle pullRefresh:pullRefresh title:title];
+}
+
+/**
  清理缓存
  */
 + (void)ylt_cleanCache {
