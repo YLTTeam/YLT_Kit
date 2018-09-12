@@ -297,8 +297,8 @@ YLT_ShareInstance(YLT_WKProcessPool);
     YLT_LogInfo(@"%@", webView);
     if (!self.notUseWebTitle) {
         [self.webView evaluateJavaScript:@"document.title" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-            if ([result isKindOfClass:[NSString class]] && ((NSString *) result).ylt_isValid && self.ylt_currentVC) {
-                self.ylt_currentVC.title = result;
+            if ([result isKindOfClass:[NSString class]] && ((NSString *) result).ylt_isValid && self.ylt_responderVC) {
+                self.ylt_responderVC.title = result;
             }
         }];
     }
@@ -391,9 +391,9 @@ YLT_ShareInstance(YLT_WKProcessPool);
  */
 - (void)ylt_useWebTitle:(BOOL)useWebTitle pullRefresh:(BOOL)pullRefresh title:(NSString *)title {
     self.notUseWebTitle = !useWebTitle;
-    self.ylt_currentVC.title = @"";
-    if (!self.notUseWebTitle && title.ylt_isValid) {
-        self.ylt_currentVC.title = title;
+    self.ylt_responderVC.title = @"";
+    if (self.notUseWebTitle && title.ylt_isValid) {
+        self.ylt_responderVC.title = title;
     }
     if (pullRefresh) {
         @weakify(self);

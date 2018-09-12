@@ -91,6 +91,11 @@
 @property (nonatomic, assign) CGFloat ylt_right;
 
 /**
+ 当前视图依赖的VC 区别于 ylt_currentVC
+ */
+@property (nonatomic, strong) UIViewController *ylt_responderVC;
+
+/**
  移除所有的子视图
  */
 - (void)removeAllSubViews;

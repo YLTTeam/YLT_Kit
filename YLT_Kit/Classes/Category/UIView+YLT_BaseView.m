@@ -142,6 +142,17 @@
 }
 
 /**
+ 当前视图依赖的VC 区别于 ylt_currentVC
+ */
+- (UIViewController *)ylt_responderVC {
+    UIViewController *obj = (UIViewController *)self.nextResponder;
+    while (![obj isKindOfClass:[UIViewController class]] && obj != nil) {
+        obj = [obj nextResponder];
+    }
+    return obj;
+}
+
+/**
  移除所有的子视图
  */
 - (void)removeAllSubViews {
