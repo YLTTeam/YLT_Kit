@@ -89,14 +89,6 @@
 
 #pragma mark - setter/getter
 
-- (void(^)(id response))ylt_callback {
-    if (_ylt_callback) {
-        return _ylt_callback;
-    }
-    return ^(id response) {
-    };
-}
-
 #pragma clang diagnostic pop
 
 #pragma mark - Table view data source

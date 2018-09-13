@@ -10,14 +10,4 @@
 
 @interface YLT_BaseCollectionVC : UITableViewController
 
-/**
- 上一个页面传入的参数
- */
-@property (nonatomic, strong) id ylt_params;
-
-/**
- 页面回调
- */
-@property (nonatomic, copy) void(^ylt_callback)(id response);
-
 @end

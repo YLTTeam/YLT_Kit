@@ -263,11 +263,13 @@ YLT_ShareInstance(YLT_PhotoHelper);
         [YLT_PhotoHelper shareInstance].success(info);
     }
     [self.pickerVC dismissViewControllerAnimated:YES completion:nil];
+    [YLT_PhotoHelper shareInstance].pickerVC = nil;
 }
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:@"用户取消"}];
     [YLT_PhotoHelper shareInstance].failed(error);
     [self.pickerVC dismissViewControllerAnimated:YES completion:nil];
+    [YLT_PhotoHelper shareInstance].pickerVC = nil;
 }
 
 #pragma mark - get

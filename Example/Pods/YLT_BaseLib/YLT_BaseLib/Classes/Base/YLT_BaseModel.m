@@ -27,7 +27,7 @@
  @param data 字典
  @return 模型
  */
-+ (instancetype)ylt_objectWithKeyValues:(NSDictionary *)data {
++ (instancetype)ylt_objectWithKeyValues:(id)data {
     YLT_BaseModel *res = [self mj_objectWithKeyValues:data];
     res.ylt_sourceData = data;
     return res;

@@ -9,6 +9,7 @@
 #import "YLT_Tools.h"
 #import <MJExtension/MJExtension.h>
 #import <LGAlertView/LGAlertView.h>
+#import "NSString+YLT_Extension.h"
 
 @implementation YLT_Tools
 

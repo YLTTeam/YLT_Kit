@@ -9,10 +9,6 @@
 #import "YLT_BaseMacro.h"
 #import "NSString+YLT_Extension.h"
 
-#define ROUTER_CLS_NAME @"ROUTER_CLS_NAME"
-#define ROUTER_SEL_NAME @"ROUTER_SEL_NAME"
-#define ROUTER_ARG_DATA @"ROUTER_ARG_DATA"
-
 @interface YLT_RouterManager() {
 }
 @end
@@ -43,9 +39,9 @@
 + (id)ylt_routerToURL:(NSString *)routerURL isClassMethod:(BOOL)isClassMethod arg:(id)arg completion:(void(^)(NSError *error, id response))completion {
     if ([routerURL hasPrefix:YLT_ROUTER_PREFIX]) {
         NSDictionary *urlParams = [self analysisURL:routerURL];
-        NSString *clsname = ([urlParams.allKeys containsObject:ROUTER_CLS_NAME])?urlParams[ROUTER_CLS_NAME]:@"";
-        NSString *selname = ([urlParams.allKeys containsObject:ROUTER_SEL_NAME])?urlParams[ROUTER_SEL_NAME]:@"";
-        NSDictionary *params = ([urlParams.allKeys containsObject:ROUTER_ARG_DATA])?urlParams[ROUTER_ARG_DATA]:nil;
+        NSString *clsname = ([urlParams.allKeys containsObject:YLT_ROUTER_CLS_NAME])?urlParams[YLT_ROUTER_CLS_NAME]:@"";
+        NSString *selname = ([urlParams.allKeys containsObject:YLT_ROUTER_SEL_NAME])?urlParams[YLT_ROUTER_SEL_NAME]:@"";
+        NSDictionary *params = ([urlParams.allKeys containsObject:YLT_ROUTER_ARG_DATA])?urlParams[YLT_ROUTER_ARG_DATA]:nil;
         return [self ylt_routerToClassname:clsname selname:selname isClassMethod:isClassMethod param:params arg:arg completion:completion];
     } else if ([routerURL hasPrefix:@"http://"] || [routerURL hasPrefix:@"https://"]) {
         YLT_LogWarn(@"webview 待开发");
@@ -102,6 +98,7 @@
 + (id)ylt_routerToClassname:(NSString *)clsname selname:(NSString *)selname isClassMethod:(BOOL)isClassMethod param:(NSDictionary *)param arg:(id)arg completion:(void(^)(NSError *error, id response))completion {
     //路由的对象类
     Class cls = NSClassFromString(clsname);
+    NSAssert(cls!=NULL, @"路由的类异常");
     if (!clsname.ylt_isValid || (cls == NULL)) {
         YLT_LogError(@"路由的类异常");
         return nil;
@@ -125,14 +122,6 @@
         instance = cls;
     } else {
         instance = [[cls alloc] init];
-        YLT_BeginIgnoreUndeclaredSelecror
-        if ([instance respondsToSelector:@selector(setYlt_params:)]) {
-            [instance performSelector:@selector(setYlt_params:) withObject:params];
-        }
-        if (completion && [instance respondsToSelector:@selector(setYlt_completion:)]) {
-            [instance performSelector:@selector(setYlt_completion:) withObject:completion];
-        }
-        YLT_EndIgnoreClangWarning
     }
     NSArray *sels = [selname componentsSeparatedByString:@"."];
     for (NSInteger i = 0; i < sels.count-1; i++) {
@@ -140,22 +129,24 @@
         if (sel.ylt_isValid) {
             YLT_BeginIgnoreUndeclaredSelecror
             YLT_BeginIgnorePerformSelectorLeaksWarning
-            if ([instance respondsToSelector:NSSelectorFromString(sel)]) {
-                instance = [instance performSelector:NSSelectorFromString(sel)];
-            }
+            NSAssert([instance respondsToSelector:NSSelectorFromString(sel)], @"路由的方法异常");
+            instance = [instance performSelector:NSSelectorFromString(sel)];
             YLT_EndIgnoreUndeclaredSelecror
             YLT_EndIgnorePerformSelectorLeaksWarning
         }
     }
     selname = sels.lastObject;
-    if (![instance respondsToSelector:NSSelectorFromString(selname)]) {
-        YLT_LogError(@"路由的方法异常");
-        return nil;
-    }
+    NSAssert([instance respondsToSelector:NSSelectorFromString(selname)], @"路由的方法异常");
     
     YLT_BeginIgnoreUndeclaredSelecror
     if ([instance respondsToSelector:@selector(setYlt_router_params:)]) {
         [instance performSelector:@selector(setYlt_router_params:) withObject:params];
+    }
+    if ([instance respondsToSelector:@selector(setYlt_params:)]) {
+        [instance performSelector:@selector(setYlt_params:) withObject:params];
+    }
+    if (completion && [instance respondsToSelector:@selector(setYlt_completion:)]) {
+        [instance performSelector:@selector(setYlt_completion:) withObject:completion];
     }
     return [self safePerformAction:NSSelectorFromString(selname) target:instance params:params];
     YLT_EndIgnoreUndeclaredSelecror
@@ -164,7 +155,7 @@
 
 /**
  url runtime解析
-
+ 
  @param action 方法名
  @param target 类名
  @param params 参数
@@ -181,7 +172,7 @@
     if (count >= 3) {
         [invocation setArgument:&params atIndex:2];
     } else {
-//        YLT_LogError(@"Action：%@ 参数过多:%@",NSStringFromSelector(action), params);
+//        YLT_LogInfo(@"Action：%@ 没有参数:%@",NSStringFromSelector(action),params);
     }
     [invocation setSelector:action];
     [invocation setTarget:target];
@@ -229,7 +220,7 @@
 
 + (NSDictionary *)analysisURL:(NSString *)routerURL {
     NSMutableDictionary *result = [NSMutableDictionary new];
-    NSString *regex = @"ylt://([a-zA-Z0-9_]{1,})/([a-zA-Z0-9_.:]{1,})[?]{0,1}([a-zA-Z0-9_=&]{0,})";
+    NSString *regex = @"([a-zA-Z0-9_]{1,})[/]{0,1}([a-zA-Z0-9_.:]{0,})[?]{0,1}([a-zA-Z0-9_=&]{0,})";
     NSError *error;
     NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:regex options:NSRegularExpressionCaseInsensitive error:&error];
     NSArray *matches = [expression matchesInString:routerURL options:NSMatchingReportProgress range:NSMakeRange(0, routerURL.length)];
@@ -239,15 +230,15 @@
             NSString *tmpName = [routerURL substringWithRange:[match rangeAtIndex:i]];
             switch (i) {
                 case 1: {
-                    [result setObject:tmpName forKey:ROUTER_CLS_NAME];
+                    [result setObject:tmpName forKey:YLT_ROUTER_CLS_NAME];
                 }
                     break;
                 case 2: {
-                    [result setObject:tmpName forKey:ROUTER_SEL_NAME];
+                    [result setObject:tmpName forKey:YLT_ROUTER_SEL_NAME];
                 }
                     break;
                 case 3: {
-                    [result setObject:[self generateParamsString:tmpName] forKey:ROUTER_ARG_DATA];
+                    [result setObject:[self generateParamsString:tmpName] forKey:YLT_ROUTER_ARG_DATA];
                 }
                     break;
             }
@@ -261,6 +252,9 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     NSArray *components = [paramString componentsSeparatedByString:@"&"];
     for (NSString *tmpStr in components) {
+        if (!tmpStr.ylt_isValid) {
+            continue;
+        }
         NSArray *tmpArray = [tmpStr componentsSeparatedByString:@"="];
         if (tmpArray.count == 2) {
             [params setObject:tmpArray[1] forKey:tmpArray[0]];
@@ -268,7 +262,6 @@
             YLT_LogError(@"参数不合法 : %@",tmpStr);
         }
     }
-    
     return params;
 }
 

@@ -20,17 +20,22 @@
 #define iPhone6 ([UIScreen mainScreen].bounds.size.width==375&&[UIScreen mainScreen].bounds.size.height==667)
 #define iPhone6P ([UIScreen mainScreen].bounds.size.width==414&&[UIScreen mainScreen].bounds.size.height==736)
 #define iPhoneX ([UIScreen mainScreen].bounds.size.width==375&&[UIScreen mainScreen].bounds.size.height==812)
+#define iPhoneXS iPhoneX
+#define iPhoneXR ([UIScreen mainScreen].bounds.size.width==414&&[UIScreen mainScreen].bounds.size.height==896)
+#define iPhoneXSMAX iPhoneXR
+
+#define iPhoneXLater (iPhoneX || iPhoneXR )
 
 // 状态栏高度
-#define STATUS_BAR_HEIGHT (iPhoneX ? 44.f : 20.f)
+#define STATUS_BAR_HEIGHT (iPhoneXLater ? 44.f : 20.f)
 // 导航栏高度
-#define NAVIGATION_BAR_HEIGHT (iPhoneX ? 88.f : 64.f)
+#define NAVIGATION_BAR_HEIGHT (iPhoneXLater ? 88.f : 64.f)
 // tabBar高度
-#define TAB_BAR_HEIGHT (iPhoneX ? (49.f + 34.f) : 49.f)
+#define TAB_BAR_HEIGHT (iPhoneXLater ? (49.f + 34.f) : 49.f)
 // 导航栏不带statusbar
 #define NAVIGATION_BAR_WITHOUTSTATUS_HEIGHT 44
 // home indicator hone按钮高度
-#define HOME_INDICATOR_HEIGHT (iPhoneX ? 34.f : 0.f)
+#define HOME_INDICATOR_HEIGHT (iPhoneXLater ? 34.f : 0.f)
 
 // iOS系统信息
 #define YLT_iOS_VERSION [[UIDevice currentDevice] systemVersion]
@@ -50,7 +55,10 @@
 #define iOS11 ([[UIDevice currentDevice] systemVersion].floatValue >= 11.0 && [[UIDevice currentDevice] systemVersion].floatValue <= 12.0)
 #define iOS11Later ([[UIDevice currentDevice] systemVersion].floatValue >= 11.0)
 
-#define iOSNew ([[UIDevice currentDevice] systemVersion].floatValue >= 12.0)
+#define iOS12  ([[UIDevice currentDevice] systemVersion].floatValue >= 12.0 && [[UIDevice currentDevice] systemVersion].floatValue <= 13.0)
+#define iOS12Later  ([[UIDevice currentDevice] systemVersion].floatValue >= 12.0)
+
+#define iOSNew ([[UIDevice currentDevice] systemVersion].floatValue >= 13.0)
 
 /// 获取系统对象
 #define YLT_Application        [UIApplication sharedApplication]
@@ -90,6 +98,7 @@
 #define YLT_LogWarn(format,...)
 #define YLT_LogError(format,...)
 #define YLT_Log(format,...)
+#define NSLog(format,...)
 #endif
 
 //当前语言

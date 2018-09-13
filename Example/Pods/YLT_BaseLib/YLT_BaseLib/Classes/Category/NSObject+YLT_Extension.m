@@ -55,8 +55,11 @@
             controller = presented;
         }
     } while (isPresenting);
-    if ([controller isKindOfClass:[UITabBarController class]]) {
+    while ([controller isKindOfClass:[UITabBarController class]]) {
         controller = ((UITabBarController *) controller).selectedViewController;
+        if ([controller isKindOfClass:[UINavigationController class]]) {
+            controller = [((UINavigationController *) controller).viewControllers lastObject];
+        }
     }
     if ([controller isKindOfClass:[UINavigationController class]]) {
         controller = [((UINavigationController *) controller).viewControllers lastObject];

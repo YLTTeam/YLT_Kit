@@ -76,8 +76,8 @@
 
 - (void)ylt_prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     [self ylt_prepareForSegue:segue sender:sender];
-    if (segue && [segue respondsToSelector:@selector(destinationViewController)] && [segue.destinationViewController respondsToSelector:@selector(setylt_params:)]) {
-        [segue.destinationViewController performSelector:@selector(setylt_params:) withObject:sender];
+    if (segue && [segue respondsToSelector:@selector(destinationViewController)] && [segue.destinationViewController respondsToSelector:@selector(setYlt_params:)]) {
+        [segue.destinationViewController performSelector:@selector(setYlt_params:) withObject:sender];
     }
 }
 
@@ -106,8 +106,8 @@
  */
 + (UIViewController *)ylt_createVCWithParam:(id)ylt_param {
     UIViewController *vc = [self ylt_createVC];
-    if ([vc respondsToSelector:@selector(setylt_params:)]) {
-        [vc performSelector:@selector(setylt_params:) withObject:ylt_param];
+    if ([vc respondsToSelector:@selector(setYlt_params:)]) {
+        [vc performSelector:@selector(setYlt_params:) withObject:ylt_param];
     }
     return vc;
 }

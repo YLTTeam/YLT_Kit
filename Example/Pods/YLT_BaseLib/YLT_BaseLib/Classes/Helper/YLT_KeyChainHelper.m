@@ -41,6 +41,9 @@ YLT_ShareInstance(YLT_KeyChainHelper);
     if (keychainQuery) {
         CFRelease((__bridge CFTypeRef)(keychainQuery));
     }
+    if (keychainQuery) {
+        CFRelease((__bridge CFTypeRef)(keychainQuery));
+    }
 }
 
 + (NSString *)ylt_readValueWithKeychain:(NSString *)aKey
