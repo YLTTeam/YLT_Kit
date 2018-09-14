@@ -11,4 +11,7 @@
 
 @property(nonatomic, assign) NSRange ylt_selectedRange;
 
+/// UITextField 输入框长度限制
+- (void)textFieldDidChange:(UITextField *)textField count:(NSUInteger)count;
+
 @end

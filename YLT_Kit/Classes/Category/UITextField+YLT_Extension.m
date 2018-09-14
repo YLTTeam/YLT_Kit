@@ -9,6 +9,26 @@
 
 @implementation UITextField (YLT_Extension)
 
+/// UITextField 输入框长度限制
+- (void)textFieldDidChange:(UITextField *)textField count:(NSUInteger)count {
+    [textField.undoManager removeAllActions];
+    
+    UITextRange *selectedRange = [textField markedTextRange];
+    UITextPosition *position = [textField positionFromPosition:selectedRange.start offset:0];
+    //没有高亮选择的字，则对已输入的文字进行字数统计和限制
+    if (!position) {
+        if (textField.text.length > count) {
+            NSRange rangeIndex = [textField.text rangeOfComposedCharacterSequenceAtIndex:count];
+            if (rangeIndex.length == count) {
+                [textField setText:[textField.text substringToIndex:count]];
+            } else {
+                NSRange rangeRange = [textField.text rangeOfComposedCharacterSequencesForRange:NSMakeRange(0, count)];
+                [textField setText:[textField.text substringWithRange:rangeRange]];
+            }
+        }
+    }
+}
+
 -(NSRange)ylt_selectedRange {
     NSInteger location = [self offsetFromPosition:self.beginningOfDocument toPosition:self.selectedTextRange.start];
     NSInteger length = [self offsetFromPosition:self.selectedTextRange.start toPosition:self.selectedTextRange.end];

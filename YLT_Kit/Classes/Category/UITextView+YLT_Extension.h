@@ -11,4 +11,7 @@
 
 @property(nonatomic, assign) NSRange ylt_selectedRange;
 
+/// UITextView 输入框长度限制
+- (void)textViewDidChange:(UITextView *)textView count:(NSUInteger)count;
+
 @end
