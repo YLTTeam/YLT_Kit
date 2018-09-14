@@ -479,11 +479,6 @@ YLT_ShareInstance(YLT_WKProcessPool);
  url
  */
 @property (nonatomic, strong) NSURL *url;
-
-/**
- 状态栏是否隐藏
- */
-@property (nonatomic, assign) BOOL navigationBarHidden;
 @end
 
 @implementation YLT_BaseWebVC
