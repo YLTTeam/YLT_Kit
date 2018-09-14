@@ -30,7 +30,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.view.backgroundColor = UIColor.redColor;
     
 //    UIImage *image = [UIImage imageNamed:@"bg.png"];
 //    CGFloat start = [[NSDate date] timeIntervalSince1970];
@@ -155,7 +155,7 @@
     [NSURLProtocol ylt_registerScheme:@"http"];
     [NSURLProtocol ylt_registerScheme:@"https"];
     
-    YLT_BaseWebVC *vc = [YLT_BaseWebVC ylt_webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index2.html"];
+    YLT_BaseWebVC *vc = [YLT_BaseWebVC ylt_webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index2.html?navigationBarHidden=1"];
 //    [[vc.webView webView] evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
 //        NSString *userAgent = result;
 //        NSString *newUserAgent = [userAgent stringByAppendingString:@" black_magic "];

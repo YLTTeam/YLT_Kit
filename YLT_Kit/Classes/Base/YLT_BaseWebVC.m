@@ -479,6 +479,11 @@ YLT_ShareInstance(YLT_WKProcessPool);
  url
  */
 @property (nonatomic, strong) NSURL *url;
+
+/**
+ 状态栏是否隐藏
+ */
+@property (nonatomic, assign) BOOL navigationBarHidden;
 @end
 
 @implementation YLT_BaseWebVC
@@ -505,6 +510,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
     YLT_BaseWebVC *vc = [[self alloc] init];
     urlString = [urlString stringByReplacingOccurrencesOfString:@" " withString:@""];
     vc.url = [NSURL URLWithString:urlString];
+    [vc prepareLoading:urlString];
     return vc;
 }
 
@@ -517,7 +523,27 @@ YLT_ShareInstance(YLT_WKProcessPool);
 + (instancetype)ylt_webVCFromFilePath:(NSString *)filePath {
     YLT_BaseWebVC *vc = [[self alloc] init];
     vc.url = [NSURL fileURLWithPath:filePath];
+    [vc prepareLoading:filePath];
     return vc;
+}
+
+- (void)prepareLoading:(NSString *)urlString {
+    NSDictionary *params = [self analysisURL:urlString];
+    if (params && [params.allKeys containsObject:@"navigationBarHidden"]) {
+        @weakify(self);
+        if ([[params objectForKey:@"navigationBarHidden"] boolValue]) {
+            [[self rac_signalForSelector:@selector(viewWillAppear:)] subscribeNext:^(RACTuple * _Nullable x) {
+                @strongify(self);
+                [self.navigationController setNavigationBarHidden:YES animated:YES];
+            }];
+            [[self rac_signalForSelector:@selector(viewWillDisappear:)] subscribeNext:^(RACTuple * _Nullable x) {
+                @strongify(self);
+                [self.navigationController setNavigationBarHidden:NO animated:YES];
+            }];
+        } else {
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+        }
+    }
 }
 
 /**
@@ -621,6 +647,27 @@ YLT_ShareInstance(YLT_WKProcessPool);
  */
 + (void)ylt_cleanCache {
     [YLT_BaseWebView ylt_cleanCache];
+}
+
+- (NSDictionary *)analysisURL:(NSString *)url {
+    NSMutableDictionary *result = [NSMutableDictionary new];
+    NSArray *components = [url componentsSeparatedByString:@"?"];
+    if (components.count >= 2) {
+        NSString *tempName = components.lastObject;
+        NSArray *components = [tempName componentsSeparatedByString:@"&"];
+        for (NSString *tmpStr in components) {
+            if (!tmpStr.ylt_isValid) {
+                continue;
+            }
+            NSArray *tmpArray = [tmpStr componentsSeparatedByString:@"="];
+            if (tmpArray.count == 2) {
+                [result setObject:tmpArray[1] forKey:tmpArray[0]];
+            } else {
+                YLT_LogError(@"参数不合法 : %@",tmpStr);
+            }
+        }
+    }
+    return result;
 }
 
 - (void)dealloc {
