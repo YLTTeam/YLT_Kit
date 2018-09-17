@@ -147,7 +147,7 @@
 - (UIViewController *)ylt_responderVC {
     UIViewController *obj = (UIViewController *)self.nextResponder;
     while (![obj isKindOfClass:[UIViewController class]] && obj != nil) {
-        obj = [obj nextResponder];
+        obj = (UIViewController *)[obj nextResponder];
     }
     return obj;
 }
@@ -176,6 +176,50 @@
             [view removeFromSuperview];
         }
     }
+}
+
+#pragma mark - getter
+
+- (void)setYlt_params:(id)ylt_params {
+    objc_setAssociatedObject(self, @selector(ylt_params), ylt_params, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (id)ylt_params {
+    return objc_getAssociatedObject(self, @selector(ylt_params));
+}
+
+- (void)setYlt_callback:(void (^)(id))ylt_callback {
+    objc_setAssociatedObject(self, @selector(ylt_callback), ylt_callback, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (void(^)(id))ylt_callback {
+    void (^callback)(id) = objc_getAssociatedObject(self, @selector(ylt_callback));
+    if (!callback && self.ylt_params && self.ylt_params[YLT_CALLBACK_BLOCK]) {
+        callback = self.ylt_params[YLT_CALLBACK_BLOCK];
+    }
+    if (!callback) {
+        callback = ^(id response) {
+            YLT_Log(@"%@", response);
+        };
+    }
+    return callback;
+}
+
+- (void)setYlt_completion:(void (^)(NSError *, id))ylt_completion {
+    objc_setAssociatedObject(self, @selector(ylt_completion), ylt_completion, OBJC_ASSOCIATION_COPY);
+}
+
+- (void(^)(NSError *, id))ylt_completion {
+    void(^completion)(NSError *, id) = objc_getAssociatedObject(self, @selector(ylt_completion));
+    if (!completion && self.ylt_params && self.ylt_params[YLT_ROUTER_COMPLETION]) {
+        completion = self.ylt_params[YLT_ROUTER_COMPLETION];
+    }
+    if (!completion) {
+        completion = ^(NSError *error, id response) {
+            YLT_Log(@"%@  %@", error, response);
+        };
+    }
+    return completion;
 }
 
 @end

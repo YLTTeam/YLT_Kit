@@ -28,6 +28,8 @@
 #import <AFNetworking/AFNetworking.h>
 #endif
 
+#define YLT_CALLBACK_BLOCK @"YLT_CALLBACK_BLOCK"
+
 @interface UIView (YLT_BaseView)
 
 /**
@@ -94,6 +96,21 @@
  当前视图依赖的VC 区别于 ylt_currentVC
  */
 @property (nonatomic, strong) UIViewController *ylt_responderVC;
+
+/**
+ 上一个页面传入的参数
+ */
+@property (nonatomic, strong) id ylt_params;
+
+/**
+ 视图回调
+ */
+@property (nonatomic, copy) void(^ylt_callback)(id response);
+
+/**
+ 视图回调
+ */
+@property (nonatomic, copy) void(^ylt_completion)(NSError *error, id response);
 
 /**
  移除所有的子视图
