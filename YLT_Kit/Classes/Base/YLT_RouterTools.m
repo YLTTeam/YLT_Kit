@@ -105,7 +105,7 @@ YLT_ShareInstance(YLT_RouterTools);
             [params setObject:arg forKey:@"ylt_arg"];
         }
     }
-    id target = [YLT_RouterManager ylt_routerToClassname:data[YLT_ROUTER_CLS_NAME] selname:data[YLT_ROUTER_SEL_NAME] arg:arg completion:completion];
+    id target = [YLT_RouterManager ylt_routerToClassname:data[YLT_ROUTER_CLS_NAME] selname:data[YLT_ROUTER_SEL_NAME] isClassMethod:YES arg:arg completion:completion];
     if (![target isKindOfClass:[UIViewController class]] || ![target isKindOfClass:[UIView class]]) {
         YLT_LogError(@"路由到的类非 不能解析到");
     }
@@ -117,7 +117,7 @@ YLT_ShareInstance(YLT_RouterTools);
     NSString *selname = datas[YLT_ROUTER_SEL_NAME];
     NSString *clsname = datas[YLT_ROUTER_CLS_NAME];
     Class cls = NSClassFromString(clsname);
-    NSString *reason = [NSString stringWithFormat:@"路由类异常 %@", clsname]
+    NSString *reason = [NSString stringWithFormat:@"路由类异常 %@", clsname];
     NSAssert((clsname.ylt_isValid && cls != NULL), reason);
     selname = selname.ylt_isValid?selname:@"ylt_createVC";
     reason = [NSString stringWithFormat:@"路由方法异常 %@ %@", clsname, selname];
