@@ -117,9 +117,11 @@ YLT_ShareInstance(YLT_RouterTools);
     NSString *selname = datas[YLT_ROUTER_SEL_NAME];
     NSString *clsname = datas[YLT_ROUTER_CLS_NAME];
     Class cls = NSClassFromString(clsname);
-    NSAssert((clsname.ylt_isValid && cls != NULL), @"路由类异常");
+    NSString *reason = [NSString stringWithFormat:@"路由类异常 %@", clsname]
+    NSAssert((clsname.ylt_isValid && cls != NULL), reason);
     selname = selname.ylt_isValid?selname:@"ylt_createVC";
-    NSAssert([cls respondsToSelector:NSSelectorFromString(selname)], @"路由方法异常");
+    reason = [NSString stringWithFormat:@"路由方法异常 %@ %@", clsname, selname];
+    NSAssert([cls respondsToSelector:NSSelectorFromString(selname)], reason);
     return @{YLT_ROUTER_CLS_NAME:clsname, YLT_ROUTER_SEL_NAME:selname, YLT_ROUTER_ARG_DATA:datas[YLT_ROUTER_ARG_DATA]};
 }
 
