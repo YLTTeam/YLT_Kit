@@ -15,8 +15,8 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wundeclared-selector"
 - (void)viewDidLoad {
-    [super viewDidLoad];
     self.view.backgroundColor = UIColor.whiteColor;
+    [super viewDidLoad];
 }
 
 - (void)didReceiveMemoryWarning {
