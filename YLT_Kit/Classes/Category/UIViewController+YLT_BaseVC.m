@@ -83,7 +83,8 @@
 
 - (void)ylt_dealloc {
     [self ylt_dealloc];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    YLT_LogInfo(@"%@ dealloc is safe", NSStringFromClass(self.class));
+    YLT_RemoveNotificationObserver();
 }
 
 #pragma mark - Public Method
