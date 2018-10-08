@@ -23,7 +23,6 @@
         [UIViewController ylt_swizzleInstanceMethod:@selector(viewWillLayoutSubviews) withMethod:@selector(ylt_viewWillLayoutSubviews)];
         [UIViewController ylt_swizzleInstanceMethod:@selector(viewWillDisappear:) withMethod:@selector(ylt_viewWillDisappear:)];
         [UIViewController ylt_swizzleInstanceMethod:@selector(prepareForSegue:sender:) withMethod:@selector(ylt_prepareForSegue:sender:)];
-        [UIViewController ylt_swizzleInstanceMethod:NSSelectorFromString(@"dealloc") withMethod:@selector(ylt_dealloc)];
         [UIViewController ylt_swizzleInstanceMethod:@selector(didMoveToParentViewController:) withMethod:@selector(ylt_didMoveToParentViewController:)];
     });
 }
@@ -83,12 +82,6 @@
     if (segue && [segue respondsToSelector:@selector(destinationViewController)] && [segue.destinationViewController respondsToSelector:@selector(setYlt_params:)]) {
         [segue.destinationViewController performSelector:@selector(setYlt_params:) withObject:sender];
     }
-}
-
-- (void)ylt_dealloc {
-    YLT_LogInfo(@"%@ dealloc is safe", NSStringFromClass(self.class));
-    YLT_RemoveNotificationObserver();
-    [self ylt_dealloc];
 }
 
 #pragma mark - Public Method
