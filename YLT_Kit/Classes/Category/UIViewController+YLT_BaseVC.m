@@ -86,9 +86,9 @@
 }
 
 - (void)ylt_dealloc {
-    [self ylt_dealloc];
     YLT_LogInfo(@"%@ dealloc is safe", NSStringFromClass(self.class));
     YLT_RemoveNotificationObserver();
+    [self ylt_dealloc];
 }
 
 #pragma mark - Public Method
