@@ -24,6 +24,7 @@
         [UIViewController ylt_swizzleInstanceMethod:@selector(viewWillDisappear:) withMethod:@selector(ylt_viewWillDisappear:)];
         [UIViewController ylt_swizzleInstanceMethod:@selector(prepareForSegue:sender:) withMethod:@selector(ylt_prepareForSegue:sender:)];
         [UIViewController ylt_swizzleInstanceMethod:NSSelectorFromString(@"dealloc") withMethod:@selector(ylt_dealloc)];
+        [UIViewController ylt_swizzleInstanceMethod:@selector(didMoveToParentViewController:) withMethod:@selector(ylt_didMoveToParentViewController:)];
     });
 }
 
@@ -55,21 +56,24 @@
     }
 }
 
+- (void)ylt_didMoveToParentViewController:(UIViewController *)parent {
+    [self ylt_didMoveToParentViewController:parent];
+    if (parent == nil) {
+        if ([self respondsToSelector:@selector(ylt_back)]) {
+            [self performSelector:@selector(ylt_back)];
+        }
+    }
+}
+
 - (void)ylt_viewWillDisappear:(BOOL)animated {
     [self ylt_viewWillDisappear:animated];
     if (self.navigationController && self.navigationController.viewControllers.count != 1 && [self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
         if ([self respondsToSelector:@selector(ylt_dismiss)]) {
             [self performSelector:@selector(ylt_dismiss)];
         }
-        if ([self respondsToSelector:@selector(ylt_back)]) {
-            [self performSelector:@selector(ylt_back)];
-        }
     } else if (self.presentedViewController == nil) {
         if ([self respondsToSelector:@selector(ylt_dismiss)]) {
             [self performSelector:@selector(ylt_dismiss)];
-        }
-        if ([self respondsToSelector:@selector(ylt_back)]) {
-            [self performSelector:@selector(ylt_back)];
         }
     }
 }
