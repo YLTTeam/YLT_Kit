@@ -48,11 +48,8 @@
             //重新排列
             UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForItemAtIndexPath:indexPath];
             [self.ylt_allAttributes addObject:attributes];
-            
         }
     }
-    
-    
 }
 
 - (CGSize)collectionViewContentSize {
