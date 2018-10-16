@@ -127,7 +127,6 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-//    UIImage *image = [UIImage imageNamed:@"bg.png"];
     NSData *data = UIImageJPEGRepresentation(image, 1.0);
     CGFloat start = [[NSDate date] timeIntervalSince1970];
     image = [image ylt_representation];
