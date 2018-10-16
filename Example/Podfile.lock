@@ -26,12 +26,12 @@ PODS:
   - SDWebImage (4.4.2):
     - SDWebImage/Core (= 4.4.2)
   - SDWebImage/Core (4.4.2)
-  - YLT_BaseLib (0.2.2):
+  - YLT_BaseLib (0.3.0):
     - FastCoding
     - FMDB
     - LGAlertView
     - MJExtension
-  - YLT_Kit (0.2.4):
+  - YLT_Kit (0.2.8):
     - AFNetworking
     - Masonry
     - MJRefresh
@@ -69,8 +69,8 @@ SPEC CHECKSUMS:
   MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
   ReactiveObjC: 2a38ea15335de4119d8b17caf1db1484f61db902
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
-  YLT_BaseLib: 1cc2562c3ead314d9cfcd3c4c1d35522e261a1f2
-  YLT_Kit: 0592faa21494700416319d3c8d8e0e4dfff7634a
+  YLT_BaseLib: ea8849d5345c8e8de92bf42410dc08e31699859b
+  YLT_Kit: 4faf2689018443f37af672904983d8b63edb530f
 
 PODFILE CHECKSUM: 65a474d3ca23e64c48d267336e751acf6a3ca453
 

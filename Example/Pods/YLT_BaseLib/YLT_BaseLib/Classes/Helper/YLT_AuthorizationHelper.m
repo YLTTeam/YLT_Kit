@@ -7,21 +7,23 @@
 
 #import "YLT_AuthorizationHelper.h"
 #import "YLT_BaseMacro.h"
-@import UIKit;
-@import Photos;
-@import AssetsLibrary;
-@import CoreTelephony;
-@import AVFoundation;
-@import AddressBook;
-@import Contacts;
-@import EventKit;
-@import CoreLocation;
-@import MediaPlayer;
-@import Speech;//Xcode 8.0 or later
-@import HealthKit;
-@import Intents;
-@import CoreBluetooth;
-@import Accounts;
+#import <UIKit/UIKit.h>
+#import <Photos/Photos.h>
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <CoreTelephony/CTCellularData.h>
+#import <AVFoundation/AVFoundation.h>
+#import <AddressBook/AddressBook.h>
+#import <Contacts/Contacts.h>
+#import <EventKit/EventKit.h>
+#import <CoreLocation/CoreLocation.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import <Speech/Speech.h>
+#import <HealthKit/HealthKit.h>
+#import <CoreBluetooth/CoreBluetooth.h>
+#import <Accounts/Accounts.h>
+//#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+//#import <Intents/Intents.h>
+//#endif
 
 @interface YLT_AuthorizationHelper()<CLLocationManagerDelegate>{}
 
@@ -448,25 +450,25 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
         return;
     }
     
-    INSiriAuthorizationStatus authStatus = [INPreferences siriAuthorizationStatus];
-    if (authStatus == INSiriAuthorizationStatusNotDetermined) {
-        [INPreferences requestSiriAuthorization:^(INSiriAuthorizationStatus status) {
-            if (status == INSiriAuthorizationStatusAuthorized) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    success ? success() : nil;
-                });
-            }else{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    failed ? failed() : nil;
-                });
-            }
-        }];
-        
-    }else if (authStatus == INSiriAuthorizationStatusAuthorized){
-        success ? success() : nil;
-    }else{
-        failed ? failed() : nil;
-    }
+//    INSiriAuthorizationStatus authStatus = [INPreferences siriAuthorizationStatus];
+//    if (authStatus == INSiriAuthorizationStatusNotDetermined) {
+//        [INPreferences requestSiriAuthorization:^(INSiriAuthorizationStatus status) {
+//            if (status == INSiriAuthorizationStatusAuthorized) {
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    success ? success() : nil;
+//                });
+//            }else{
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    failed ? failed() : nil;
+//                });
+//            }
+//        }];
+//        
+//    }else if (authStatus == INSiriAuthorizationStatusAuthorized){
+//        success ? success() : nil;
+//    }else{
+//        failed ? failed() : nil;
+//    }
 }
 
 #pragma mark - Bluetooth

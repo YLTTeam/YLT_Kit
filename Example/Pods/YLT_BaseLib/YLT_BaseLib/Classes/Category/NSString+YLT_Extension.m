@@ -25,6 +25,7 @@
 @dynamic ylt_isEmoji;
 @dynamic ylt_isURL;
 @dynamic ylt_isLocalPath;
+@dynamic ylt_isAllChinese;
 
 #pragma mark - Public method 类方法
 /**
@@ -133,6 +134,20 @@
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:nil];
     NSInteger numMatch = [regex numberOfMatchesInString:sender options:NSMatchingReportProgress range:NSMakeRange(0, sender.length)];
     return numMatch > 0 ? YES : NO;
+}
+/**
+ 字符串是否全部是中文
+ 
+ @param sender 目标字符串
+ @return  YES:全部是 NO:包含非中文字符串
+ */
++ (BOOL)ylt_isAllChineseString:(NSString *)sender {
+    NSString *pattern  = @"^[\u4e00-\u9fa5]+$";
+    NSPredicate *regextest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", pattern];
+    if (([regextest evaluateWithObject:sender] == YES)) {
+        return YES;
+    }
+    return NO;
 }
 
 /**
@@ -598,6 +613,13 @@
  */
 - (BOOL)ylt_isChinese {
     return [NSString ylt_isChineseString:self];
+}
+
+/**
+ 字符串是否全部是中文
+ */
+- (BOOL)ylt_isAllChinese {
+    return [NSString ylt_isAllChineseString:self];
 }
 
 /**

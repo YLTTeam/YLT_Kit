@@ -19,7 +19,6 @@
 #import "NSDictionary+YLT_Log.h"
 #import "NSFileManager+YLT_Extension.h"
 #import "NSObject+YLT_Extension.h"
-#import "NSObject+YLT_Safe.h"
 #import "NSString+YLT_Extension.h"
 #import "NSTimer+YLT_Extension.h"
 #import "UIDevice+YLT_Extension.h"

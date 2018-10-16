@@ -15,6 +15,26 @@
 
 @implementation NSObject (YLT_Extension)
 
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [UIView ylt_swizzleInstanceMethod:NSSelectorFromString(@"dealloc") withMethod:@selector(ylt_dealloc)];
+        [UIViewController ylt_swizzleInstanceMethod:NSSelectorFromString(@"dealloc") withMethod:@selector(ylt_dealloc)];
+    });
+}
+
+- (void)ylt_dealloc {
+    if ([self isKindOfClass:UIView.class] ||
+        [self isKindOfClass:UIViewController.class]) {
+        if ([self isKindOfClass:UIViewController.class]) {
+            YLT_LogInfo(@"%@ dealloc is safe", NSStringFromClass(self.class));
+        }
+        YLT_RemoveNotificationObserver();
+    }
+    
+    [self ylt_dealloc];
+}
+
 /**
  获取当前的控制器
  
@@ -146,6 +166,9 @@
  */
 + (id)ylt_valueByKey:(NSString *)key {
     NSParameterAssert(key);
+    if (![[[NSUserDefaults standardUserDefaults] dictionaryRepresentation].allKeys containsObject:key]) {
+        return nil;
+    }
     NSData *data = [[NSUserDefaults standardUserDefaults] valueForKey:key];
     return [FastCoder objectWithData:data];
 }
@@ -166,6 +189,5 @@
 }
 
 #pragma mark -
-
 
 @end

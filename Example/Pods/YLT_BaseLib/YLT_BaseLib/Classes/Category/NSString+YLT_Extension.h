@@ -21,6 +21,11 @@
 @property (nonatomic, assign) BOOL ylt_isChinese;
 
 /**
+ 字符串全部是中文
+ */
+@property (nonatomic, assign) BOOL ylt_isAllChinese;
+
+/**
  字符串是否为整形
  */
 @property (nonatomic, assign) BOOL ylt_isPureInt;
@@ -88,6 +93,14 @@
  @return YES:包含 NO:否
  */
 + (BOOL)ylt_isChineseString:(NSString *)sender;
+
+/**
+ 字符串是否全部是中文
+
+ @param sender 目标字符串
+ @return  YES:全部是 NO:包含非中文字符串
+ */
++ (BOOL)ylt_isAllChineseString:(NSString *)sender;
 
 /**
  字符串是否为整形

@@ -63,6 +63,11 @@
 @property (nonatomic, strong) id ylt_params;
 
 /**
+ 当前页面的操作队列，进入页面的时候会启动，离开页面时会挂起
+ */
+@property (nonatomic, strong, readonly) NSOperationQueue *ylt_queue;
+
+/**
  页面回调
  */
 @property (nonatomic, copy) void(^ylt_callback)(id response);

@@ -46,6 +46,10 @@
 
 - (void)ylt_viewWillAppear:(BOOL)animated {
     [self ylt_viewWillAppear:animated];
+    if (self.ylt_queue.isSuspended) {
+        //队列处于暂停状态 页面显示 开启队列
+        [self.ylt_queue setSuspended:NO];
+    }
 }
 
 - (void)ylt_viewWillLayoutSubviews {
@@ -75,6 +79,20 @@
             [self performSelector:@selector(ylt_dismiss)];
         }
     }
+    if (!self.ylt_queue.isSuspended && self.ylt_queue.operationCount > 0) {
+        //队列处于非暂停状态 暂停队列
+        [self.ylt_queue setSuspended:YES];
+    }
+}
+
+- (void)ylt_dealloc {
+    if ([self isKindOfClass:UIViewController.class]) {
+        YLT_LogWarn(@"%@ dealloc is safe", NSStringFromClass(self.class));
+        //队列处于非暂停状态 暂停队列
+        [self.ylt_queue cancelAllOperations];
+        YLT_RemoveNotificationObserver();
+    }
+    [self ylt_dealloc];
 }
 
 - (void)ylt_prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -167,6 +185,16 @@
 
 - (id)ylt_params {
     return objc_getAssociatedObject(self, @selector(ylt_params));
+}
+
+- (NSOperationQueue *)ylt_queue {
+    NSOperationQueue *result = objc_getAssociatedObject(self, @selector(ylt_queue));
+    if (result == nil) {
+        result = [[NSOperationQueue alloc] init];
+        result.maxConcurrentOperationCount = 5;
+        objc_setAssociatedObject(self, @selector(ylt_queue), result, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return result;
 }
 
 - (void)setYlt_callback:(void (^)(id))ylt_callback {

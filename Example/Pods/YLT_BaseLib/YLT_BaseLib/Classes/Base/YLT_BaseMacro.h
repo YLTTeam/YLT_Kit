@@ -15,13 +15,13 @@
 #define iPhone ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
 
 //屏幕信息
-#define iPhone4 ([UIScreen mainScreen].bounds.size.width==320&&[UIScreen mainScreen].bounds.size.height==480)
-#define iPhone5 ([UIScreen mainScreen].bounds.size.width==320&&[UIScreen mainScreen].bounds.size.height==568)
-#define iPhone6 ([UIScreen mainScreen].bounds.size.width==375&&[UIScreen mainScreen].bounds.size.height==667)
-#define iPhone6P ([UIScreen mainScreen].bounds.size.width==414&&[UIScreen mainScreen].bounds.size.height==736)
-#define iPhoneX ([UIScreen mainScreen].bounds.size.width==375&&[UIScreen mainScreen].bounds.size.height==812)
+#define iPhone4 (([UIScreen mainScreen].bounds.size.width==320&&[UIScreen mainScreen].bounds.size.height==480) || ([UIScreen mainScreen].bounds.size.width==480&&[UIScreen mainScreen].bounds.size.height==320))
+#define iPhone5 (([UIScreen mainScreen].bounds.size.width==320&&[UIScreen mainScreen].bounds.size.height==568) || ([UIScreen mainScreen].bounds.size.width==568&&[UIScreen mainScreen].bounds.size.height==320))
+#define iPhone6 (([UIScreen mainScreen].bounds.size.width==375&&[UIScreen mainScreen].bounds.size.height==667) || ([UIScreen mainScreen].bounds.size.width==667&&[UIScreen mainScreen].bounds.size.height==375))
+#define iPhone6P (([UIScreen mainScreen].bounds.size.width==414&&[UIScreen mainScreen].bounds.size.height==736) || ([UIScreen mainScreen].bounds.size.width==736&&[UIScreen mainScreen].bounds.size.height==414))
+#define iPhoneX (([UIScreen mainScreen].bounds.size.width==375&&[UIScreen mainScreen].bounds.size.height==812) || ([UIScreen mainScreen].bounds.size.width==812&&[UIScreen mainScreen].bounds.size.height==375))
 #define iPhoneXS iPhoneX
-#define iPhoneXR ([UIScreen mainScreen].bounds.size.width==414&&[UIScreen mainScreen].bounds.size.height==896)
+#define iPhoneXR (([UIScreen mainScreen].bounds.size.width==414&&[UIScreen mainScreen].bounds.size.height==896) || ([UIScreen mainScreen].bounds.size.width==896&&[UIScreen mainScreen].bounds.size.height==414))
 #define iPhoneXSMAX iPhoneXR
 
 #define iPhoneXLater (iPhoneX || iPhoneXR )
