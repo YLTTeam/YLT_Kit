@@ -7,6 +7,7 @@
 //
 
 #import "UIView+YLT_GesExtension.h"
+#import <objc/message.h>
 #import <ReactiveObjC/ReactiveObjC.h>
 
 @implementation UIView (YLT_GesExtension)
@@ -72,6 +73,30 @@
 
 - (UILongPressGestureRecognizer *(^)(id, SEL))ylt_longPress {
     return [self ylt_add:[UILongPressGestureRecognizer class]];
+}
+
+- (void)setHitsEdgeInsets:(UIEdgeInsets)hitsEdgeInsets {
+    NSValue *value = [NSValue value:&hitsEdgeInsets withObjCType:@encode(UIEdgeInsets)];
+    objc_setAssociatedObject(self, @selector(hitsEdgeInsets), value, OBJC_ASSOCIATION_ASSIGN);
+}
+
+- (UIEdgeInsets)hitsEdgeInsets {
+    NSValue *value = objc_getAssociatedObject(self, @selector(hitsEdgeInsets));
+    if (value) {
+        UIEdgeInsets edgeInsets;
+        [value getValue:&edgeInsets];
+        return edgeInsets;
+    } else {
+        return UIEdgeInsetsZero;
+    }
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    if (UIEdgeInsetsEqualToEdgeInsets(self.hitsEdgeInsets, UIEdgeInsetsZero) || !self.userInteractionEnabled || self.hidden) {
+        return CGRectContainsPoint(self.bounds, point);
+    } else {
+        return CGRectContainsPoint(UIEdgeInsetsInsetRect(self.bounds, self.hitsEdgeInsets), point);
+    }
 }
 
 @end

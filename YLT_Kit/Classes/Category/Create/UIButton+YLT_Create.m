@@ -58,6 +58,17 @@
     };
 }
 /**
+ 普通字体
+ */
+- (UIButton *(^)(UIFont *font))ylt_font {
+    @weakify(self);
+    return ^id(UIFont *font) {
+        @strongify(self);
+        self.titleLabel.font = font;
+        return self;
+    };
+}
+/**
  选中image
  */
 - (UIButton *(^)(id img))ylt_selectedImage {

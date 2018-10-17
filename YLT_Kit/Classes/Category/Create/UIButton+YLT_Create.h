@@ -34,6 +34,10 @@ typedef NS_ENUM(NSUInteger, YLT_ButtonLayout) {
  */
 - (UIButton *(^)(CGFloat fontSize))ylt_fontSize;
 /**
+ 普通字体
+ */
+- (UIButton *(^)(UIFont *font))ylt_font;
+/**
  选中image
  */
 - (UIButton *(^)(id img))ylt_selectedImage;

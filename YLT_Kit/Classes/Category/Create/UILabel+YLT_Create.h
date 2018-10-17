@@ -38,7 +38,10 @@
  文字的行数 默认为1
  */
 - (UILabel *(^)(NSUInteger lineNum))ylt_lineNum;
-
+/**
+ 文字截取形式
+ */
+- (UILabel *(^)(NSLineBreakMode lineBreakMode))ylt_lineBreakMode;
 
 #pragma mark - 快速创建对象
 

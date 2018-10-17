@@ -65,6 +65,18 @@
  */
 - (UIView *(^)(NSInteger tag))ylt_tag;
 /**
+ 设置透明度
+ */
+- (UIView *(^)(CGFloat alpha))ylt_alpha;
+/**
+ 设置触摸是否可用
+ */
+- (UIView *(^)(BOOL userInteractionEnabled))ylt_userInteractionEnabled;
+/**
+ 赋值
+ */
+- (UIView *(^)(UIView **target))ylt_target;
+/**
  点击事件
  */
 - (UIView *(^)(void (^)(id response)))ylt_clickBlock;
@@ -72,7 +84,6 @@
  信号量
  */
 - (UIView *(^)(RACSignal *signal))ylt_signal;
-
 
 #pragma mark - type convert
 - (UIButton *(^)(void))ylt_convertToButton;

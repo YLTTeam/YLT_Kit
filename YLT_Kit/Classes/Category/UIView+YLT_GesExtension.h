@@ -16,6 +16,11 @@
 @interface UIView (YLT_GesExtension)
 
 /**
+ 设置视图的触摸范围 （主要用来扩大视图的触摸区域）
+ */
+@property (nonatomic, assign) UIEdgeInsets hitsEdgeInsets;
+
+/**
  *  添加点按手势
  */
 - (UITapGestureRecognizer *(^)(id, SEL))ylt_tap;

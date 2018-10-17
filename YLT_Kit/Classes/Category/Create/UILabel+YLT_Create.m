@@ -130,6 +130,17 @@
         return self;
     };
 }
+/**
+ 文字截取形式
+ */
+- (UILabel *(^)(NSLineBreakMode lineBreakMode))ylt_lineBreakMode {
+    @weakify(self);
+    return ^id(NSLineBreakMode lineBreakMode) {
+        @strongify(self);
+        self.lineBreakMode = lineBreakMode;
+        return self;
+    };
+}
 
 /**
  信号量

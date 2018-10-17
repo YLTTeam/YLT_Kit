@@ -230,6 +230,39 @@
     };
 }
 /**
+ 设置透明度
+ */
+- (UIView *(^)(CGFloat alpha))ylt_alpha {
+    @weakify(self);
+    return ^id(CGFloat alpha) {
+        @strongify(self);
+        self.alpha = alpha;
+        return self;
+    };
+}
+/**
+ 设置触摸是否可用
+ */
+- (UIView *(^)(BOOL userInteractionEnabled))ylt_userInteractionEnabled {
+    @weakify(self);
+    return ^id(BOOL userInteractionEnabled) {
+        @strongify(self);
+        self.userInteractionEnabled = userInteractionEnabled;
+        return self;
+    };
+}
+/**
+ 赋值
+ */
+- (UIView *(^)(UIView **target))ylt_target {
+    @weakify(self);
+    return ^id(UIView **target) {
+        @strongify(self);
+        *target = self;
+        return self;
+    };
+}
+/**
  点击事件
  */
 - (UIView *(^)(void (^)(id response)))ylt_clickBlock {
