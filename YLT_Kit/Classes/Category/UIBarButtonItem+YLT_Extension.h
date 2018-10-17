@@ -12,4 +12,10 @@
  是否显示红点角标
  */
 @property (assign, nonatomic) BOOL hasBadge;
+
+/**
+ 点击事件回调
+ */
+@property (nonatomic, copy) void(^ylt_clickBlock)(UIBarButtonItem *sender);
+
 @end
