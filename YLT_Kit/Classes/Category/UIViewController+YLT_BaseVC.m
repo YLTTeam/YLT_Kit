@@ -107,6 +107,44 @@
 #pragma mark - Public Method
 
 /**
+ push进页面
+ 
+ @param vc 目标页面
+ @param callback 回调
+ */
+- (void)ylt_pushToVC:(UIViewController *)vc callback:(void(^)(id response))callback {
+    if (vc == nil) {
+        return;
+    }
+    vc.hidesBottomBarWhenPushed = YES;
+    if (callback) {
+        vc.ylt_callback = callback;
+    }
+    if (self.navigationController) {
+        [self.navigationController pushViewController:vc animated:YES];
+    } else {
+        UINavigationController *navigationController = navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+        [self presentViewController:navigationController animated:YES completion:nil];
+    }
+}
+
+/**
+ push进页面
+ 
+ @param vc 目标页面
+ @param callback 回调
+ */
+- (void)ylt_presentToVC:(UIViewController *)vc callback:(void(^)(id response))callback {
+    if (vc == nil) {
+        return;
+    }
+    if (callback) {
+        vc.ylt_callback = callback;
+    }
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
+/**
  创建控制器
  
  @return 控制器

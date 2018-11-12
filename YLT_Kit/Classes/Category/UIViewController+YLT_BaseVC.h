@@ -78,6 +78,22 @@
 @property (nonatomic, copy) void(^ylt_completion)(NSError *error, id response);
 
 /**
+ push进页面
+
+ @param vc 目标页面
+ @param callback 回调
+ */
+- (void)ylt_pushToVC:(UIViewController *)vc callback:(void(^)(id response))callback;
+
+/**
+ push进页面
+ 
+ @param vc 目标页面
+ @param callback 回调
+ */
+- (void)ylt_presentToVC:(UIViewController *)vc callback:(void(^)(id response))callback;
+
+/**
  创建控制器
  
  @return 控制器
