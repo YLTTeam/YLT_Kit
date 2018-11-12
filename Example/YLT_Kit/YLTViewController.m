@@ -31,7 +31,7 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = UIColor.redColor;
-    
+    NSLog(@"viewdid load");
 //    UIImage *image = [UIImage imageNamed:@"bg.png"];
 //    CGFloat start = [[NSDate date] timeIntervalSince1970];
 //    NSData *res = [UIImage ylt_representationData:UIImageJPEGRepresentation(image, 0.9) kb:2048];

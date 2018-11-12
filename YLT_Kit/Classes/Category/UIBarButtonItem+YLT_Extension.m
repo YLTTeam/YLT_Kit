@@ -18,9 +18,8 @@ NSString *const ZYBarButtonItem_badgeColorKey = @"ZYBarButtonItem_badgeColorKey"
 
 @implementation UIBarButtonItem (YTL_Utils)
 
-- (void)initBadge{
+- (void)initBadge {
     UIView *superview = nil;
-    
     if (self.customView) {
         superview = self.customView;
         superview.clipsToBounds = NO;
@@ -121,7 +120,7 @@ NSString *const ZYBarButtonItem_badgeColorKey = @"ZYBarButtonItem_badgeColorKey"
 - (void)setHasBadge:(BOOL)hasBadge {
     if (hasBadge) {
         [self showBadge];
-    }else{
+    } else {
         [self hideBadge];
     }
     

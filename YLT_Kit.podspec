@@ -24,4 +24,5 @@ Pod::Spec.new do |s|
   s.dependency 'YLT_BaseLib'
   s.dependency 'SDWebImage'
   s.dependency 'MJRefresh'
+  s.dependency 'Aspects'
 end
