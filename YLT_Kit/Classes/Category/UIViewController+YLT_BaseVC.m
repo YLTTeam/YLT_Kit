@@ -42,7 +42,6 @@
     if ([self respondsToSelector:@selector(ylt_request)]) {
         [self performSelector:@selector(ylt_request)];
     }
-    NSLog(@"hook selector %@", NSStringFromClass([self class]));
     [self ylt_viewDidLoad];
 }
 

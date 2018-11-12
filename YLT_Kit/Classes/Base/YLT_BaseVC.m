@@ -21,7 +21,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"viewdid load YLT_BaseVC");
 }
 
 - (void)didReceiveMemoryWarning {
