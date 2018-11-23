@@ -12,7 +12,7 @@
 @dynamic ylt_top, ylt_bottom, ylt_left, ylt_right;
 
 - (void)setYlt_x:(CGFloat)x {
-    self.frame = CGRectMake(x, self.ylt_x, self.ylt_width, self.ylt_height);
+    self.frame = CGRectMake(x, self.ylt_y, self.ylt_width, self.ylt_height);
 }
 
 - (CGFloat)ylt_x {
