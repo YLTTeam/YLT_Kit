@@ -51,6 +51,14 @@
                                         endPoint:(CGPoint)endPoint;
 
 /**
+ 部分角生成圆角
+
+ @param rectCorner 指定角
+ @param radius 圆角率
+ */
+- (void)ylt_cornerType:(UIRectCorner)rectCorner radius:(NSUInteger)radius;
+
+/**
  设置内边框颜色
  
  @param width 边宽

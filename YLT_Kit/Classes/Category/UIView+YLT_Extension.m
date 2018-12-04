@@ -83,6 +83,23 @@
     return layer;
 }
 
+/**
+ 部分角生成圆角
+ 
+ @param rectCorner 指定角
+ @param radius 圆角率
+ */
+- (void)ylt_cornerType:(UIRectCorner)rectCorner radius:(NSUInteger)radius {
+    //绘制圆角 要设置的圆角 使用“|”来组合
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:rectCorner cornerRadii:CGSizeMake(radius, radius)];
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    //设置大小
+    maskLayer.frame = self.bounds;
+    //设置图形样子
+    maskLayer.path = maskPath.CGPath;
+    self.layer.mask = maskLayer;
+}
+
 - (void)ylt_borderWidth:(CGFloat)width
            cornerRadius:(CGFloat)radius
             borderColor:(UIColor *)color{
