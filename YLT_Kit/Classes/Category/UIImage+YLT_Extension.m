@@ -941,12 +941,10 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
         return nil;
     }
     CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
-    
     size_t count = CGImageSourceGetCount(source);
     NSMutableArray <UIImage *>*images = [NSMutableArray array];
     [images removeAllObjects];
     UIImage *animatedImage;
-    
     if (count <= 1) {
         animatedImage = [[UIImage alloc] initWithData:data];
         [images addObject:animatedImage];
@@ -957,10 +955,8 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
                 continue;
             }
             [images addObject:[UIImage imageWithCGImage:image scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp]];
-            
             CGImageRelease(image);
         }
-        
     }
     CFRelease(source);
     return images;
