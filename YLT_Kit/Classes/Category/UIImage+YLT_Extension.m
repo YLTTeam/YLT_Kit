@@ -930,4 +930,35 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
     return output;
 }
 
+/**
+ Gif资源，转换为图片数组
+
+ @param data nsdata
+ @return 转换后的数组
+ */
++ (NSArray <UIImage *>*)imgArrFromGif:(NSData *)data {
+    if (!data) {
+        return nil;
+    }
+    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
+    size_t count = CGImageSourceGetCount(source);
+    NSMutableArray <UIImage *>*images = [NSMutableArray array];
+    [images removeAllObjects];
+    UIImage *animatedImage;
+    if (count <= 1) {
+        animatedImage = [[UIImage alloc] initWithData:data];
+        [images addObject:animatedImage];
+    } else {
+        for (size_t i = 0; i < count; i++) {
+            CGImageRef image = CGImageSourceCreateImageAtIndex(source, i, NULL);
+            if (!image) {
+                continue;
+            }
+            [images addObject:[UIImage imageWithCGImage:image scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp]];
+            CGImageRelease(image);
+        }
+    }
+    CFRelease(source);
+    return images;
+}
 @end
