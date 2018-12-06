@@ -202,4 +202,11 @@
  */
 - (UIImage *)ylt_cropImageWithRect:(CGRect)rect;
 
+/**
+ gif图转换为图片
+
+ @param data
+ @return 转换后的图片资源数组
+ */
++ (NSArray <UIImage *>*)imgArrFromGif:(NSData *)data;
 @end
