@@ -75,7 +75,6 @@
     if (floatNumArray && [floatNumArray count] == [cgColorArray count]) {
         layer.locations = floatNumArray;
     }
-    
     layer.startPoint = startPoint;
     layer.endPoint = endPoint;
     [self.layer addSublayer:layer];
