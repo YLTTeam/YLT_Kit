@@ -98,6 +98,12 @@
             @strongify(self);
             [self dismissWithAnimated:YES];
         }];
+        [_inputTextfield.rac_textSignal subscribeNext:^(NSString * _Nullable x) {
+            @strongify(self);
+            if (self.inputTextChange) {
+                self.inputTextChange(x);
+            }
+        }];
     }
     return _inputTextfield;
 }
