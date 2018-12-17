@@ -86,7 +86,8 @@
         _inputTextfield = UITextField.ylt_createLayout(self, ^(MASConstraintMaker *make) {
             make.top.mas_equalTo(24);
             make.bottom.equalTo(self);
-            make.left.right.equalTo(self).inset(16);
+            make.left.equalTo(self).offset(16);
+            make.right.equalTo(self).offset(-16);
         }).ylt_convertToTextField().ylt_font([UIFont systemFontOfSize:14]).ylt_textColor(@"333333".ylt_colorFromHexString);
         _inputTextfield.clearButtonMode = UITextFieldViewModeWhileEditing;
         @weakify(self);
