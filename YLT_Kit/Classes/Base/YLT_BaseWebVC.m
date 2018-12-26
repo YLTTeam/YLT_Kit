@@ -9,6 +9,37 @@
 #import "UIView+YLT_Create.h"
 #import <MJRefresh/MJRefresh.h>
 #import <ReactiveObjC/ReactiveObjC.h>
+#import <Aspects/Aspects.h>
+
+@interface YLT_WKWebView : WKWebView
+/**
+ 观察的对象名称列表
+ */
+@property (nonatomic, strong) NSArray *observers;
+@end
+
+@implementation YLT_WKWebView
+
+- (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration{
+    if (self = [super initWithFrame:frame configuration:configuration]) {
+        NSError *error = nil;
+        @weakify(self);
+        [self aspect_hookSelector:NSSelectorFromString(@"dealloc") withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info) {
+            @strongify(self);
+            [self stopLoading];
+            self.UIDelegate = nil;
+            self.navigationDelegate = nil;
+            self.scrollView.delegate = nil;
+            [self.configuration.userContentController removeAllUserScripts];
+            [self.observers enumerateObjectsUsingBlock:^(NSString *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [self.configuration.userContentController removeScriptMessageHandlerForName:obj];
+            }];
+        } error:&error];
+    }
+    return self;
+}
+
+@end
 
 @interface YLT_WKProcessPool : WKProcessPool
 YLT_ShareInstanceHeader(YLT_WKProcessPool);
@@ -52,7 +83,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        _webView = [[WKWebView alloc] initWithFrame:self.bounds configuration:self.configuration];
+        _webView = [[YLT_WKWebView alloc] initWithFrame:self.bounds configuration:self.configuration];
         [self addSubview:self.webView];
         self.webView.UIDelegate = self;
         self.webView.navigationDelegate = self;
@@ -76,6 +107,8 @@ YLT_ShareInstance(YLT_WKProcessPool);
         }];
         
         self.ylt_tap(self, @selector(tapAction:));
+        YLT_WKWebView *tmpview = (YLT_WKWebView *)_webView;
+        RAC(tmpview,observers) = RACObserve(self, observers);
     }
     return self;
 }
@@ -663,15 +696,6 @@ YLT_ShareInstance(YLT_WKProcessPool);
         }
     }
     return result;
-}
-
-- (void)dealloc {
-    [_webView.webView stopLoading];
-    _webView.webView.UIDelegate = nil;
-    _webView.webView.navigationDelegate = nil;
-    _webView.webView.scrollView.delegate = nil;
-    [_webView.configuration.userContentController removeAllUserScripts];
-    [_webView ylt_removeAllObserMessageHandlers];
 }
 
 #pragma mark - getter
