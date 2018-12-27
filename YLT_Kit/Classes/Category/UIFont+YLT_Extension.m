@@ -10,93 +10,49 @@
 
 @implementation UIFont (YLT_Utils)
 + (UIFont *)ylt_mediumFont:(CGFloat)x {
-    if (iOS9Later) {
-        UIFont *font = [UIFont fontWithName:@"PingFangSC-Medium" size:x];
-        if (font) {
-            return font;
-        }
-    }
-    return [UIFont systemFontOfSize:x];
+    return [self ylt_FontFamilyName:@"PingFangSC-Medium" fontSize:x];
 }
 
 + (UIFont *)ylt_lightFont:(CGFloat)x {
-    if (iOS9Later) {
-        UIFont *font = [UIFont fontWithName:@"PingFangSC-Light" size:x];
-        if (font) {
-            return font;
-        }
-    }
-    return [UIFont systemFontOfSize:x];
+    return [self ylt_FontFamilyName:@"PingFangSC-Light" fontSize:x];
 }
 
 + (UIFont *)ylt_semiboldFont:(CGFloat)x {
-    if (iOS9Later) {
-        UIFont *font = [UIFont fontWithName:@"PingFangSC-Semibold" size:x];
-        if (font) {
-            return font;
-        }
-    }
-    return [UIFont systemFontOfSize:x];
+    return [self ylt_FontFamilyName:@"PingFangSC-Semibold" fontSize:x];
 }
 
 + (UIFont *)ylt_thinFont:(CGFloat)x {
-    if (iOS9Later) {
-        UIFont *font = [UIFont fontWithName:@"PingFangSC-Thin" size:x];
-        if (font) {
-            return font;
-        }
-    }
-    return [UIFont systemFontOfSize:x];
+    return [self ylt_FontFamilyName:@"PingFangSC-Thin" fontSize:x];
 }
 
 + (UIFont *)ylt_regularFont:(CGFloat)x {
-    if (iOS9Later) {
-        UIFont *font = [UIFont fontWithName:@"PingFangSC-Regular" size:x];
-        if (font) {
-            return font;
-        }
-    }
-    return [UIFont systemFontOfSize:x];
+    return [self ylt_FontFamilyName:@"PingFangSC-Regular" fontSize:x];
 }
 
 + (UIFont *)ylt_stRegularFont:(CGFloat)x {
-    if (iOS9Later) {
-        UIFont *font = [UIFont fontWithName:@"FZQingKeBenYueSongS-R-GB" size:x];
-        if (font) {
-            return font;
-        }
-    }
-    return [UIFont systemFontOfSize:x];
+    return [self ylt_FontFamilyName:@"FZQingKeBenYueSongS-R-GB" fontSize:x];
 }
 
 + (UIFont *)ylt_politicaBoldFont:(CGFloat)x {
-    if (iOS9Later) {
-        UIFont *font = [UIFont fontWithName:@"Politica-Bold" size:x];
-        if (font) {
-            return font;
-        }
-    }
-    return [UIFont systemFontOfSize:x];
+    return [self ylt_FontFamilyName:@"Politica-Bold" fontSize:x];
 }
 
 + (UIFont *)ylt_sfBoldFont:(CGFloat)x {
-    if (iOS9Later) {
-        UIFont *font = [UIFont fontWithName:@".HelveticaNeueDeskInterface-Bold" size:x];
-        if (font) {
-            return font;
-        }
-    }
-    return [UIFont systemFontOfSize:x];
+    return [self ylt_FontFamilyName:@".HelveticaNeueDeskInterface-Bold" fontSize:x];
 }
 
 + (UIFont *)ylt_sfRegularFont:(CGFloat)x {
+    return [self ylt_FontFamilyName:@".HelveticaNeueDeskInterface-Regular" fontSize:x];
+}
+
++ (UIFont *)ylt_FontFamilyName:(NSString*)familyName fontSize:(CGFloat)fontSize {
     if (iOS9Later) {
-        UIFont *font = [UIFont fontWithName:@".HelveticaNeueDeskInterface-Regular" size:x];
+        UIFont *font = [UIFont fontWithName:familyName size:fontSize];
         if (font) {
             return font;
         }
     }
-    return [UIFont systemFontOfSize:x];
-    
+    return [UIFont systemFontOfSize:fontSize];
+
 }
 @end

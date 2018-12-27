@@ -23,6 +23,7 @@
 @property (strong, nonatomic) UIImageView *imageview;
 @property (assign, nonatomic) NSInteger tag;
 @property (strong, nonatomic) Person *p;
+@property (strong, nonatomic) YLT_ImageFilter *imageFilter;
 @end
 
 @implementation YLTViewController
@@ -30,8 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = UIColor.redColor;
-    NSLog(@"viewdid load");
+    
 //    UIImage *image = [UIImage imageNamed:@"bg.png"];
 //    CGFloat start = [[NSDate date] timeIntervalSince1970];
 //    NSData *res = [UIImage ylt_representationData:UIImageJPEGRepresentation(image, 0.9) kb:2048];
@@ -39,12 +39,27 @@
 //    NSLog(@"%f , imagesize:%zd, resSize:%zd", end-start, UIImageJPEGRepresentation(image, 0.9).length/1024, res.length/1024);
     
 //    self.view.backgroundColor = [UIColor redColor];
-//    UIImageView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
-//        make.edges.equalTo(self.view);
-//    })
-//    .ylt_convertToImageView()
-//    .ylt_image([[UIImage ylt_imageNamed:@"bg"] ylt_representation])
-//    .ylt_contentMode(UIViewContentModeScaleAspectFit);
+    self.imageview = UIImageView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+        make.center.equalTo(self.view);
+    }).ylt_backgroundColor(UIColor.clearColor)
+    .ylt_convertToImageView()
+    .ylt_image([UIImage ylt_imageNamed:@"icon_wifi"])
+    .ylt_contentMode(UIViewContentModeCenter);
+    @weakify(self);
+
+    
+    UISlider *mySlider = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, 280, 44)];
+    mySlider.minimumValue = -100;
+    mySlider.maximumValue = 100;
+    [self.view addSubview:mySlider];
+    [mySlider mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(self.view).inset(16);
+        make.height.mas_equalTo(44);
+    }];
+    [[mySlider rac_signalForControlEvents:UIControlEventValueChanged] subscribeNext:^(__kindof UISlider * _Nullable x) {
+        @strongify(self);
+        self.imageFilter.filterValue = x.value;
+    }];
 //    UILabel
 //    .ylt_layout(self.view, ^(MASConstraintMaker *make) {
 //        make.edges.equalTo(self.view);
@@ -151,6 +166,13 @@
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    @weakify(self);
+    self.imageFilter = [YLT_ImageFilter filterImage:[UIImage imageNamed:@"icon_wifi"] filterType:YLT_ImageFilterTypeTemperatureAndTint value:0.0 value2:0.0 completion:^(UIImage *outputImage) {
+        @strongify(self);
+        self.imageview.image = outputImage;
+    }];
+    return;
+    
     [NSURLProtocol ylt_registerScheme:@"http"];
     [NSURLProtocol ylt_registerScheme:@"https"];
     

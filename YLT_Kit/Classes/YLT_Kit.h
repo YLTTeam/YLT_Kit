@@ -40,6 +40,7 @@
 #import "UIView+YLT_GesExtension.h"
 #import "UIViewController+YLT_BaseVC.h"
 #import "YLT_HorizontalFlowLayout.h"
+#import "YLT_ImageFilter.h"
 #import "YLT_InputTextField.h"
 #import "YLT_URLProtocol.h"
 #import "YLT_TableRowModel.h"

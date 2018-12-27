@@ -18,5 +18,6 @@
 + (UIFont *)ylt_politicaBoldFont:(CGFloat)x;
 + (UIFont *)ylt_sfBoldFont:(CGFloat)x;
 + (UIFont *)ylt_sfRegularFont:(CGFloat)x;
++ (UIFont *)ylt_FontFamilyName:(NSString*)familyName fontSize:(CGFloat)fontSize;
 
 @end
