@@ -11,6 +11,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UITableView (YLT_Extension)
 
+/**
+ 批量注册CELL
+ 
+ @param cellClassNames cell的类型名称列表
+ */
+- (void)registerCell:(NSArray<NSString *> *)cellClassNames;
+
 @end
 
 NS_ASSUME_NONNULL_END
