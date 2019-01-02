@@ -203,6 +203,16 @@
 }
 
 /**
+ 创建视图并PUSH到对应的视图
+ 
+ @param ylt_param 参数
+ @return 控制器
+ */
++ (UIViewController *)ylt_pushVCWithParam:(id)ylt_param {
+    return [self ylt_pushVCWithParam:ylt_param callback:nil];
+}
+
+/**
  创建控制器并Modal到对应的视图
  
  @param ylt_param 参数
@@ -214,6 +224,16 @@
     UIViewController *vc = [self ylt_createVCWithParam:ylt_param callback:callback];
     [self.ylt_currentVC presentViewController:vc animated:YES completion:nil];
     return vc;
+}
+
+/**
+ 创建控制器并Modal到对应的视图
+ 
+ @param ylt_param 参数
+ @return 控制器
+ */
++ (UIViewController *)ylt_modalVCWithParam:(id)ylt_param {
+    return [self ylt_modalVCWithParam:ylt_param callback:nil];
 }
 
 #pragma mark - getter

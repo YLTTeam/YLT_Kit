@@ -120,6 +120,14 @@
 
 /**
  创建视图并PUSH到对应的视图
+ 
+ @param ylt_param 参数
+ @return 控制器
+ */
++ (UIViewController *)ylt_pushVCWithParam:(id)ylt_param;
+
+/**
+ 创建视图并PUSH到对应的视图
 
  @param ylt_param 参数
  @param callback 回调
@@ -127,6 +135,14 @@
  */
 + (UIViewController *)ylt_pushVCWithParam:(id)ylt_param
                                  callback:(void(^)(id response))callback;
+
+/**
+ 创建控制器并Modal到对应的视图
+ 
+ @param ylt_param 参数
+ @return 控制器
+ */
++ (UIViewController *)ylt_modalVCWithParam:(id)ylt_param;
 
 /**
  创建控制器并Modal到对应的视图
