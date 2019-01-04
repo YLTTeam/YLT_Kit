@@ -29,7 +29,6 @@
             [self stopLoading];
             self.UIDelegate = nil;
             self.navigationDelegate = nil;
-            self.scrollView.delegate = nil;
             [self.configuration.userContentController removeAllUserScripts];
             [self.observers enumerateObjectsUsingBlock:^(NSString *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 [self.configuration.userContentController removeScriptMessageHandlerForName:obj];
@@ -675,6 +674,10 @@ YLT_ShareInstance(YLT_WKProcessPool);
  */
 + (void)ylt_cleanCache {
     [YLT_BaseWebView ylt_cleanCache];
+}
+
+- (void)dealloc {
+    _webView.webView.scrollView.delegate = nil;
 }
 
 - (NSDictionary *)analysisURL:(NSString *)url {
