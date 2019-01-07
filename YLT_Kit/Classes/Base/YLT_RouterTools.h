@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <YLT_BaseLib/YLT_BaseLib.h>
+#import <YLT_BaseLib/YLT_BaseMacro.h>
 
 #define YLT_ShowURL(url) [YLT_RouterTools ylt_showURL:url arg:nil completion:nil];
 #define YLT_PushTo(url) [YLT_RouterTools ylt_pushToURL:url completion:nil];
