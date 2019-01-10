@@ -522,9 +522,19 @@ YLT_ShareInstance(YLT_WKProcessPool);
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.webView.url = self.url;
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:self.backBtn];
-    UIBarButtonItem *closeItem = [[UIBarButtonItem alloc] initWithCustomView:self.closeBtn];
-    self.navigationItem.leftBarButtonItems = @[backItem, closeItem];
+}
+
+- (void)registerBackBtn:(BOOL)hasBackBtn closeBtn:(BOOL)hasCloseBtn {
+    NSMutableArray *list = [[NSMutableArray alloc] init];
+    if (hasBackBtn) {
+        [list addObject:[[UIBarButtonItem alloc] initWithCustomView:self.backBtn]];
+    }
+    if (hasCloseBtn) {
+        [list addObject:[[UIBarButtonItem alloc] initWithCustomView:self.closeBtn]];
+    }
+    if (list.count > 0) {
+        self.navigationItem.leftBarButtonItems = list;
+    }
 }
 
 /**
@@ -723,6 +733,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
             }
         });
         _backBtn.titleLabel.font = [UIFont systemFontOfSize:16.];
+        [_backBtn setTitleColor:[[UINavigationBar appearance] tintColor] forState:UIControlStateNormal];
         [_backBtn sizeToFit];
     }
     return _backBtn;
@@ -744,15 +755,16 @@ YLT_ShareInstance(YLT_WKProcessPool);
             }
         });
         _closeBtn.titleLabel.font = [UIFont systemFontOfSize:16.];
+        [_closeBtn setTitleColor:[[UINavigationBar appearance] tintColor] forState:UIControlStateNormal];
         [_closeBtn sizeToFit];
         RAC(_closeBtn, hidden) = [RACObserve(self.webView.webView, canGoBack) map:^id _Nullable(NSNumber *canGoBackNum) {
             @strongify(self);
-            //            if (canGoBackNum.boolValue) {
-            //                [self.backBtn setTitle:@"返回" forState:UIControlStateNormal];
-            //            } else {
-            //                [self.backBtn setTitle:@"" forState:UIControlStateNormal];
-            //            }
-            //            [self.backBtn sizeToFit];
+//            if (canGoBackNum.boolValue) {
+//                [self.backBtn setTitle:@"返回" forState:UIControlStateNormal];
+//            } else {
+//                [self.backBtn setTitle:@"" forState:UIControlStateNormal];
+//            }
+//            [self.backBtn sizeToFit];
             return @(!canGoBackNum.boolValue);
         }];
     }
