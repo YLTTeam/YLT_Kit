@@ -687,7 +687,6 @@ YLT_ShareInstance(YLT_WKProcessPool);
 }
 
 - (void)dealloc {
-    _webView.webView.scrollView.delegate = nil;
 }
 
 - (NSDictionary *)analysisURL:(NSString *)url {
