@@ -328,7 +328,9 @@ YLT_ShareInstance(YLT_WKProcessPool);
 - (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation {
     YLT_LogInfo(@"%@", webView);
     if (!self.notUseWebTitle) {
+        @weakify(self);
         [self.webView evaluateJavaScript:@"document.title" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+            @strongify(self);
             if ([result isKindOfClass:[NSString class]] && ((NSString *) result).ylt_isValid && self.ylt_responderVC) {
                 self.ylt_responderVC.title = result;
             }
@@ -687,6 +689,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
 }
 
 - (void)dealloc {
+    [self ylt_removeAllObserMessageHandlers];
 }
 
 - (NSDictionary *)analysisURL:(NSString *)url {

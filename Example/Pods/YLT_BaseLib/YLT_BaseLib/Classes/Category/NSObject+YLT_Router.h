@@ -1,30 +1,39 @@
 //
-//  YLT_RouterManager.h
-//  FastCoding
+//  NSObject+YLT_Router.h
+//  YLT_BaseLib
 //
-//  Created by Sean on 2018/4/28.
+//  Created by 项普华 on 2018/12/29.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface YLT_RouterManager : NSObject
+#define YLT_ROUTER_PREFIX @"ylt://"
+//回调的KEY
+#define YLT_ROUTER_COMPLETION @"YLT_ROUTER_COMPLETION"
+
+
+#define YLT_ROUTER_CLS_NAME @"YLT_ROUTER_CLS_NAME"
+#define YLT_ROUTER_SEL_NAME @"YLT_ROUTER_SEL_NAME"
+#define YLT_ROUTER_ARG_DATA @"YLT_ROUTER_ARG_DATA"
+
+@interface NSObject (YLT_Router)
 
 /**
  注册web路由
-
+ 
  @param webRouter webRouter
  */
-+ (void)registerWebRouter:(NSString *)webRouter;
+- (void)registerWebRouter:(NSString *)webRouter;
 
 /**
  路由  默认路由实例方法
-
+ 
  @param routerURL 路由的URL,参数带到URL后面,默认路由实例方法  NSString *routerURL = @"ylt://classname/selectorname?username=alex&password=123456";
  @param arg 参数
  @param completion 回调
  @return 回参
  */
-+ (id)ylt_routerToURL:(NSString *)routerURL arg:(id)arg completion:(void(^)(NSError *error, id response))completion;
+- (id)ylt_routerToURL:(NSString *)routerURL arg:(id)arg completion:(void(^)(NSError *error, id response))completion;
 
 /**
  路由
@@ -35,18 +44,18 @@
  @param completion 回调
  @return 回参
  */
-+ (id)ylt_routerToURL:(NSString *)routerURL isClassMethod:(BOOL)isClassMethod arg:(id)arg completion:(void(^)(NSError *error, id response))completion;
+- (id)ylt_routerToURL:(NSString *)routerURL isClassMethod:(BOOL)isClassMethod arg:(id)arg completion:(void(^)(NSError *error, id response))completion;
 
 /**
  路由  默认路由实例方法
-
+ 
  @param clsname 路由到对应的classname
  @param selname 方法名对应的字串 后面可以带参数
  @param arg 参数
  @param completion 回调
  @return 回参
  */
-+ (id)ylt_routerToClassname:(NSString *)clsname selname:(NSString *)selname arg:(id)arg completion:(void(^)(NSError *error, id response))completion;
+- (id)ylt_routerToClassname:(NSString *)clsname selname:(NSString *)selname arg:(id)arg completion:(void(^)(NSError *error, id response))completion;
 
 /**
  路由
@@ -58,15 +67,15 @@
  @param completion 回调
  @return 回参
  */
-+ (id)ylt_routerToClassname:(NSString *)clsname selname:(NSString *)selname isClassMethod:(BOOL)isClassMethod arg:(id)arg completion:(void(^)(NSError *error, id response))completion;
+- (id)ylt_routerToClassname:(NSString *)clsname selname:(NSString *)selname isClassMethod:(BOOL)isClassMethod arg:(id)arg completion:(void(^)(NSError *error, id response))completion;
 
 
 /**
  路由数据分析
-
+ 
  @param routerURL 路由地址
  @return 数据
  */
-+ (NSDictionary *)analysisURL:(NSString *)routerURL;
+- (NSDictionary *)analysisURL:(NSString *)routerURL;
 
 @end

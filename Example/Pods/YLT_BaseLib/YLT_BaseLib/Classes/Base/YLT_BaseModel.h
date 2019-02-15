@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MJExtension/MJExtension.h>
 
 @interface YLT_BaseModel : NSObject<NSCopying>
 
@@ -13,14 +14,6 @@
  源数据
  */
 @property (nonatomic, strong) id ylt_sourceData;
-
-/**
- 字典转模型
-
- @param data 字典
- @return 模型
- */
-+ (instancetype)ylt_objectWithKeyValues:(id)data;
 
 /**
  返回当前ORM映射

@@ -8,8 +8,6 @@
 #ifndef YLT_BaseMacro_h
 #define YLT_BaseMacro_h
 
-#import <LGAlertView/LGAlertView.h>
-
 /// iOS设备信息
 #define iPad ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
 #define iPhone ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
@@ -83,7 +81,7 @@
 #define YLT_DOCUMENT_PATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define YLT_CACHE_PATH [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
-#define YLT_TipAlert(_S_, ...) [[LGAlertView alertViewWithTitle:[NSString stringWithFormat:(_S_), ##__VA_ARGS__] message:nil style:LGAlertViewStyleAlert buttonTitles:nil cancelButtonTitle:@"确定" destructiveButtonTitle:nil actionHandler:nil cancelHandler:nil destructiveHandler:^(LGAlertView * _Nonnull alertView) {}] show];
+#define YLT_TipAlert(_S_, ...) [[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:(_S_), ##__VA_ARGS__] message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] show];
 
 #if DEBUG
 //输出日志信息
@@ -156,12 +154,14 @@
 ([[NSNotificationCenter defaultCenter] postNotificationName:_name object:_obj userInfo:_infos])
 
 //快速生成单例对象
-#define YLT_ShareInstanceHeader(cls)    + (cls *)shareInstance;
+#define YLT_ShareInstanceHeader(cls)    + (cls *)shareInstance;\
+                                        + (void)resetInstance;
 #define YLT_ShareInstance(cls)          static cls *share_cls = nil;\
+                                        static dispatch_once_t share_onceToken;\
+                                        static dispatch_once_t ylt_init_onceToken;\
                                         + (cls *)shareInstance {\
-                                                static dispatch_once_t onceToken;\
-                                                dispatch_once(&onceToken, ^{\
-                                                    share_cls = [[cls alloc] init];\
+                                                share_cls = [[cls alloc] init];\
+                                                dispatch_once(&ylt_init_onceToken, ^{\
                                                     if ([share_cls respondsToSelector:@selector(ylt_init)]) {\
                                                         [share_cls performSelector:@selector(ylt_init) withObject:nil];\
                                                     }\
@@ -170,12 +170,16 @@
                                             }\
                                             + (instancetype)allocWithZone:(struct _NSZone *)zone {\
                                                 if (share_cls == nil) {\
-                                                    static dispatch_once_t onceToken;\
-                                                    dispatch_once(&onceToken, ^{\
+                                                    dispatch_once(&share_onceToken, ^{\
                                                         share_cls = [super allocWithZone:zone];\
                                                     });\
                                                 }\
                                                 return share_cls;\
+                                            }\
+                                            + (void)resetInstance {\
+                                                share_onceToken = 0;\
+                                                ylt_init_onceToken = 0;\
+                                                share_cls = nil;\
                                             }
 //懒加载宏定义
 

@@ -8,10 +8,10 @@
 #import "NSArray+YLT_Log.h"
 
 @implementation NSArray (YLT_Log)
-
+#ifdef DEBUG
 /**
  改写数组的日志打印
-
+ 
  @param locale 本地化
  @return 打印的字串
  */
@@ -24,5 +24,5 @@
     [strM appendString:@")"];
     return strM;
 }
-
+#endif
 @end

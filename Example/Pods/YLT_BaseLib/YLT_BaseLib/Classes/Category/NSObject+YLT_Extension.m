@@ -13,26 +13,65 @@
 #import <MJExtension/MJExtension.h>
 #import <FastCoding/FastCoder.h>
 
+@interface XXObserverRemover : NSObject {
+    __strong NSMutableArray *_centers;
+    __unsafe_unretained id _obs;
+}
+@end
+@implementation XXObserverRemover
+
+- (instancetype)initWithObserver:(id)obs {
+    if (self = [super init]) {
+        _obs = obs;
+        _centers = @[].mutableCopy;
+    }
+    return self;
+}
+
+- (void)addCenter:(NSNotificationCenter*)center {
+    if (center && ![_centers containsObject:center]) {
+        [_centers addObject:center];
+    }
+}
+
+- (void)dealloc {
+    @autoreleasepool {
+        for (NSNotificationCenter *center in _centers) {
+            [center removeObserver:_obs];
+        }
+    }
+}
+
+@end
+
+void addCenterForObserver(NSNotificationCenter *center ,id obs) {
+    XXObserverRemover *remover = nil;
+    static char removerKey;
+    @autoreleasepool {
+        remover = objc_getAssociatedObject(obs, &removerKey);
+        if (!remover) {
+            remover = [[XXObserverRemover alloc] initWithObserver:obs];
+            objc_setAssociatedObject(obs, &removerKey, remover, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        }
+        [remover addCenter:center];
+    }
+    
+}
+
 @implementation NSObject (YLT_Extension)
 
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [UIView ylt_swizzleInstanceMethod:NSSelectorFromString(@"dealloc") withMethod:@selector(ylt_dealloc)];
-        [UIViewController ylt_swizzleInstanceMethod:NSSelectorFromString(@"dealloc") withMethod:@selector(ylt_dealloc)];
+        [NSNotificationCenter ylt_swizzleInstanceMethod:@selector(addObserver:selector:name:object:) withMethod:@selector(ylt_addObserver:selector:name:object:)];
     });
 }
 
-- (void)ylt_dealloc {
-    if ([self isKindOfClass:UIView.class] ||
-        [self isKindOfClass:UIViewController.class]) {
-        if ([self isKindOfClass:UIViewController.class]) {
-            YLT_LogInfo(@"%@ dealloc is safe", NSStringFromClass(self.class));
-        }
-        YLT_RemoveNotificationObserver();
+- (void)ylt_addObserver:(id)observer selector:(SEL)aSelector name:(nullable NSNotificationName)aName object:(nullable id)anObject{
+    [self ylt_addObserver:observer selector:aSelector name:aName object:anObject];
+    if ([observer isKindOfClass:[UIViewController class]] || [observer isKindOfClass:[UIView class]]) {
+        addCenterForObserver(self, observer);
     }
-    
-    [self ylt_dealloc];
 }
 
 /**

@@ -400,46 +400,8 @@
         retTime = time / 3600;
         retTime = retTime <= 0.0 ? 1.0 : retTime;
         return [NSString stringWithFormat:@"%.0f小时前", floor(retTime)];
-    } else if (time < 3600 * 24 * 2) {
-        return @"昨天";
     }
-    // 第一个条件是同年，且相隔时间在一个月内
-    // 第二个条件是隔年，对于隔年，只能是去年12月与今年1月这种情况
-    else if ((abs(year) == 0 && abs(month) <= 1)
-             || (abs(year) == 1 && [curDate ylt_month] == 1 && [self ylt_month] == 12)) {
-        int retDay = 0;
-        if (year == 0) { // 同年
-            if (month == 0) { // 同月
-                retDay = day;
-            }
-        }
-        
-        if (retDay <= 0) {
-            // 获取发布日期中，该月有多少天
-            int totalDays = (int)[self ylt_daysInMonth];
-            
-            // 当前天数 + （发布日期月中的总天数-发布日期月中发布日，即等于距离今天的天数）
-            retDay = (int)[curDate ylt_day] + (totalDays - (int)[self ylt_day]);
-        }
-        
-        return [NSString stringWithFormat:@"%d天前", (abs)(retDay)];
-    } else  {
-        if (abs(year) <= 1) {
-            if (year == 0) { // 同年
-                return [NSString stringWithFormat:@"%d个月前", abs(month)];
-            }
-            
-            // 隔年
-            int month = (int)[curDate ylt_month];
-            int preMonth = (int)[self ylt_month];
-            if (month == 12 && preMonth == 12) {// 隔年，但同月，就作为满一年来计算
-                return @"1年前";
-            }
-            return [NSString stringWithFormat:@"%d个月前", (abs)(12 - preMonth + month)];
-        }
-        return [NSString stringWithFormat:@"%d年前", abs(year)];
-    }
-    return @"1小时前";
+    return [self ylt_stringWithFormat:@"yyyy-MM-dd HH:mm"];
 }
 
 - (NSString *)ylt_timeInfo {
@@ -452,67 +414,7 @@
 
 + (NSString *)ylt_timeInfoWithDateString:(NSString *)dateString {
     NSDate *date = [self ylt_dateWithString:dateString format:@"yyyy-MM-dd HH:mm:ss"];
-    
-    NSDate *curDate = [NSDate date];
-    NSTimeInterval time = -[date timeIntervalSinceDate:curDate];
-    
-    int month = (int)([curDate ylt_month] - [date ylt_month]);
-    int year = (int)([curDate ylt_year] - [date ylt_year]);
-    int day = (int)([curDate ylt_day] - [date ylt_day]);
-    
-    NSTimeInterval retTime = 1.0;
-    if (time < 3600) { // 小于一小时
-        if (time < 60) {
-            return @"刚刚";
-        }
-        retTime = time/60;
-        return [NSString stringWithFormat:@"%ld分钟前", (long)retTime];
-    } else if (time < 3600 * 24) { // 小于一天，也就是今天
-        retTime = time / 3600;
-        retTime = retTime <= 0.0 ? 1.0 : retTime;
-        return [NSString stringWithFormat:@"%.0f小时前", retTime];
-    } else if (time < 3600 * 24 * 2) {
-        return @"昨天";
-    }
-    // 第一个条件是同年，且相隔时间在一个月内
-    // 第二个条件是隔年，对于隔年，只能是去年12月与今年1月这种情况
-    else if ((abs(year) == 0 && abs(month) <= 1)
-             || (abs(year) == 1 && [curDate ylt_month] == 1 && [date ylt_month] == 12)) {
-        int retDay = 0;
-        if (year == 0) { // 同年
-            if (month == 0) { // 同月
-                retDay = day;
-            }
-        }
-        
-        if (retDay <= 0) {
-            // 获取发布日期中，该月有多少天
-            int totalDays = (int)[self ylt_daysInMonth:date month:[date ylt_month]];
-            
-            // 当前天数 + （发布日期月中的总天数-发布日期月中发布日，即等于距离今天的天数）
-            retDay = (int)[curDate ylt_day] + (totalDays - (int)[date ylt_day]);
-        }
-        
-        return [NSString stringWithFormat:@"%d天前", (abs)(retDay)];
-    } else  {
-        if (abs(year) <= 1) {
-            if (year == 0) { // 同年
-                return [NSString stringWithFormat:@"%d个月前", abs(month)];
-            }
-            
-            // 隔年
-            int month = (int)[curDate ylt_month];
-            int preMonth = (int)[date ylt_month];
-            if (month == 12 && preMonth == 12) {// 隔年，但同月，就作为满一年来计算
-                return @"1年前";
-            }
-            return [NSString stringWithFormat:@"%d个月前", (abs)(12 - preMonth + month)];
-        }
-        
-        return [NSString stringWithFormat:@"%d年前", abs(year)];
-    }
-    
-    return @"1小时前";
+    return date.ylt_timeDetail;
 }
 
 + (NSInteger)ylt_getDaysFrom:(NSDate *)serverDate To:(NSDate *)endDate {

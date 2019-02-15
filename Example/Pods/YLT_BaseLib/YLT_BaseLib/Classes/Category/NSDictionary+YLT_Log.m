@@ -8,7 +8,7 @@
 #import "NSDictionary+YLT_Log.h"
 
 @implementation NSDictionary (YLT_Log)
-
+#ifdef DEBUG
 /**
  改写字典的日志打印
  
@@ -23,5 +23,5 @@
     [strM appendString:@"}\n"];
     return strM;
 }
-
+#endif
 @end

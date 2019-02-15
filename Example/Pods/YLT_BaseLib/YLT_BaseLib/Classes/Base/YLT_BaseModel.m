@@ -10,6 +10,7 @@
 #import "YLT_BaseMacro.h"
 #import <objc/message.h>
 #import "NSString+YLT_Extension.h"
+#import "NSObject+YLT_Extension.h"
 
 #define OBJECT_MEMORY_KEY [NSString stringWithFormat:@"YLT_OBJECT_SYSTEM_%@_%@", YLT_BundleIdentifier, NSStringFromClass([self class])]
 #define GROUP_MEMORY_KEY [NSString stringWithFormat:@"YLT_GROUP_SYSTEM_%@_%@", YLT_BundleIdentifier, NSStringFromClass([self class])]
@@ -21,15 +22,11 @@
     return [[self class] mj_objectWithKeyValues:self.mj_keyValues];
 }
 
-/**
- 字典转模型
- 
- @param data 字典
- @return 模型
- */
-+ (instancetype)ylt_objectWithKeyValues:(id)data {
-    YLT_BaseModel *res = [self mj_objectWithKeyValues:data];
-    res.ylt_sourceData = data;
++ (instancetype)mj_objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context{
+    YLT_BaseModel *res = [super mj_objectWithKeyValues:keyValues context:context];
+    if ([res respondsToSelector:@selector(setYlt_sourceData:)]) {
+        res.ylt_sourceData = keyValues;
+    }
     return res;
 }
 
@@ -83,7 +80,7 @@
         return NO;
     }
     
-    NSDictionary *data = self.mj_keyValues;
+    NSDictionary *data = [self.mj_JSONString stringByReplacingOccurrencesOfString:@"<null>" withString:@""].mj_keyValues;
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:key];
     return [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -109,21 +106,25 @@
         if ([[[NSUserDefaults standardUserDefaults] dictionaryRepresentation].allKeys containsObject:key]) {
             data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
         }
-        if (![[self class] respondsToSelector:@selector(mj_objectWithKeyValues:)] || ![data isKindOfClass:[NSDictionary class]]) {
-            YLT_LogWarn(@"对象异常");
+        if ([data isKindOfClass:[NSString class]] && [data respondsToSelector:@selector(mj_JSONObject)]) {
+            data = data.mj_JSONObject;
+        }
+        if ([[self class] respondsToSelector:@selector(mj_objectWithKeyValues:)] && [data isKindOfClass:[NSDictionary class]]) {
+            id result = nil;
+            if (data) {
+                @try {
+                    result = [[self class] mj_objectWithKeyValues:data];
+                } @catch (NSException *exception) {
+                    YLT_LogError(@"%@", exception);
+                } @finally {
+                    return result;
+                }
+            }
+            return result;
+        } else {
+            YLT_LogError(@"对象异常");
             return nil;
         }
-        id result = nil;
-        if (data) {
-            @try {
-                result = [[self class] mj_objectWithKeyValues:data];
-            } @catch (NSException *exception) {
-                YLT_LogError(@"%@", exception);
-            } @finally {
-                return result;
-            }
-        }
-        return result;
     }
     return nil;
 }
@@ -150,6 +151,9 @@
             data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
         }
         if (data) {
+            if ([data isKindOfClass:[NSString class]] && [data respondsToSelector:@selector(mj_JSONObject)]) {
+                data = data.mj_JSONObject;
+            }
             if (![self respondsToSelector:@selector(mj_setKeyValues:)] || ![data isKindOfClass:[NSDictionary class]]) {
                 YLT_LogWarn(@"对象异常");
                 return NO;

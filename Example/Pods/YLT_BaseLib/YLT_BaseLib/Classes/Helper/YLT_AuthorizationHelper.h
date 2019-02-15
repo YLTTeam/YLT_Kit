@@ -61,7 +61,10 @@ typedef NS_ENUM(NSInteger, ylt_authorizationType) {
      *  蓝牙共享/Bluetooth
      */
     YLT_Bluetooth,
-    
+    /**
+     * 通知权限
+     */
+    YLT_Notification,
 };
 
 @interface YLT_AuthorizationHelper : NSObject

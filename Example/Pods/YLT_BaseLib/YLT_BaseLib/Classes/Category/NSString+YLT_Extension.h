@@ -315,6 +315,13 @@
 - (UIColor *)ylt_colorFromHexString;
 
 /**
+ 将当前字符串转化为颜色值 argb 形式
+ 
+ @return 颜色值
+ */
+- (UIColor *)ylt_androidColorFromHexString;
+
+/**
  字符串是否包含特殊字符
  
  @return YES:包含 NO:不包含

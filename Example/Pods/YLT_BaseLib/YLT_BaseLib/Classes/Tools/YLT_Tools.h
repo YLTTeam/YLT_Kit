@@ -27,13 +27,6 @@
 + (NSDictionary *)ylt_dictionaryFromString:(NSString *)jsonString;
 
 /**
- 显示跳转设置提示
-
- @param title 标题
- */
-+ (void)ylt_showSettingTitle:(NSString *)title;
-
-/**
  生成6位随机码 （数字和英文）
  
  @return 随机码
@@ -48,5 +41,14 @@
  @return 随机码
  */
 + (NSString *)ylt_makeCodeIsNumber:(BOOL)isNumber length:(NSInteger)length;
+
+/**
+ 从framework中加载类别
+
+ @param frameworkPath framework的地址
+ @param classname 类名
+ @return 类
+ */
++ (Class)ylt_loadClassFromFrameworkPath:(NSString *)frameworkPath classname:(NSString *)classname;
 
 @end

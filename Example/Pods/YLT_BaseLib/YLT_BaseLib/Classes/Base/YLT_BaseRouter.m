@@ -7,6 +7,7 @@
 
 #import "YLT_BaseRouter.h"
 #import "YLT_BaseMacro.h"
+#import "NSObject+YLT_Router.h"
 
 @interface YLT_BaseRouter () {
 }
@@ -24,9 +25,6 @@
 }
 
 - (void(^)(NSError *error, id response))completion {
-    if (_completion) {
-        return _completion;
-    }
     if ([self.ylt_router_params.allKeys containsObject:YLT_ROUTER_COMPLETION]) {
         _completion = self.ylt_router_params[YLT_ROUTER_COMPLETION];
     } else {

@@ -106,6 +106,11 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
             [self ylt_bluetoothAccessSuccess:success
                                       failed:failed];
             break;
+        case YLT_Notification: {
+            [self ylt_notificationSuccess:success
+                                   failed:failed];
+        }
+            break;
             
         default:
             NSAssert(!1, @"该方法暂不提供");
@@ -473,7 +478,7 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
 
 #pragma mark - Bluetooth
 - (void)ylt_bluetoothAccessSuccess:(void(^)(void))success
-                            failed:(void(^)(void))failed{
+                            failed:(void(^)(void))failed {
     CBPeripheralManagerAuthorizationStatus authStatus = [CBPeripheralManager authorizationStatus];
     if (authStatus == CBPeripheralManagerAuthorizationStatusNotDetermined) {
         
@@ -485,6 +490,17 @@ YLT_ShareInstance(YLT_AuthorizationHelper);
         success ? success() : nil;
     }else{
         failed ? failed() : nil;
+    }
+}
+
+#pragma mark - notification
+- (void)ylt_notificationSuccess:(void(^)(void))success
+                         failed:(void(^)(void))failed {
+    UIUserNotificationSettings *setting = [[UIApplication sharedApplication] currentUserNotificationSettings];
+    if (setting.types != UIUserNotificationTypeNone) {
+        success();
+    } else {
+        failed();
     }
 }
 
