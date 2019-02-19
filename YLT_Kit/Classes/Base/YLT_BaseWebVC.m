@@ -89,7 +89,6 @@ YLT_ShareInstance(YLT_WKProcessPool);
         [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self);
         }];
-        
         @weakify(self);
         _progressLayer = [CALayer layer];
         self.progressLayer.frame = CGRectMake(0, 0, 0, 2);
