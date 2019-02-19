@@ -112,10 +112,6 @@ YLT_ShareInstance(YLT_WKProcessPool);
     return self;
 }
 
-- (void)dealloc {
-    YLT_Log(@"--- BaseWebView dealloc");
-}
-
 /**
  JS给OC发送数据 （JS调用OC的方法）
  
