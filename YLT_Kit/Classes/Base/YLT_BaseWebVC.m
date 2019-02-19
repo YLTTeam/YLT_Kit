@@ -15,7 +15,7 @@
 /**
  观察的对象名称列表
  */
-@property (nonatomic, strong) NSArray *observers;
+@property (nonatomic, weak) NSArray *observers;
 @end
 
 @implementation YLT_WKWebView
