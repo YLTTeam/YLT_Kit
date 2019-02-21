@@ -484,7 +484,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
         WKPreferences *preferences = [WKPreferences new];
         //在iOS上默认为NO，表示不能自动通过窗口打开
         preferences.javaScriptCanOpenWindowsAutomatically = YES;
-        preferences.minimumFontSize = 10.0;
+        preferences.minimumFontSize = 0.0;
         preferences.javaScriptEnabled = YES;
         _configuration.preferences = preferences;
         // web内容处理池，由于没有属性可以设置，也没有方法可以调用，不用手动创建
