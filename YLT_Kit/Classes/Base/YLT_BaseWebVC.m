@@ -488,7 +488,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
         preferences.javaScriptEnabled = YES;
         _configuration.preferences = preferences;
         // web内容处理池，由于没有属性可以设置，也没有方法可以调用，不用手动创建
-        _configuration.processPool = [YLT_WKProcessPool shareInstance];
+        _configuration.processPool = [WKProcessPool new];//[YLT_WKProcessPool shareInstance];
     }
     return _configuration;
 }
