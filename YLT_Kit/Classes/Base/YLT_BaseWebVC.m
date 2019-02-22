@@ -684,7 +684,6 @@ YLT_ShareInstance(YLT_WKProcessPool);
 }
 
 - (void)dealloc {
-    [self ylt_removeAllObserMessageHandlers];
 }
 
 - (NSDictionary *)analysisURL:(NSString *)url {
