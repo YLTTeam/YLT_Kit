@@ -1,6 +1,6 @@
 {
   "name": "YLT_Kit",
-  "version": "0.3.17",
+  "version": "0.3.13",
   "summary": "YLT_Kit. 基础的kit框架",
   "description": "平常使用的基础kit框架封装",
   "homepage": "https://github.com/YLTTeam/ylt_kit",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/YLTTeam/ylt_kit.git",
-    "tag": "0.3.17"
+    "tag": "0.3.13"
   },
   "platforms": {
     "ios": "8.0"

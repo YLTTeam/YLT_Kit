@@ -39,27 +39,27 @@
 //    NSLog(@"%f , imagesize:%zd, resSize:%zd", end-start, UIImageJPEGRepresentation(image, 0.9).length/1024, res.length/1024);
     
 //    self.view.backgroundColor = [UIColor redColor];
-//    self.imageview = UIImageView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
-//        make.center.equalTo(self.view);
-//    }).ylt_backgroundColor(UIColor.clearColor)
-//    .ylt_convertToImageView()
-//    .ylt_image([UIImage ylt_imageNamed:@"icon_wifi"])
-//    .ylt_contentMode(UIViewContentModeCenter);
-//    @weakify(self);
-//
-//
-//    UISlider *mySlider = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, 280, 44)];
-//    mySlider.minimumValue = -100;
-//    mySlider.maximumValue = 100;
-//    [self.view addSubview:mySlider];
-//    [mySlider mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.right.top.equalTo(self.view).inset(16);
-//        make.height.mas_equalTo(44);
-//    }];
-//    [[mySlider rac_signalForControlEvents:UIControlEventValueChanged] subscribeNext:^(__kindof UISlider * _Nullable x) {
-//        @strongify(self);
-//        self.imageFilter.filterValue = x.value;
-//    }];
+    self.imageview = UIImageView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+        make.center.equalTo(self.view);
+    }).ylt_backgroundColor(UIColor.clearColor)
+    .ylt_convertToImageView()
+    .ylt_image([UIImage ylt_imageNamed:@"icon_wifi"])
+    .ylt_contentMode(UIViewContentModeCenter);
+    @weakify(self);
+
+    
+    UISlider *mySlider = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, 280, 44)];
+    mySlider.minimumValue = -100;
+    mySlider.maximumValue = 100;
+    [self.view addSubview:mySlider];
+    [mySlider mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(self.view).inset(16);
+        make.height.mas_equalTo(44);
+    }];
+    [[mySlider rac_signalForControlEvents:UIControlEventValueChanged] subscribeNext:^(__kindof UISlider * _Nullable x) {
+        @strongify(self);
+        self.imageFilter.filterValue = x.value;
+    }];
 //    UILabel
 //    .ylt_layout(self.view, ^(MASConstraintMaker *make) {
 //        make.edges.equalTo(self.view);
@@ -166,17 +166,17 @@
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-//    @weakify(self);
-//    self.imageFilter = [YLT_ImageFilter filterImage:[UIImage imageNamed:@"icon_wifi"] filterType:YLT_ImageFilterTypeTemperatureAndTint value:0.0 value2:0.0 completion:^(UIImage *outputImage) {
-//        @strongify(self);
-//        self.imageview.image = outputImage;
-//    }];
-//    return;
-//
-//    [NSURLProtocol ylt_registerScheme:@"http"];
-//    [NSURLProtocol ylt_registerScheme:@"https"];
+    @weakify(self);
+    self.imageFilter = [YLT_ImageFilter filterImage:[UIImage imageNamed:@"icon_wifi"] filterType:YLT_ImageFilterTypeTemperatureAndTint value:0.0 value2:0.0 completion:^(UIImage *outputImage) {
+        @strongify(self);
+        self.imageview.image = outputImage;
+    }];
+    return;
     
-    YLT_BaseWebVC *vc = [YLT_BaseWebVC ylt_webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index2.html"];
+    [NSURLProtocol ylt_registerScheme:@"http"];
+    [NSURLProtocol ylt_registerScheme:@"https"];
+    
+    YLT_BaseWebVC *vc = [YLT_BaseWebVC ylt_webVCFromURLString:@"https://static.ultimavip.cn/marketing/test/index2.html?navigationBarHidden=1"];
 //    [[vc.webView webView] evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
 //        NSString *userAgent = result;
 //        NSString *newUserAgent = [userAgent stringByAppendingString:@" black_magic "];
