@@ -11,35 +11,6 @@
 #import <ReactiveObjC/ReactiveObjC.h>
 #import <Aspects/Aspects.h>
 
-@interface YLT_WKWebView : WKWebView
-/**
- 观察的对象名称列表
- */
-@property (nonatomic, strong) NSArray *observers;
-@end
-
-@implementation YLT_WKWebView
-
-- (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration{
-    if (self = [super initWithFrame:frame configuration:configuration]) {
-        NSError *error = nil;
-        @weakify(self);
-        [self aspect_hookSelector:NSSelectorFromString(@"dealloc") withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info) {
-            @strongify(self);
-            [self stopLoading];
-            self.UIDelegate = nil;
-            self.navigationDelegate = nil;
-            [self.configuration.userContentController removeAllUserScripts];
-            [self.observers enumerateObjectsUsingBlock:^(NSString *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                [self.configuration.userContentController removeScriptMessageHandlerForName:obj];
-            }];
-        } error:&error];
-    }
-    return self;
-}
-
-@end
-
 @interface YLT_WKProcessPool : WKProcessPool
 YLT_ShareInstanceHeader(YLT_WKProcessPool);
 @end
@@ -49,7 +20,6 @@ YLT_ShareInstance(YLT_WKProcessPool);
 
 - (void)ylt_init {
 }
-
 @end
 
 
@@ -82,7 +52,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        _webView = [[YLT_WKWebView alloc] initWithFrame:self.bounds configuration:self.configuration];
+        _webView = [[WKWebView alloc] initWithFrame:self.bounds configuration:self.configuration];
         [self addSubview:self.webView];
         self.webView.UIDelegate = self;
         self.webView.navigationDelegate = self;
@@ -105,10 +75,17 @@ YLT_ShareInstance(YLT_WKProcessPool);
         }];
         
         self.ylt_tap(self, @selector(tapAction:));
-        YLT_WKWebView *tmpview = (YLT_WKWebView *)_webView;
-        RAC(tmpview,observers) = RACObserve(self, observers);
     }
     return self;
+}
+
+- (void)dealloc {
+    [self.webView stopLoading];
+    self.webView.UIDelegate = nil;
+    self.webView.navigationDelegate = nil;
+    [self.configuration.userContentController removeAllUserScripts];
+    [self.webView.configuration.userContentController removeAllUserScripts];
+    [self ylt_removeAllObserMessageHandlers];
 }
 
 /**
@@ -488,7 +465,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
         preferences.javaScriptEnabled = YES;
         _configuration.preferences = preferences;
         // web内容处理池，由于没有属性可以设置，也没有方法可以调用，不用手动创建
-        _configuration.processPool = [WKProcessPool new];//[YLT_WKProcessPool shareInstance];
+        _configuration.processPool = [YLT_WKProcessPool shareInstance];
     }
     return _configuration;
 }
