@@ -18,6 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)registerCell:(NSArray<NSString *> *)cellClassNames;
 
+/**
+ 批量注册HeaderFooterView
+ 
+ @param headerFooterClassNames headerFooter的类型名称列表
+ */
+- (void)registerHeaderFooterView:(NSArray<NSString *> *)headerFooterClassNames;
+
 @end
 
 NS_ASSUME_NONNULL_END
