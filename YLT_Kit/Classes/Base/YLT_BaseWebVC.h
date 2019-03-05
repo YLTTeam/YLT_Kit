@@ -76,6 +76,10 @@
  */
 @property (nonatomic, strong, readonly) WKWebView *webView;
 /**
+ 进度条的颜色
+ */
+@property (nonatomic, strong) UIColor *progressColor;
+/**
  加载失败的占位图
  */
 @property (nonatomic, strong) UIView *loadingFailedView;

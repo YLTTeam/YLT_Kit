@@ -62,7 +62,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
         @weakify(self);
         _progressLayer = [CALayer layer];
         self.progressLayer.frame = CGRectMake(0, 0, 0, 2);
-        self.progressLayer.backgroundColor = [UIColor blueColor].CGColor;
+        self.progressLayer.backgroundColor = self.progressColor?self.progressColor.CGColor:UIColor.blueColor.CGColor;
         [self.layer addSublayer:self.progressLayer];
         [[self.webView rac_valuesForKeyPath:@"estimatedProgress" observer:self] subscribeNext:^(id  _Nullable x) {
             @strongify(self);
@@ -427,6 +427,11 @@ YLT_ShareInstance(YLT_WKProcessPool);
 }
 
 #pragma mark - getter
+
+- (void)setProgressColor:(UIColor *)progressColor {
+    _progressColor = progressColor;
+    self.progressLayer.backgroundColor = progressColor.CGColor;
+}
 
 - (UIView *)loadingFailedView {
     if (!_loadingFailedView) {
