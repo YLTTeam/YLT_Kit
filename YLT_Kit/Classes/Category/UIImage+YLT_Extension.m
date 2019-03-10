@@ -970,7 +970,7 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
  */
 - (UIImage *)ylt_imageAngle:(CGFloat)angle {
     CGSize imgSize = {self.size.width, self.size.height};
-    UIGraphicsBeginImageContextWithOptions(imgSize, YES, [UIScreen mainScreen].scale);
+    UIGraphicsBeginImageContextWithOptions(imgSize, NO, [UIScreen mainScreen].scale);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextTranslateCTM(context, self.size.width/2, self.size.height/2);
     CGContextScaleCTM(context, 1.0, -1.0);
