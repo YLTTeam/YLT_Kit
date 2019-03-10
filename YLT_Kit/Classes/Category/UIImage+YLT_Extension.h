@@ -209,4 +209,13 @@
  @return 转换后的图片资源数组
  */
 + (NSArray <UIImage *>*)imgArrFromGif:(NSData *)data;
+
+/**
+ 旋转自定义角度
+
+ @param angle 角度
+ @return 图片
+ */
+- (UIImage *)ylt_imageAngle:(CGFloat)angle;
+
 @end

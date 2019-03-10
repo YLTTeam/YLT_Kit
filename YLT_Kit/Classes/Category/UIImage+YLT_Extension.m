@@ -961,4 +961,26 @@ static CGContextRef RequestImagePixelData(CGImageRef inImage) {
     CFRelease(source);
     return images;
 }
+
+/**
+ 旋转自定义角度
+ 
+ @param angle 角度
+ @return 图片
+ */
+- (UIImage *)ylt_imageAngle:(CGFloat)angle {
+    CGSize imgSize = {self.size.width, self.size.height};
+    UIGraphicsBeginImageContextWithOptions(imgSize, YES, [UIScreen mainScreen].scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(context, self.size.width/2, self.size.height/2);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    float radian = angle;
+    CGContextRotateCTM(context, radian);
+    CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(-self.size.width/2, -self.size.height/2, self.size.width, self.size.height), self.CGImage);
+    
+    UIImage *rotatedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return rotatedImage;
+}
+
 @end
