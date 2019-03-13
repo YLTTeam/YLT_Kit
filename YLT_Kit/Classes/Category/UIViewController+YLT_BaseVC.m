@@ -262,11 +262,6 @@
 
 - (void(^)(id))ylt_callback {
     void (^callback)(id) = objc_getAssociatedObject(self, @selector(ylt_callback));
-    if (!callback) {
-        callback = ^(id response) {
-            YLT_Log(@"%@", response);
-        };
-    }
     return callback;
 }
 
@@ -278,11 +273,6 @@
     void(^completion)(NSError *, id) = objc_getAssociatedObject(self, @selector(ylt_completion));
     if (!completion && self.ylt_params && self.ylt_params[YLT_ROUTER_COMPLETION]) {
         completion = self.ylt_params[YLT_ROUTER_COMPLETION];
-    }
-    if (!completion) {
-        completion = ^(NSError *error, id response) {
-            YLT_Log(@"%@  %@", error, response);
-        };
     }
     return completion;
 }
