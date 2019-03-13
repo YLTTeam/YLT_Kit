@@ -84,7 +84,9 @@
 }
 
 - (void)ylt_back {
-    self.ylt_callback(self.ylt_params);
+    if (self.ylt_callback) {
+        self.ylt_callback(self.ylt_params);
+    }
 }
 
 #pragma mark - setter/getter
