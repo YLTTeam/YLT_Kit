@@ -30,7 +30,7 @@ PODS:
     - FastCoding
     - FMDB
     - MJExtension
-  - YLT_Kit (0.3.24):
+  - YLT_Kit (0.3.25):
     - AFNetworking
     - Aspects
     - Masonry
@@ -70,7 +70,7 @@ SPEC CHECKSUMS:
   ReactiveObjC: 2a38ea15335de4119d8b17caf1db1484f61db902
   SDWebImage: ecc03494e973b93b80213649d32175f8d2d17d4d
   YLT_BaseLib: f15f3f7dd72cc0e996c499590f70fe97fe25d97f
-  YLT_Kit: 2f3730129eb201b52e26051313be7c2d762b4ad8
+  YLT_Kit: 12ff71128250e2608dae2ea8df9fd94dab111634
 
 PODFILE CHECKSUM: 65a474d3ca23e64c48d267336e751acf6a3ca453
 
