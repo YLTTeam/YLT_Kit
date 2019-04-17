@@ -582,7 +582,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
  移除所有的观察名称
  */
 - (void)ylt_removeAllObserMessageHandlers {
-    [self.webView ylt_removeAllObserMessageHandlers];
+    [_webView ylt_removeAllObserMessageHandlers];
 }
 
 /**
