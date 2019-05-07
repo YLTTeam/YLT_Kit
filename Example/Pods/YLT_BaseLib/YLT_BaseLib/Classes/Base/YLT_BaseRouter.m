@@ -20,7 +20,7 @@
  路由协议
  */
 - (id)ylt_router:(NSDictionary *)params {
-    YLT_LogError(@"路由类未实现路由方法");
+    YLT_LogWarn(@"路由类未实现路由方法");
     return self.ylt_router_params;
 }
 
@@ -29,7 +29,7 @@
         _completion = self.ylt_router_params[YLT_ROUTER_COMPLETION];
     } else {
         _completion = ^(NSError *error, id response) {
-            YLT_LogError(@"回调未接入");
+            YLT_LogWarn(@"回调未接入");
         };
     }
     return _completion;

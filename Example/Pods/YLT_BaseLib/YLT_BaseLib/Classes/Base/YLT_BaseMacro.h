@@ -8,6 +8,8 @@
 #ifndef YLT_BaseMacro_h
 #define YLT_BaseMacro_h
 
+#import "NSObject+YLT_ThreadSafe.h"
+
 /// iOS设备信息
 #define iPad ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
 #define iPhone ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
@@ -180,7 +182,8 @@
                                                 share_onceToken = 0;\
                                                 ylt_init_onceToken = 0;\
                                                 share_cls = nil;\
-                                            }
+                                            }\
+                                            YLT_THREAD_SAFE
 //懒加载宏定义
 
 #define YLT_Lazy(cls, sel, _sel) \

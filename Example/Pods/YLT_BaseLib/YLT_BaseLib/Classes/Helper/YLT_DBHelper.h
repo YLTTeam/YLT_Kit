@@ -17,11 +17,31 @@ YLT_ShareInstanceHeader(YLT_DBHelper);
 /**
  数据库路径
  */
-@property (nonatomic, strong) NSString *ylt_dbPath;
+@property (nonatomic, copy) NSString *ylt_dbPath;
 
 /**
  数据库队列
  */
 @property (nonatomic, strong) FMDatabaseQueue *ylt_databaseQueue;
+
+/**
+ 用户相关路径:可用 cardNum/userId 等
+ */
+@property (nonatomic, copy) NSString *ylt_userPath;
+
+/**
+ 数据库路径
+ */
+@property (nonatomic, copy) NSString *ylt_userDbPath;
+
+/**
+ 用户关联数据库
+ */
+@property (nonatomic, strong) FMDatabaseQueue *ylt_userDbQueue;
+
+/**
+ 重置用户关联数据库
+ */
+- (void)ylt_dbReset;
 
 @end

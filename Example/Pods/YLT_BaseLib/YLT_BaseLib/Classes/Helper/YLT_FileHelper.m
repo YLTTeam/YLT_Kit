@@ -52,7 +52,6 @@ YLT_ShareInstance(YLT_FileHelper);
             }
         }
     }
-    YLT_LogError(@"%@", filepath);
     return filepath;
 }
 

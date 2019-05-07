@@ -75,5 +75,4 @@ YLT_ShareInstanceHeader(YLT_AuthorizationHelper);
                       success:(void(^)(void))success
                        failed:(void(^)(void))failed;
 
-
 @end

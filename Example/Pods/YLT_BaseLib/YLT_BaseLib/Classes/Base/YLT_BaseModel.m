@@ -115,14 +115,14 @@
                 @try {
                     result = [[self class] mj_objectWithKeyValues:data];
                 } @catch (NSException *exception) {
-                    YLT_LogError(@"%@", exception);
+                    YLT_LogWarn(@"%@", exception);
                 } @finally {
                     return result;
                 }
             }
             return result;
         } else {
-            YLT_LogError(@"对象异常");
+            YLT_LogWarn(@"对象异常");
             return nil;
         }
     }
@@ -162,7 +162,7 @@
             @try {
                 [self mj_setKeyValues:data];
             } @catch (NSException *exception) {
-                YLT_LogError(@"%@", exception);
+                YLT_LogWarn(@"%@", exception);
             } @finally {
                 return YES;
             }
@@ -272,12 +272,5 @@
 }
 
 #pragma mark - setter getter
-
-//- (id)ylt_sourceData {
-//    if (!_ylt_sourceData) {
-//        _ylt_sourceData = self.mj_keyValues;
-//    }
-//    return _ylt_sourceData;
-//}
 
 @end

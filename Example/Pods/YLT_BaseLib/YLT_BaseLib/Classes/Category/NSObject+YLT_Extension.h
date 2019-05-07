@@ -8,7 +8,26 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#define YLT_LockBlock() dispatch_semaphore_wait(self.ylt_semaphoreBlock, DISPATCH_TIME_FOREVER);
+#define YLT_UnlockBlock() dispatch_semaphore_signal(self.ylt_semaphoreBlock);
+
+#define YLT_Lock() dispatch_semaphore_wait(self.ylt_semaphore, DISPATCH_TIME_FOREVER);
+#define YLT_Unlock() dispatch_semaphore_signal(self.ylt_semaphore);
+
+void ylt_swizzleClassMethod(Class cls, SEL originSelector, SEL newSelector);
+void ylt_swizzleInstanceMethod(Class cls, SEL originSelector, SEL newSelector);
+
 @interface NSObject (YLT_Extension)
+
+/**
+ 用来保证线程安全
+ */
+@property (nonatomic, strong) dispatch_semaphore_t ylt_semaphore;
+
+/**
+ 用来保证线程安全
+ */
+@property (nonatomic, strong) dispatch_semaphore_t ylt_semaphoreBlock;
 
 /**
  获取当前的控制器

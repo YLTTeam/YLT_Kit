@@ -7,8 +7,50 @@
 //
 
 #import "UINavigationController+YLT_Extension.h"
+#import <YLT_BaseLib/YLT_BaseLib.h>
 
 @implementation UINavigationController (YLT_Extension)
+
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self ylt_swizzleInstanceMethod:@selector(popViewControllerAnimated:) withMethod:@selector(ylt_popViewControllerAnimated:)];
+        [self ylt_swizzleInstanceMethod:@selector(pushViewController:animated:) withMethod:@selector(ylt_pushViewController:animated:)];
+    });
+}
+
+- (void)ylt_pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    if (self.ylt_prohibitPushPop) {
+        return;
+    }
+    
+    self.ylt_prohibitPushPop = YES;
+    [self ylt_pushViewController:viewController animated:animated];
+    [CATransaction setCompletionBlock:^{
+        self.ylt_prohibitPushPop = NO;
+    }];
+}
+
+- (nullable UIViewController *)ylt_popViewControllerAnimated:(BOOL)animated {
+    if (self.ylt_prohibitPushPop) {
+        return nil;
+    }
+    
+    self.ylt_prohibitPushPop = YES;
+    UIViewController *vc = [self ylt_popViewControllerAnimated:animated];
+    [CATransaction setCompletionBlock:^{
+        self.ylt_prohibitPushPop = NO;
+    }];
+    return vc;
+}
+
+- (BOOL)ylt_prohibitPushPop {
+    return [objc_getAssociatedObject(self, @selector(ylt_prohibitPushPop)) boolValue];
+}
+
+- (void)setYlt_prohibitPushPop:(BOOL)ylt_prohibitPushPop {
+    objc_setAssociatedObject(self, @selector(ylt_prohibitPushPop), @(ylt_prohibitPushPop), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 /**
  寻找Navigation中的某个viewControler对象
