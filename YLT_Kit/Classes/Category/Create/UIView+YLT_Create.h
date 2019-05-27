@@ -91,6 +91,7 @@
 - (UIImageView *(^)(void))ylt_convertToImageView;
 - (UITableView *(^)(void))ylt_convertToTableView;
 - (UITextField *(^)(void))ylt_convertToTextField;
+- (UICollectionView *(^)(void))ylt_convertToCollectionView;
 
 #pragma mark - normal method
 

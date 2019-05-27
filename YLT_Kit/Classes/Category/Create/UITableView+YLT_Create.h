@@ -42,6 +42,10 @@
  */
 - (UITableView *(^)(void(^)(UITableViewCell *cell, NSIndexPath *indexPath, id response)))ylt_cellClick;
 /**
+ 设置代理
+ */
+- (UITableView *(^)(id<UITableViewDataSource, UITableViewDelegate> delegate))ylt_delegate;
+/**
  刷新列表
  */
 - (UITableView *(^)(void))ylt_reloadData;

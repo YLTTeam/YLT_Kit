@@ -21,6 +21,7 @@
  cell class
  */
 @property (nonatomic, strong) Class cellClass;
+@property (nonatomic, strong) id<UITableViewDataSource, UITableViewDelegate> customDelegate;
 /**
  cell 点击回调
  */
@@ -50,6 +51,14 @@
     return objc_getAssociatedObject(self, @selector(cellClass));
 }
 
+- (void)setCustomDelegate:(id<UITableViewDataSource,UITableViewDelegate>)customDelegate {
+    objc_setAssociatedObject(self, @selector(customDelegate), customDelegate, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (id<UITableViewDataSource,UITableViewDelegate>)customDelegate {
+    return objc_getAssociatedObject(self, @selector(customDelegate));
+}
+
 - (void)setCellBlock:(void(^)(UITableViewCell *cell, NSIndexPath *indexPath, id response))cellBlock {
     objc_setAssociatedObject(self, @selector(cellBlock), cellBlock, OBJC_ASSOCIATION_COPY);
 }
@@ -63,26 +72,16 @@
 #pragma mark - UITableViewDataSource
 @interface UITableView (YLT_DataSource)<UITableViewDelegate, UITableViewDataSource>
 
-/**
- 设置代理
- */
-- (void)ylt_delegate;
-
-
 @end
 
 @implementation UITableView (YLT_DataSource)
 
-/**
- 设置代理
- */
-- (void)ylt_delegate {
-    self.delegate = self;
-    self.dataSource = self;
-}
-
 #pragma mark - header footer
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)]) {
+        return [self.customDelegate tableView:tableView heightForHeaderInSection:section];
+    }
+    
     YLT_TableSectionModel *data = self.tableData[section];
     if ([data isKindOfClass:[YLT_TableSectionModel class]]) {
         if (data.sectionHeaderHeight != 0) {
@@ -97,6 +96,9 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(tableView:heightForFooterInSection:)]) {
+        return [self.customDelegate tableView:tableView heightForFooterInSection:section];
+    }
     YLT_TableSectionModel *data = self.tableData[section];
     if ([data isKindOfClass:[YLT_TableSectionModel class]]) {
         if (data.sectionFooterHeight != 0) {
@@ -111,6 +113,9 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)]) {
+        return [self.customDelegate tableView:tableView viewForHeaderInSection:section];
+    }
     YLT_TableSectionModel *data = self.tableData[section];
     if ([data isKindOfClass:[YLT_TableSectionModel class]]) {
         return data.sectionHeaderView?:nil;
@@ -119,6 +124,9 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(tableView:viewForFooterInSection:)]) {
+        return [self.customDelegate tableView:tableView viewForFooterInSection:section];
+    }
     YLT_TableSectionModel *data = self.tableData[section];
     if ([data isKindOfClass:[YLT_TableSectionModel class]]) {
         return data.sectionFooterView?:nil;
@@ -127,6 +135,9 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(tableView:titleForHeaderInSection:)]) {
+        return [self.customDelegate tableView:tableView titleForHeaderInSection:section];
+    }
     YLT_TableSectionModel *data = self.tableData[section];
     if ([data isKindOfClass:[YLT_TableSectionModel class]]) {
         return ([data.sectionHeaderTitle ylt_isValid])?data.sectionHeaderTitle:nil;
@@ -135,6 +146,9 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(tableView:titleForFooterInSection:)]) {
+        return [self.customDelegate tableView:tableView titleForFooterInSection:section];
+    }
     YLT_TableSectionModel *data = self.tableData[section];
     if ([data isKindOfClass:[YLT_TableSectionModel class]]) {
         return ([data.sectionFooterTitle ylt_isValid])?data.sectionFooterTitle:nil;
@@ -145,15 +159,24 @@
 #pragma mark - UITableViewDelegate UITableVIewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
+        return [self.customDelegate numberOfSectionsInTableView:tableView];
+    }
     return self.tableData.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(tableView:numberOfRowsInSection:)]) {
+        return [self.customDelegate tableView:tableView numberOfRowsInSection:section];
+    }
     YLT_TableSectionModel *sectionData = self.tableData[section];
     return sectionData.sectionData.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]) {
+        return [self.customDelegate tableView:tableView heightForRowAtIndexPath:indexPath];
+    }
     YLT_TableSectionModel *sectionData = self.tableData[indexPath.section];
     YLT_TableRowModel *data = sectionData.sectionData[indexPath.row];
     CGFloat height = 0;
@@ -176,6 +199,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(tableView:cellForRowAtIndexPath:)]) {
+        return [self.customDelegate tableView:tableView cellForRowAtIndexPath:indexPath];
+    }
     YLT_TableSectionModel *sectionData = self.tableData[indexPath.section];
     YLT_TableRowModel *data = sectionData.sectionData[indexPath.row];
     Class cellClass;
@@ -204,6 +230,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+        return [self.customDelegate tableView:tableView didSelectRowAtIndexPath:indexPath];
+    }
     if (self.cellBlock) {
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         self.cellBlock(cell, indexPath, cell.cellData);
@@ -222,7 +251,7 @@
         @strongify(self);
         UITableView *result = [[[self class] alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         result.rowHeight = 44.;
-        [result ylt_delegate];
+        result.ylt_delegate(nil);
         return result;
     };
 }
@@ -235,7 +264,7 @@
         @strongify(self);
         UITableView *result = [[[self class] alloc] initWithFrame:CGRectZero style:style];
         result.rowHeight = 44.;
-        [result ylt_delegate];
+        result.ylt_delegate(nil);
         if (superView) {
             [superView addSubview:result];
             if (layout) {
@@ -257,7 +286,7 @@
     return ^id(UIView *superView, CGRect frame, UITableViewStyle style) {
         @strongify(self);
         UITableView *result = [[[self class] alloc] initWithFrame:frame style:style];
-        [result ylt_delegate];
+        result.ylt_delegate(nil);
         if (superView) {
             [superView addSubview:result];
         }
@@ -308,6 +337,7 @@
         @strongify(self);
         self.rowHeight = rowHeight;
         self.cellClass = cellClass;
+        [self registerClass:cellClass forCellReuseIdentifier:NSStringFromClass(cellClass)];
         return self;
     };
 }
@@ -320,6 +350,20 @@
     return ^id(void(^cellActionBlock)(UITableViewCell *cell, NSIndexPath *indexPath, id response)) {
         @strongify(self);
         self.cellBlock = cellActionBlock;
+        return self;
+    };
+}
+
+/**
+ 设置代理
+ */
+- (UITableView *(^)(id<UITableViewDataSource, UITableViewDelegate> delegate))ylt_delegate {
+    @weakify(self);
+    return ^id(id delegate) {
+        @strongify(self);
+        self.customDelegate = delegate;
+        self.delegate = self;
+        self.dataSource = self;
         return self;
     };
 }

@@ -17,6 +17,9 @@
 #import "YLT_BaseWebVC.h"
 #import "YLT_RouterTools.h"
 #import "UIButton+YLT_Create.h"
+#import "UICollectionReusableView+YLT_Create.h"
+#import "UICollectionView+YLT_Create.h"
+#import "UICollectionViewCell+YLT_Create.h"
 #import "UIImageView+YLT_Create.h"
 #import "UILabel+YLT_Create.h"
 #import "UITableView+YLT_Create.h"
@@ -43,6 +46,8 @@
 #import "YLT_ImageFilter.h"
 #import "YLT_InputTextField.h"
 #import "YLT_URLProtocol.h"
+#import "YLT_CollectionRowModel.h"
+#import "YLT_CollectionSectionModel.h"
 #import "YLT_TableRowModel.h"
 #import "YLT_TableSectionModel.h"
 

@@ -9,6 +9,7 @@
 #import "YLTViewController.h"
 #import <YLT_Kit/YLT_Kit.h>
 #import "YLTTableViewCell.h"
+#import "YLTCollectionViewCell.h"
 #import <YLT_Kit/YLT_Kit.h>
 
 @interface Person : NSObject
@@ -19,7 +20,7 @@
 @implementation Person
 @end
 
-@interface YLTViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface YLTViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate>
 @property (strong, nonatomic) UIImageView *imageview;
 @property (assign, nonatomic) NSInteger tag;
 @property (strong, nonatomic) Person *p;
@@ -32,6 +33,17 @@
 {
     [super viewDidLoad];
     
+    YLT_CollectionSectionModel *model =
+    [YLT_CollectionSectionModel ylt_createSectionData:@[@"11", @"22", @"33"]
+                                         headerString:nil
+                                         footerString:nil];
+    
+    YLT_CollectionSectionModel *model1 = [YLT_CollectionSectionModel ylt_createSectionData:@[@"123", @"234", @"456"] headerString:nil footerString:nil];
+    
+    UICollectionView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }).ylt_convertToCollectionView().ylt_cell(CGSizeMake(120, 120), YLTCollectionViewCell.class).ylt_spacing(8).ylt_delegate(self).ylt_collectionData(@[model, model1]);
+    
 //    UIImage *image = [UIImage imageNamed:@"bg.png"];
 //    CGFloat start = [[NSDate date] timeIntervalSince1970];
 //    NSData *res = [UIImage ylt_representationData:UIImageJPEGRepresentation(image, 0.9) kb:2048];
@@ -39,27 +51,26 @@
 //    NSLog(@"%f , imagesize:%zd, resSize:%zd", end-start, UIImageJPEGRepresentation(image, 0.9).length/1024, res.length/1024);
     
 //    self.view.backgroundColor = [UIColor redColor];
-    self.imageview = UIImageView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
-        make.center.equalTo(self.view);
-    }).ylt_backgroundColor(UIColor.clearColor)
-    .ylt_convertToImageView()
-    .ylt_image([UIImage ylt_imageNamed:@"icon_wifi"])
-    .ylt_contentMode(UIViewContentModeCenter);
-    @weakify(self);
-
-    
-    UISlider *mySlider = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, 280, 44)];
-    mySlider.minimumValue = -100;
-    mySlider.maximumValue = 100;
-    [self.view addSubview:mySlider];
-    [mySlider mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.equalTo(self.view).inset(16);
-        make.height.mas_equalTo(44);
-    }];
-    [[mySlider rac_signalForControlEvents:UIControlEventValueChanged] subscribeNext:^(__kindof UISlider * _Nullable x) {
-        @strongify(self);
-        self.imageFilter.filterValue = x.value;
-    }];
+//    self.imageview = UIImageView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+//        make.center.equalTo(self.view);
+//    }).ylt_backgroundColor(UIColor.clearColor)
+//    .ylt_convertToImageView()
+//    .ylt_image([UIImage ylt_imageNamed:@"icon_wifi"])
+//    .ylt_contentMode(UIViewContentModeCenter);
+//    @weakify(self);
+//
+//    UISlider *mySlider = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, 280, 44)];
+//    mySlider.minimumValue = -100;
+//    mySlider.maximumValue = 100;
+//    [self.view addSubview:mySlider];
+//    [mySlider mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.equalTo(self.view).inset(16);
+//        make.height.mas_equalTo(44);
+//    }];
+//    [[mySlider rac_signalForControlEvents:UIControlEventValueChanged] subscribeNext:^(__kindof UISlider * _Nullable x) {
+//        @strongify(self);
+//        self.imageFilter.filterValue = x.value;
+//    }];
 //    UILabel
 //    .ylt_layout(self.view, ^(MASConstraintMaker *make) {
 //        make.edges.equalTo(self.view);
@@ -139,6 +150,14 @@
 //        YLT_LogInfo(@"%@", response);
 //    });
 }
+
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+//    return CGSizeMake(240, 240);
+//}
+//
+//- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+//    YLT_Log(@"did selected");
+//}
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];

@@ -368,6 +368,19 @@
     };
 }
 
+- (UICollectionView *(^)(void))ylt_convertToCollectionView {
+    @weakify(self);
+    return ^id() {
+        @strongify(self);
+        if ([self isKindOfClass:[UICollectionView class]]) {
+            return self;
+        } else {
+            NSLog(@"tableView 类型转化错误");
+        }
+        return nil;
+    };
+}
+
 /**
  获取当前对象
  
