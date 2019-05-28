@@ -20,7 +20,7 @@
 }
 
 - (instancetype)initWithYLT_Frame:(CGRect)frame {
-    self = [self initWithYLT_Frame:frame];
+    self = [super initWithFrame:frame];
     if (self) {
         self.ylt_cellConfigUI();
     }
