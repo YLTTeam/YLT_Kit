@@ -16,6 +16,7 @@
 @implementation YLTCollectionViewCell
 
 - (void)ylt_configUI {
+    NSLog(@"%@", self.contentView);
     self.backgroundColor = UIColor.blueColor;
     self.label = [[UILabel alloc] init];
     self.label.textColor = UIColor.whiteColor;
