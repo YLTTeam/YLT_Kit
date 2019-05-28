@@ -35,10 +35,10 @@
     
     YLT_CollectionSectionModel *model =
     [YLT_CollectionSectionModel ylt_createSectionData:@[@"11", @"22", @"33"]
-                                         headerString:nil
-                                         footerString:nil];
+                                         headerString:@"hahahha"
+                                         footerString:@"hahahhaFooter"];
     
-    YLT_CollectionSectionModel *model1 = [YLT_CollectionSectionModel ylt_createSectionData:@[@"123", @"234", @"456"] headerString:nil footerString:nil];
+    YLT_CollectionSectionModel *model1 = [YLT_CollectionSectionModel ylt_createSectionData:@[@"123", @"234", @"456"] headerString:@"header" footerString:@"footer"];
     
     UICollectionView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);

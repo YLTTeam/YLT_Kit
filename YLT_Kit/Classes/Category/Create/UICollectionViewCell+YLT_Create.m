@@ -15,12 +15,12 @@
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [UICollectionViewCell ylt_swizzleInstanceMethod:@selector(initWithFrame:) withMethod:@selector(initWithYLT_Frame:)];
+        [UICollectionViewCell ylt_swizzleInstanceMethod:@selector(initWithFrame:) withMethod:@selector(initWithYLTCollectionViewCell_Frame:)];
     });
 }
 
-- (instancetype)initWithYLT_Frame:(CGRect)frame {
-    self = [self initWithYLT_Frame:frame];
+- (instancetype)initWithYLTCollectionViewCell_Frame:(CGRect)frame {
+    self = [self initWithYLTCollectionViewCell_Frame:frame];
     if (self) {
         self.ylt_cellConfigUI();
     }

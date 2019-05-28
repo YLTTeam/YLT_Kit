@@ -12,6 +12,7 @@
 #import <ReactiveObjC/ReactiveObjC.h>
 #import "UIView+YLT_BaseView.h"
 #import "UICollectionViewCell+YLT_Create.h"
+#import "YLT_CollectionReusableView.h"
 
 @interface UICollectionView (YLT_Data)
 
@@ -51,6 +52,12 @@
         objc_setAssociatedObject(self, @selector(tableData), tableData, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [tableData enumerateObjectsUsingBlock:^(YLT_CollectionSectionModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([obj isKindOfClass:[YLT_CollectionSectionModel class]] && obj.cellClass) {
+                if (obj.sectionHeaderClass) {
+                    [self registerClass:obj.sectionHeaderClass forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:NSStringFromClass(obj.sectionHeaderClass)];
+                }
+                if (obj.sectionFooterClass) {
+                    [self registerClass:obj.sectionFooterClass forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:NSStringFromClass(obj.sectionFooterClass)];
+                }
                 [self registerClass:obj.cellClass forCellWithReuseIdentifier:NSStringFromClass(obj.cellClass)];
                 if ([obj.sectionData isKindOfClass:[NSArray class]]) {
                     [obj.sectionData enumerateObjectsUsingBlock:^(YLT_CollectionRowModel *obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -168,13 +175,19 @@
         if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
             if (data.sectionHeaderClass) {
                 reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(data.sectionHeaderClass) forIndexPath:indexPath];
+            } else if (data.sectionHeaderTitle.ylt_isValid) {
+                reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(YLT_CollectionReusableView.class) forIndexPath:indexPath];
+                [((YLT_CollectionReusableView *) reuseableView) performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:data.sectionHeaderTitle];
             }
         } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
             if (data.sectionFooterClass) {
                 reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(data.sectionFooterClass) forIndexPath:indexPath];
+            } else if (data.sectionFooterTitle.ylt_isValid) {
+                reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(YLT_CollectionReusableView.class) forIndexPath:indexPath];
+                [((YLT_CollectionReusableView *) reuseableView) performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:data.sectionFooterTitle];
             }
         }
-        if ([reuseableView conformsToProtocol:@protocol(YLT_CellProtocol)] && [reuseableView respondsToSelector:@selector(ylt_indexPath:bindData:)]) {
+        if (![reuseableView isKindOfClass:YLT_CollectionReusableView.class] && [reuseableView conformsToProtocol:@protocol(YLT_CellProtocol)] && [reuseableView respondsToSelector:@selector(ylt_indexPath:bindData:)]) {
             [reuseableView performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:data];
         }
     }
@@ -297,6 +310,7 @@
         UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
         flowLayout.itemSize = CGSizeMake(50, 50);
         UICollectionView *result = [[[self class] alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
+        result.backgroundColor = UIColor.clearColor;
         result.ylt_delegate(nil);
         return result;
     };
@@ -312,6 +326,7 @@
         UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
         flowLayout.itemSize = CGSizeMake(50, 50);
         UICollectionView *result = [[[self class] alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
+        result.backgroundColor = UIColor.clearColor;
         result.ylt_delegate(nil);
         if (superView) {
             [superView addSubview:result];
@@ -337,6 +352,7 @@
         UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
         flowLayout.itemSize = CGSizeMake(50, 50);
         UICollectionView *result = [[[self class] alloc] initWithFrame:frame collectionViewLayout:flowLayout];
+        result.backgroundColor = UIColor.clearColor;
         result.ylt_delegate(nil);
         if (superView) {
             [superView addSubview:result];
@@ -402,6 +418,8 @@
  */
 - (UICollectionView *(^)(id<UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource> delegate))ylt_delegate {
     return ^id(id<UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource> delegate) {
+        [self registerClass:YLT_CollectionReusableView.class forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:NSStringFromClass(YLT_CollectionReusableView.class)];
+        [self registerClass:YLT_CollectionReusableView.class forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:NSStringFromClass(YLT_CollectionReusableView.class)];
         self.delegate = self;
         self.dataSource = self;
         self.customDelegate = delegate;
