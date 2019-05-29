@@ -18,7 +18,7 @@
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [UITableView ylt_swizzleInstanceMethod:@selector(initWithStyle:reuseIdentifier:) withMethod:@selector(initWithStyle:ylt_reuseIdentifier:)];
+        [UITableViewCell ylt_swizzleInstanceMethod:@selector(initWithStyle:reuseIdentifier:) withMethod:@selector(initWithStyle:ylt_reuseIdentifier:)];
     });
 }
 
