@@ -11,6 +11,79 @@
 
 @implementation UINavigationController (YLT_Extension)
 
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self ylt_swizzleInstanceMethod:@selector(popViewControllerAnimated:) withMethod:@selector(ylt_popViewControllerAnimated:)];
+        [self ylt_swizzleInstanceMethod:@selector(pushViewController:animated:) withMethod:@selector(ylt_pushViewController:animated:)];
+        [self ylt_swizzleInstanceMethod:@selector(popToRootViewControllerAnimated:) withMethod:@selector(ylt_popToRootViewControllerAnimated:)];
+        [self ylt_swizzleInstanceMethod:@selector(popToViewController:animated:) withMethod:@selector(ylt_popToViewController:animated:)];
+    });
+}
+
+- (nullable NSArray<__kindof UIViewController *> *)ylt_popToViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    if (self.ylt_prohibitPushPop)
+        return nil;
+    if (animated) {
+        self.ylt_prohibitPushPop = YES;
+    }
+    
+    NSArray *viewControllers = [self ylt_popToViewController:viewController animated:animated];
+    if (viewControllers.count == 0) {
+        self.ylt_prohibitPushPop = NO;
+    }
+    
+    return viewControllers;
+}
+
+- (nullable NSArray<__kindof UIViewController *> *)ylt_popToRootViewControllerAnimated:(BOOL)animated {
+    if (self.ylt_prohibitPushPop) {
+        return nil;
+    }
+    if (animated) {
+        self.ylt_prohibitPushPop = YES;
+    }
+    NSArray *viewControllers = [self ylt_popToRootViewControllerAnimated:animated];
+    if (viewControllers.count == 0) {
+        self.ylt_prohibitPushPop = NO;
+    }
+    return viewControllers;
+}
+
+- (void)ylt_pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    if (self.ylt_prohibitPushPop) {
+        return;
+    }
+    
+    [self ylt_pushViewController:viewController animated:animated];
+    if (animated) {
+        self.ylt_prohibitPushPop = YES;
+    }
+}
+
+- (nullable UIViewController *)ylt_popViewControllerAnimated:(BOOL)animated {
+    if (self.ylt_prohibitPushPop) {
+        return nil;
+    }
+    if (animated) {
+        self.ylt_prohibitPushPop = YES;
+    }
+    UIViewController *vc = [self ylt_popViewControllerAnimated:animated];
+
+    if (vc == nil) {
+        self.ylt_prohibitPushPop = NO;
+    }
+    return vc;
+}
+
+- (BOOL)ylt_prohibitPushPop {
+    return [objc_getAssociatedObject(self, @selector(ylt_prohibitPushPop)) boolValue];
+}
+
+- (void)setYlt_prohibitPushPop:(BOOL)ylt_prohibitPushPop {
+    objc_setAssociatedObject(self, @selector(ylt_prohibitPushPop), @(ylt_prohibitPushPop), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 /**
  寻找Navigation中的某个viewControler对象
  
@@ -78,6 +151,24 @@
     } else {
         return [self popToRootViewControllerAnimated:animated];
     }
+}
+
+@end
+
+
+
+@implementation UIViewController (SafeTransitionLock)
+
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self ylt_swizzleInstanceMethod:@selector(viewWillAppear:) withMethod:@selector(ylt_navigation_viewWillAppear:)];
+    });
+}
+
+- (void)ylt_navigation_viewWillAppear:(BOOL)animated {
+    self.navigationController.ylt_prohibitPushPop = NO;
+    [self ylt_navigation_viewWillAppear:animated];
 }
 
 @end
