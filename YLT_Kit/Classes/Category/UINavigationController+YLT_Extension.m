@@ -157,7 +157,7 @@
 
 
 
-@implementation UIViewController (SafeTransitionLock)
+@implementation UIViewController (YLT_NavigationExtension)
 
 + (void)load {
     static dispatch_once_t onceToken;
