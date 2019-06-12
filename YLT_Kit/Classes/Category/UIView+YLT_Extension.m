@@ -8,7 +8,20 @@
 #import "UIView+YLT_Extension.h"
 #import <YLT_BaseLib/YLT_BaseLib.h>
 
+@interface UIView (YLT_EnlargeEdge)
+
+@property (nonatomic, assign) UIEdgeInsets hitsEdgeInsets;
+
+@end
+
+
 @implementation UIView (YLT_Extension)
+
+static char topNameKey;
+static char rightNameKey;
+static char bottomNameKey;
+static char leftNameKey;
+static char touchButtonRangeKey;
 
 /**
  view的标识
@@ -125,6 +138,68 @@
     self.layer.shadowRadius = radius;
     self.layer.shadowOpacity = opacity;
     self.clipsToBounds = NO;
+}
+
+/**
+ 放大按钮点击范围
+ 
+ @param top 向上扩展
+ @param right 向右扩展
+ @param bottom 向下扩展
+ @param left 向左扩展
+ */
+- (void)ylt_enlargeEdgeWithTop:(CGFloat)top right:(CGFloat)right bottom:(CGFloat)bottom left:(CGFloat)left {
+    objc_setAssociatedObject(self, &topNameKey, [NSNumber numberWithFloat:top], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &rightNameKey, [NSNumber numberWithFloat:right], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &bottomNameKey, [NSNumber numberWithFloat:bottom], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &leftNameKey, [NSNumber numberWithFloat:left], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGRect)enlargedRect {
+    NSNumber* topEdge = objc_getAssociatedObject(self, &topNameKey);
+    NSNumber* rightEdge = objc_getAssociatedObject(self, &rightNameKey);
+    NSNumber* bottomEdge = objc_getAssociatedObject(self, &bottomNameKey);
+    NSNumber* leftEdge = objc_getAssociatedObject(self, &leftNameKey);
+    if (topEdge && rightEdge && bottomEdge && leftEdge) {
+        return CGRectMake(self.bounds.origin.x - leftEdge.floatValue,
+                          self.bounds.origin.y - topEdge.floatValue,
+                          self.bounds.size.width + leftEdge.floatValue + rightEdge.floatValue,
+                          self.bounds.size.height + topEdge.floatValue + bottomEdge.floatValue);
+    }
+    return self.bounds;
+}
+
+-(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    CGRect rect = [self enlargedRect];
+    if (CGRectEqualToRect(rect, self.bounds)) {
+        return self;
+    }
+    return CGRectContainsPoint(rect, point) ? self : nil;
+}
+
+- (void)setHitsEdgeInsets:(UIEdgeInsets)hitsEdgeInsets {
+    NSValue *value = [NSValue value:&hitsEdgeInsets withObjCType:@encode(UIEdgeInsets)];
+    objc_setAssociatedObject(self, &touchButtonRangeKey, value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UIEdgeInsets)hitsEdgeInsets {
+    NSValue *value = objc_getAssociatedObject(self, &touchButtonRangeKey);
+    if(value) {
+        UIEdgeInsets edgeInsets;
+        [value getValue:&edgeInsets];
+        return edgeInsets;
+    } else {
+        return UIEdgeInsetsZero;
+    }
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    if (UIEdgeInsetsEqualToEdgeInsets(self.hitsEdgeInsets, UIEdgeInsetsZero) || !self.userInteractionEnabled || self.hidden) {
+        return NO;
+    }
+    CGRect relativeFrame = self.bounds;
+    CGRect hitFrame = UIEdgeInsetsInsetRect(relativeFrame, self.hitsEdgeInsets);
+    return CGRectContainsPoint(hitFrame, point);
 }
 
 @end

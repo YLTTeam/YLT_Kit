@@ -82,4 +82,14 @@
                        color:(UIColor *)color
                      opacity:(CGFloat)opacity;
 
+/**
+ 放大按钮点击范围
+ 
+ @param top 向上扩展
+ @param right 向右扩展
+ @param bottom 向下扩展
+ @param left 向左扩展
+ */
+- (void)ylt_enlargeEdgeWithTop:(CGFloat)top right:(CGFloat)right bottom:(CGFloat)bottom left:(CGFloat)left;
+
 @end
