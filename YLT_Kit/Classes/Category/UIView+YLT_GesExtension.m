@@ -77,7 +77,7 @@
 
 - (void)setHitsEdgeInsets:(UIEdgeInsets)hitsEdgeInsets {
     NSValue *value = [NSValue value:&hitsEdgeInsets withObjCType:@encode(UIEdgeInsets)];
-    objc_setAssociatedObject(self, @selector(hitsEdgeInsets), value, OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(hitsEdgeInsets), value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (UIEdgeInsets)hitsEdgeInsets {
@@ -92,11 +92,21 @@
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-    if (UIEdgeInsetsEqualToEdgeInsets(self.hitsEdgeInsets, UIEdgeInsetsZero) || !self.userInteractionEnabled || self.hidden) {
-        return CGRectContainsPoint(self.bounds, point);
-    } else {
-        return CGRectContainsPoint(UIEdgeInsetsInsetRect(self.bounds, self.hitsEdgeInsets), point);
+    if (self.alpha < 0.05 || !self.userInteractionEnabled || self.hidden) {
+        return NO;
     }
+    BOOL result = NO;
+    if (UIEdgeInsetsEqualToEdgeInsets(self.hitsEdgeInsets, UIEdgeInsetsZero)) {
+        result = CGRectContainsPoint(self.bounds, point);
+    } else {
+        result = CGRectContainsPoint(UIEdgeInsetsInsetRect(self.bounds, self.hitsEdgeInsets), point);
+    }
+    return result;
+}
+
+//扩展热区
+- (void)ylt_enlargeEdgeWithTop:(CGFloat)top left:(CGFloat)left bottom:(CGFloat)bottom right:(CGFloat)right {
+    self.hitsEdgeInsets = UIEdgeInsetsMake(-top, -left, -bottom, -right);
 }
 
 @end

@@ -33,18 +33,27 @@
 {
     [super viewDidLoad];
     
-    YLT_CollectionSectionModel *model =
-    [YLT_CollectionSectionModel ylt_createSectionData:@[@"11", @"22", @"33"]
-                                         headerString:@"hahahha"
-                                         footerString:@"hahahhaFooter"];
+//    YLT_CollectionSectionModel *model =
+//    [YLT_CollectionSectionModel ylt_createSectionData:@[@"11", @"22", @"33"]
+//                                         headerString:@"hahahha"
+//                                         footerString:@"hahahhaFooter"];
+//
+//    YLT_CollectionSectionModel *model1 = [YLT_CollectionSectionModel ylt_createSectionData:@[@"123", @"234", @"456"] headerString:@"header" footerString:@"footer"];
+//
+//    UICollectionView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+//        make.edges.equalTo(self.view);
+//    }).ylt_convertToCollectionView().ylt_cell(CGSizeMake(120, 120), YLTCollectionViewCell.class).ylt_spacing(8).ylt_delegate(self).ylt_collectionData(@[model, model1]).ylt_cellClick(^(UICollectionViewCell *cell, NSIndexPath *indexPath, id response) {
+//        NSLog(@"%zd", indexPath.row);
+//    });
     
-    YLT_CollectionSectionModel *model1 = [YLT_CollectionSectionModel ylt_createSectionData:@[@"123", @"234", @"456"] headerString:@"header" footerString:@"footer"];
-    
-    UICollectionView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    }).ylt_convertToCollectionView().ylt_cell(CGSizeMake(120, 120), YLTCollectionViewCell.class).ylt_spacing(8).ylt_delegate(self).ylt_collectionData(@[model, model1]).ylt_cellClick(^(UICollectionViewCell *cell, NSIndexPath *indexPath, id response) {
-        NSLog(@"%zd", indexPath.row);
+    UIView *target = UIView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+        make.center.equalTo(self.view);
+        make.size.mas_equalTo(CGSizeMake(50, 50));
+    }).ylt_backgroundColor(UIColor.redColor).ylt_clickBlock(^(UIView *sender) {
+        NSLog(@"%@", sender);
     });
+    target.hitsEdgeInsets = UIEdgeInsetsMake(-100, -100, -100, -100);
+    
     
 //    UIImage *image = [UIImage imageNamed:@"bg.png"];
 //    CGFloat start = [[NSDate date] timeIntervalSince1970];

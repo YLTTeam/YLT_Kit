@@ -62,4 +62,7 @@
  */
 - (void (^)(void))ylt_removeAll;
 
+//扩展热区
+- (void)ylt_enlargeEdgeWithTop:(CGFloat)top left:(CGFloat)left bottom:(CGFloat)bottom right:(CGFloat)right;
+
 @end
