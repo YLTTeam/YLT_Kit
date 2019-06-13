@@ -8,20 +8,7 @@
 #import "UIView+YLT_Extension.h"
 #import <YLT_BaseLib/YLT_BaseLib.h>
 
-@interface UIView (YLT_EnlargeEdge)
-
-@property (nonatomic, assign) UIEdgeInsets hitsEdgeInsets;
-
-@end
-
-
 @implementation UIView (YLT_Extension)
-
-static char topNameKey;
-static char rightNameKey;
-static char bottomNameKey;
-static char leftNameKey;
-static char touchButtonRangeKey;
 
 /**
  view的标识
