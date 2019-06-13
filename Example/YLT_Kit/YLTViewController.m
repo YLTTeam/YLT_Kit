@@ -42,7 +42,9 @@
     
     UICollectionView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
-    }).ylt_convertToCollectionView().ylt_cell(CGSizeMake(120, 120), YLTCollectionViewCell.class).ylt_spacing(8).ylt_delegate(self).ylt_collectionData(@[model, model1]);
+    }).ylt_convertToCollectionView().ylt_cell(CGSizeMake(120, 120), YLTCollectionViewCell.class).ylt_spacing(8).ylt_delegate(self).ylt_collectionData(@[model, model1]).ylt_cellClick(^(UICollectionViewCell *cell, NSIndexPath *indexPath, id response) {
+        NSLog(@"%zd", indexPath.row);
+    });
     
 //    UIImage *image = [UIImage imageNamed:@"bg.png"];
 //    CGFloat start = [[NSDate date] timeIntervalSince1970];
