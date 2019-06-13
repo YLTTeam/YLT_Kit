@@ -77,6 +77,14 @@
 - (UIImage *)ylt_scaledToSize:(CGSize)size;
 
 /**
+ 压缩最大边框为 maxLength 的图片
+ 
+ @param maxLength 最大的边长
+ @return 压缩图
+ */
+- (UIImage *)ylt_scaledToMaxLength:(CGFloat)maxLength;
+
+/**
  压缩到指定大小size,并保证图片清晰度和质量好于上面方法
  
  @param size 目标size

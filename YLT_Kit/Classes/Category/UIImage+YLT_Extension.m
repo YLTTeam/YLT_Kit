@@ -139,6 +139,27 @@ static CGBitmapInfo const kTCDefaultBitMapOrder = kCGBitmapByteOrder32Little | k
     return [self ylt_scaledToSize:size highQuality:NO];
 }
 
+/**
+ 压缩最大边框为 maxLength 的图片
+ 
+ @param maxLength 最大的边长
+ @return 压缩图
+ */
+- (UIImage *)ylt_scaledToMaxLength:(CGFloat)maxLength {
+    if (self.size.width <= maxLength && self.size.height <= maxLength) {
+        return self;
+    }
+    CGSize size = self.size;
+    if (self.size.width > self.size.height) {
+        size.width = maxLength;
+        size.height = size.width*self.size.height/self.size.width;
+    } else {
+        size.height = maxLength;
+        size.width = size.height*self.size.width/self.size.height;
+    }
+    return [self ylt_scaledToSize:size];
+}
+
 - (UIImage*)ylt_scaledToSize:(CGSize)size highQuality:(BOOL)highQuality {
     UIImage *sourceImage = self;
     UIImage *newImage = self;
