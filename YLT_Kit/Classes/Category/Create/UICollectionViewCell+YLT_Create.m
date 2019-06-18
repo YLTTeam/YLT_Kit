@@ -13,10 +13,10 @@
 @implementation UICollectionViewCell (YLT_Create)
 
 + (void)load {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [UICollectionViewCell ylt_swizzleInstanceMethod:@selector(initWithFrame:) withMethod:@selector(initWithYLTCollectionViewCell_Frame:)];
-    });
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        [UICollectionViewCell ylt_swizzleInstanceMethod:@selector(initWithFrame:) withMethod:@selector(initWithYLTCollectionViewCell_Frame:)];
+//    });
 }
 
 - (instancetype)initWithYLTCollectionViewCell_Frame:(CGRect)frame {

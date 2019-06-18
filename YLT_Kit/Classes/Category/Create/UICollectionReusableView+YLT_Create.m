@@ -13,10 +13,10 @@
 @implementation UICollectionReusableView (YLT_Create)
 
 + (void)load {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [UICollectionReusableView ylt_swizzleInstanceMethod:@selector(initWithFrame:) withMethod:@selector(initWithYLTCollectionReusableView_Frame:)];
-    });
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        [UICollectionReusableView ylt_swizzleInstanceMethod:@selector(initWithFrame:) withMethod:@selector(initWithYLTCollectionReusableView_Frame:)];
+//    });
 }
 
 - (instancetype)initWithYLTCollectionReusableView_Frame:(CGRect)frame {
