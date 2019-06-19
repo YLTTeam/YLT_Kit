@@ -27,12 +27,12 @@
 //    if (animated) {
 //        self.ylt_prohibitPushPop = YES;
 //    }
-//    
+//
 //    NSArray *viewControllers = [self ylt_popToViewController:viewController animated:animated];
 //    if (viewControllers.count == 0) {
 //        self.ylt_prohibitPushPop = NO;
 //    }
-//    
+//
 //    return viewControllers;
 //}
 //
@@ -54,7 +54,7 @@
 //    if (self.ylt_prohibitPushPop) {
 //        return;
 //    }
-//    
+//
 //    [self ylt_pushViewController:viewController animated:animated];
 //    if (animated) {
 //        self.ylt_prohibitPushPop = YES;
@@ -159,16 +159,15 @@
 
 @implementation UIViewController (YLT_NavigationExtension)
 
-+ (void)load {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [self ylt_swizzleInstanceMethod:@selector(viewWillAppear:) withMethod:@selector(ylt_navigation_viewWillAppear:)];
-    });
-}
-
-- (void)ylt_navigation_viewWillAppear:(BOOL)animated {
-    self.navigationController.ylt_prohibitPushPop = NO;
-    [self ylt_navigation_viewWillAppear:animated];
-}
+//+ (void)load {
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        [self ylt_swizzleInstanceMethod:@selector(viewWillAppear:) withMethod:@selector(ylt_navigation_viewWillAppear:)];
+//    });
+//}
+//
+//- (void)ylt_navigation_viewWillAppear:(BOOL)animated {
+//    [self ylt_navigation_viewWillAppear:animated];
+//}
 
 @end
