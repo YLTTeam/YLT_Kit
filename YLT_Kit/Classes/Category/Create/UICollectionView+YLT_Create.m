@@ -124,177 +124,177 @@
 @end
 
 @implementation UICollectionView (YLT_DataSource)
-
-#pragma mark - header footer
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:referenceSizeForHeaderInSection:)]) {
-        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout referenceSizeForHeaderInSection:section];
-    }
-    
-    YLT_CollectionSectionModel *data = self.tableData[section];
-    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
-        if (CGSizeEqualToSize(data.sectionHeaderSize, CGSizeZero)) {
-            if (data.sectionHeaderClass) {
-                return CGSizeMake(collectionView.ylt_width, 44.);
-            } else if (data.sectionHeaderTitle.ylt_isValid) {
-                return CGSizeMake(collectionView.ylt_width, 36.);
-            }
-        } else {
-            return data.sectionHeaderSize;
-        }
-    }
-    return CGSizeZero;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
-    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:referenceSizeForFooterInSection:)]) {
-        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout referenceSizeForFooterInSection:section];
-    }
-    YLT_CollectionSectionModel *data = self.tableData[section];
-    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
-        if (CGSizeEqualToSize(data.sectionFooterSize, CGSizeZero)) {
-            if (data.sectionFooterClass) {
-                return CGSizeMake(collectionView.ylt_width, 44.);
-            } else if (data.sectionFooterTitle.ylt_isValid) {
-                return CGSizeMake(collectionView.ylt_width, 36.);
-            }
-        } else {
-            return data.sectionFooterSize;
-        }
-    }
-    return CGSizeZero;
-}
-
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:viewForSupplementaryElementOfKind:atIndexPath:)]) {
-        return [self.customDelegate collectionView:collectionView viewForSupplementaryElementOfKind:kind atIndexPath:indexPath];
-    }
-    UICollectionReusableView *reuseableView = nil;
-    YLT_CollectionSectionModel *data = self.tableData[indexPath.section];
-    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
-        if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-            if (data.sectionHeaderClass) {
-                reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(data.sectionHeaderClass) forIndexPath:indexPath];
-            } else if (data.sectionHeaderTitle.ylt_isValid) {
-                reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(YLT_CollectionReusableView.class) forIndexPath:indexPath];
-                [((YLT_CollectionReusableView *) reuseableView) performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:data.sectionHeaderTitle];
-            }
-        } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
-            if (data.sectionFooterClass) {
-                reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(data.sectionFooterClass) forIndexPath:indexPath];
-            } else if (data.sectionFooterTitle.ylt_isValid) {
-                reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(YLT_CollectionReusableView.class) forIndexPath:indexPath];
-                [((YLT_CollectionReusableView *) reuseableView) performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:data.sectionFooterTitle];
-            }
-        }
-        if (![reuseableView isKindOfClass:YLT_CollectionReusableView.class] && [reuseableView conformsToProtocol:@protocol(YLT_CellProtocol)] && [reuseableView respondsToSelector:@selector(ylt_indexPath:bindData:)]) {
-            [reuseableView performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:data];
-        }
-    }
-    
-    return reuseableView;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:minimumLineSpacingForSectionAtIndex:)]) {
-        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout minimumLineSpacingForSectionAtIndex:section];
-    }
-    return self.spacing;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:minimumInteritemSpacingForSectionAtIndex:)]) {
-        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout minimumInteritemSpacingForSectionAtIndex:section];
-    }
-    return self.spacing;
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:insetForSectionAtIndex:)]) {
-        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout insetForSectionAtIndex:section];
-    }
-    return UIEdgeInsetsMake(self.spacing, self.spacing, self.spacing, self.spacing);
-}
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) {
-        return [self.customDelegate numberOfSectionsInCollectionView:collectionView];
-    }
-    return self.tableData.count;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:numberOfItemsInSection:)]) {
-        return [self.customDelegate collectionView:collectionView numberOfItemsInSection:section];
-    }
-    YLT_CollectionSectionModel *data = self.tableData[section];
-    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
-        if ([data.sectionData isKindOfClass:[NSArray class]]) {
-            return data.sectionData.count;
-        }
-    }
-    return 0;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:sizeForItemAtIndexPath:)]) {
-        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout sizeForItemAtIndexPath:indexPath];
-    }
-    YLT_CollectionSectionModel *data = self.tableData[indexPath.section];
-    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
-        if ([data.sectionData isKindOfClass:[NSArray class]]) {
-            YLT_CollectionRowModel *rowData = data.sectionData[indexPath.section];
-            if ([rowData isKindOfClass:[YLT_CollectionRowModel class]] && !CGSizeEqualToSize(CGSizeZero, rowData.itemSize)) {
-                return rowData.itemSize;
-            }
-        }
-        if (!CGSizeEqualToSize(CGSizeZero, data.itemSize)) {
-            return data.itemSize;
-        }
-    }
-    return self.cellSize;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:cellForItemAtIndexPath:)]) {
-        return [self.customDelegate collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    }
-    UICollectionViewCell *cell = nil;
-    YLT_CollectionSectionModel *data = self.tableData[indexPath.section];
-    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
-        if ([data.sectionData isKindOfClass:[NSArray class]]) {
-            YLT_CollectionRowModel *rowData = data.sectionData[indexPath.row];
-            if ([rowData isKindOfClass:[YLT_CollectionRowModel class]] && rowData.cellClass) {
-                cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass(rowData.cellClass) forIndexPath:indexPath];
-            }
-            if (cell == nil && data.cellClass) {
-                cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass(data.cellClass) forIndexPath:indexPath];
-            }
-            if (cell == nil && self.cellClass) {
-                cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass(self.cellClass) forIndexPath:indexPath];
-            }
-            if ([cell conformsToProtocol:@protocol(YLT_CellProtocol)] && [cell respondsToSelector:@selector(ylt_indexPath:bindData:)]) {
-                [cell performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:rowData];
-            }
-        } else {
-            if ([cell conformsToProtocol:@protocol(YLT_CellProtocol)] && [cell respondsToSelector:@selector(ylt_indexPath:bindData:)]) {
-                [cell performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:data];
-            }
-        }
-    }
-    
-    return cell;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:didSelectItemAtIndexPath:)]) {
-        return [self.customDelegate collectionView:collectionView didSelectItemAtIndexPath:indexPath];
-    }
-    if (self.cellBlock) {
-        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-        self.cellBlock(cell, indexPath, cell.cellData);
-    }
-}
+//
+//#pragma mark - header footer
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+//    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:referenceSizeForHeaderInSection:)]) {
+//        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout referenceSizeForHeaderInSection:section];
+//    }
+//
+//    YLT_CollectionSectionModel *data = self.tableData[section];
+//    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
+//        if (CGSizeEqualToSize(data.sectionHeaderSize, CGSizeZero)) {
+//            if (data.sectionHeaderClass) {
+//                return CGSizeMake(collectionView.ylt_width, 44.);
+//            } else if (data.sectionHeaderTitle.ylt_isValid) {
+//                return CGSizeMake(collectionView.ylt_width, 36.);
+//            }
+//        } else {
+//            return data.sectionHeaderSize;
+//        }
+//    }
+//    return CGSizeZero;
+//}
+//
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+//    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:referenceSizeForFooterInSection:)]) {
+//        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout referenceSizeForFooterInSection:section];
+//    }
+//    YLT_CollectionSectionModel *data = self.tableData[section];
+//    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
+//        if (CGSizeEqualToSize(data.sectionFooterSize, CGSizeZero)) {
+//            if (data.sectionFooterClass) {
+//                return CGSizeMake(collectionView.ylt_width, 44.);
+//            } else if (data.sectionFooterTitle.ylt_isValid) {
+//                return CGSizeMake(collectionView.ylt_width, 36.);
+//            }
+//        } else {
+//            return data.sectionFooterSize;
+//        }
+//    }
+//    return CGSizeZero;
+//}
+//
+//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+//    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:viewForSupplementaryElementOfKind:atIndexPath:)]) {
+//        return [self.customDelegate collectionView:collectionView viewForSupplementaryElementOfKind:kind atIndexPath:indexPath];
+//    }
+//    UICollectionReusableView *reuseableView = nil;
+//    YLT_CollectionSectionModel *data = self.tableData[indexPath.section];
+//    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
+//        if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+//            if (data.sectionHeaderClass) {
+//                reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(data.sectionHeaderClass) forIndexPath:indexPath];
+//            } else if (data.sectionHeaderTitle.ylt_isValid) {
+//                reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(YLT_CollectionReusableView.class) forIndexPath:indexPath];
+//                [((YLT_CollectionReusableView *) reuseableView) performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:data.sectionHeaderTitle];
+//            }
+//        } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+//            if (data.sectionFooterClass) {
+//                reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(data.sectionFooterClass) forIndexPath:indexPath];
+//            } else if (data.sectionFooterTitle.ylt_isValid) {
+//                reuseableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass(YLT_CollectionReusableView.class) forIndexPath:indexPath];
+//                [((YLT_CollectionReusableView *) reuseableView) performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:data.sectionFooterTitle];
+//            }
+//        }
+//        if (![reuseableView isKindOfClass:YLT_CollectionReusableView.class] && [reuseableView conformsToProtocol:@protocol(YLT_CellProtocol)] && [reuseableView respondsToSelector:@selector(ylt_indexPath:bindData:)]) {
+//            [reuseableView performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:data];
+//        }
+//    }
+//
+//    return reuseableView;
+//}
+//
+//- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+//    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:minimumLineSpacingForSectionAtIndex:)]) {
+//        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout minimumLineSpacingForSectionAtIndex:section];
+//    }
+//    return self.spacing;
+//}
+//
+//- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+//    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:minimumInteritemSpacingForSectionAtIndex:)]) {
+//        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout minimumInteritemSpacingForSectionAtIndex:section];
+//    }
+//    return self.spacing;
+//}
+//
+//- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+//    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:insetForSectionAtIndex:)]) {
+//        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout insetForSectionAtIndex:section];
+//    }
+//    return UIEdgeInsetsMake(self.spacing, self.spacing, self.spacing, self.spacing);
+//}
+//
+//- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+//    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) {
+//        return [self.customDelegate numberOfSectionsInCollectionView:collectionView];
+//    }
+//    return self.tableData.count;
+//}
+//
+//- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+//    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:numberOfItemsInSection:)]) {
+//        return [self.customDelegate collectionView:collectionView numberOfItemsInSection:section];
+//    }
+//    YLT_CollectionSectionModel *data = self.tableData[section];
+//    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
+//        if ([data.sectionData isKindOfClass:[NSArray class]]) {
+//            return data.sectionData.count;
+//        }
+//    }
+//    return 0;
+//}
+//
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+//    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:layout:sizeForItemAtIndexPath:)]) {
+//        return [self.customDelegate collectionView:collectionView layout:collectionViewLayout sizeForItemAtIndexPath:indexPath];
+//    }
+//    YLT_CollectionSectionModel *data = self.tableData[indexPath.section];
+//    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
+//        if ([data.sectionData isKindOfClass:[NSArray class]]) {
+//            YLT_CollectionRowModel *rowData = data.sectionData[indexPath.section];
+//            if ([rowData isKindOfClass:[YLT_CollectionRowModel class]] && !CGSizeEqualToSize(CGSizeZero, rowData.itemSize)) {
+//                return rowData.itemSize;
+//            }
+//        }
+//        if (!CGSizeEqualToSize(CGSizeZero, data.itemSize)) {
+//            return data.itemSize;
+//        }
+//    }
+//    return self.cellSize;
+//}
+//
+//- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+//    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:cellForItemAtIndexPath:)]) {
+//        return [self.customDelegate collectionView:collectionView cellForItemAtIndexPath:indexPath];
+//    }
+//    UICollectionViewCell *cell = nil;
+//    YLT_CollectionSectionModel *data = self.tableData[indexPath.section];
+//    if ([data isKindOfClass:[YLT_CollectionSectionModel class]]) {
+//        if ([data.sectionData isKindOfClass:[NSArray class]]) {
+//            YLT_CollectionRowModel *rowData = data.sectionData[indexPath.row];
+//            if ([rowData isKindOfClass:[YLT_CollectionRowModel class]] && rowData.cellClass) {
+//                cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass(rowData.cellClass) forIndexPath:indexPath];
+//            }
+//            if (cell == nil && data.cellClass) {
+//                cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass(data.cellClass) forIndexPath:indexPath];
+//            }
+//            if (cell == nil && self.cellClass) {
+//                cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass(self.cellClass) forIndexPath:indexPath];
+//            }
+//            if ([cell conformsToProtocol:@protocol(YLT_CellProtocol)] && [cell respondsToSelector:@selector(ylt_indexPath:bindData:)]) {
+//                [cell performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:rowData];
+//            }
+//        } else {
+//            if ([cell conformsToProtocol:@protocol(YLT_CellProtocol)] && [cell respondsToSelector:@selector(ylt_indexPath:bindData:)]) {
+//                [cell performSelector:@selector(ylt_indexPath:bindData:) withObject:indexPath withObject:data];
+//            }
+//        }
+//    }
+//
+//    return cell;
+//}
+//
+//- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+//    if (self.customDelegate && [self.customDelegate respondsToSelector:@selector(collectionView:didSelectItemAtIndexPath:)]) {
+//        return [self.customDelegate collectionView:collectionView didSelectItemAtIndexPath:indexPath];
+//    }
+//    if (self.cellBlock) {
+//        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+//        self.cellBlock(cell, indexPath, cell.cellData);
+//    }
+//}
 
 @end
 
