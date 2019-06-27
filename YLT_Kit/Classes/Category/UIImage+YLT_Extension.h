@@ -218,6 +218,10 @@
  */
 + (NSArray <UIImage *>*)imgArrFromGif:(NSData *)data;
 
+/// 旋转图片
+/// @param orient 方向
+- (UIImage *)ylt_rotate:(UIImageOrientation)orient;
+
 /**
  旋转自定义角度
 
