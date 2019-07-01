@@ -363,6 +363,14 @@ YLT_ShareInstance(YLT_WKProcessPool);
     completionHandler(YES);
 }
 
+//出现new tab的时候是否响应的问题
+- (WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures {
+    if (!navigationAction.targetFrame.isMainFrame) {
+        [webView loadRequest:navigationAction.request];
+    }
+    return nil;
+}
+
 #pragma mark - WKUIDelegate
 
 
