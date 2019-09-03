@@ -16,7 +16,6 @@
     while (![result isKindOfClass:UICollectionView.class]) {
         result = (UICollectionView *)result.superview;
     }
-    
     return result;
 }
 
