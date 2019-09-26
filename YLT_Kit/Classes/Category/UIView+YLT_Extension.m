@@ -77,7 +77,7 @@
     }
     layer.startPoint = startPoint;
     layer.endPoint = endPoint;
-    [self.layer addSublayer:layer];
+    [self.layer insertSublayer:layer atIndex:0];
     
     return layer;
 }
