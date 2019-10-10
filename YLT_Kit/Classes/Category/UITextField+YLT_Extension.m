@@ -42,4 +42,29 @@
     [self setSelectedTextRange:selectedTextRange];
 }
 
+/// 输入金额字符串进行验证
+- (BOOL)amountStringIsEnteredForValidation:(NSString *)string {
+    if ([string isEqualToString:@"."]) {
+        self.text = @"0.";
+        return NO;
+    }
+    if (string.length > 1) {
+        if ([string rangeOfString:@"."].location == NSNotFound && string.floatValue == 0) {
+            self.text = @"0";
+            return NO;
+        }
+    }
+    NSArray *arrayCount = [string componentsSeparatedByString:@"."];
+    if (arrayCount.count > 2) {
+        return NO;
+    } else if ([string rangeOfString:@"."].location != NSNotFound) {
+        //只能有两位小数
+        NSRange tempRange = [string rangeOfString:@"."];
+        if (string.length - NSMaxRange(tempRange) > 2) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 @end

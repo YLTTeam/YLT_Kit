@@ -14,4 +14,7 @@
 /// UITextField 输入框长度限制
 - (void)textFieldDidChange:(UITextField *)textField count:(NSUInteger)count;
 
+/// 输入金额字符串进行验证
+- (BOOL)amountStringIsEnteredForValidation:(NSString *)string;
+
 @end
