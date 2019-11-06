@@ -148,6 +148,15 @@
  
  @return 控制器
  */
++ (UIViewController *)ylt_create {
+    return [self ylt_createVC];
+}
+
+/**
+ 创建控制器
+ 
+ @return 控制器
+ */
 + (UIViewController *)ylt_createVC {
     UIViewController *vc = [[self alloc] init];
     return vc;

@@ -98,6 +98,12 @@
  
  @return 控制器
  */
++ (UIViewController *)ylt_create;
+/**
+ 创建控制器
+ 
+ @return 控制器
+ */
 + (UIViewController *)ylt_createVC;
 
 /**
