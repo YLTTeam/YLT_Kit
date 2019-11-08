@@ -310,6 +310,87 @@
     return result;
 }
 
++ (UIButton *)ylt_createSuperView:(UIView *)superView
+                     buttonLayout:(YLT_ButtonLayout)buttonLayout
+                            image:(UIImage *)image
+                             font:(UIFont *)font
+                        textColor:(UIColor *)textColor
+                            title:(NSString *)title
+                          spacing:(CGFloat)spacing {
+    UIButton *result = [UIButton buttonWithType:UIButtonTypeCustom];
+    CGSize size = [title sizeWithAttributes:@{NSForegroundColorAttributeName:font}];
+    
+    UIView *contentView = [[UIView alloc] init];
+    contentView.backgroundColor = UIColor.clearColor;
+    [result addSubview:contentView];
+    
+    UIImageView *imgView = [[UIImageView alloc] init];
+    imgView.contentMode = UIViewContentModeScaleAspectFit;
+    imgView.image = image;
+    [contentView addSubview:imgView];
+    
+    UILabel *nameLabel = [[UILabel alloc] init];
+    nameLabel.text = title;
+    nameLabel.font = font;
+    nameLabel.textColor = textColor;
+    [contentView addSubview:nameLabel];
+    
+    CGFloat width = 0;
+    CGFloat height = 0;
+    
+    switch (buttonLayout) {
+        case YLT_ButtonLayoutImageAtTop: {
+            [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.centerX.equalTo(contentView);
+            }];
+            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.bottom.centerX.equalTo(contentView);
+            }];
+            height = size.height + image.size.height + spacing;
+            width = (size.width > image.size.width) ? size.width : image.size.width;
+        }
+            break;
+        case YLT_ButtonLayoutImageAtBottom: {
+            [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.bottom.centerX.equalTo(contentView);
+            }];
+            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.centerX.equalTo(contentView);
+            }];
+            height = size.height + image.size.height + spacing;
+            width = (size.width > image.size.width) ? size.width : image.size.width;
+        }
+            break;
+        case YLT_ButtonLayoutImageAtLeft: {
+            [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.centerX.equalTo(contentView);
+            }];
+            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.right.centerX.equalTo(contentView);
+            }];
+            width = size.width + image.size.width + spacing;
+            height = (size.height > image.size.height) ? size.height : image.size.height;
+        }
+            break;
+        case YLT_ButtonLayoutImageAtRight: {
+            [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.right.centerX.equalTo(contentView);
+            }];
+            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.centerX.equalTo(contentView);
+            }];
+            width = size.width + image.size.width + spacing;
+            height = (size.height > image.size.height) ? size.height : image.size.height;
+        }
+            break;
+    }
+    [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(result);
+        make.size.mas_equalTo(CGSizeMake(width, height));
+    }];
+    
+    return result;
+}
 
 @end
 #pragma clang diagnostic pop

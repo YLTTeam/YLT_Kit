@@ -125,4 +125,12 @@ typedef NS_ENUM(NSUInteger, YLT_ButtonLayout) {
                      buttonLayout:(YLT_ButtonLayout)buttonLayout
                       clickAction:(void(^)(UIButton *response))clickBlock;
 
++ (UIButton *)ylt_createSuperView:(UIView *)superView
+                     buttonLayout:(YLT_ButtonLayout)buttonLayout
+                            image:(UIImage *)image
+                             font:(UIFont *)font
+                        textColor:(UIColor *)textColor
+                            title:(NSString *)title
+                          spacing:(CGFloat)spacing;
+
 @end
