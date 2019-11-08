@@ -388,7 +388,7 @@
         make.center.equalTo(result);
         make.size.mas_equalTo(CGSizeMake(width, height));
     }];
-    
+    result.frame = CGRectMake(0, 0, width, height);
     return result;
 }
 
