@@ -318,7 +318,7 @@
                             title:(NSString *)title
                           spacing:(CGFloat)spacing {
     UIButton *result = [UIButton buttonWithType:UIButtonTypeCustom];
-    CGSize size = [title sizeWithAttributes:@{NSForegroundColorAttributeName:font}];
+    CGSize size = [title sizeWithAttributes:@{NSFontAttributeName:font}];
     
     UIView *contentView = [[UIView alloc] init];
     contentView.backgroundColor = UIColor.clearColor;
@@ -363,10 +363,10 @@
             break;
         case YLT_ButtonLayoutImageAtLeft: {
             [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.centerX.equalTo(contentView);
+                make.left.centerY.equalTo(contentView);
             }];
             [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.right.centerX.equalTo(contentView);
+                make.right.centerY.equalTo(contentView);
             }];
             width = size.width + image.size.width + spacing;
             height = (size.height > image.size.height) ? size.height : image.size.height;
@@ -374,10 +374,10 @@
             break;
         case YLT_ButtonLayoutImageAtRight: {
             [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.right.centerX.equalTo(contentView);
+                make.right.centerY.equalTo(contentView);
             }];
             [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.centerX.equalTo(contentView);
+                make.left.centerY.equalTo(contentView);
             }];
             width = size.width + image.size.width + spacing;
             height = (size.height > image.size.height) ? size.height : image.size.height;
@@ -389,6 +389,7 @@
         make.size.mas_equalTo(CGSizeMake(width, height));
     }];
     result.frame = CGRectMake(0, 0, width, height);
+    [superView addSubview:result];
     return result;
 }
 

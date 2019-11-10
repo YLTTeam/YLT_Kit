@@ -33,6 +33,12 @@
 {
     [super viewDidLoad];
     
+    UIButton *btn = [UIButton ylt_createSuperView:self.view buttonLayout:YLT_ButtonLayoutImageAtBottom image:[UIImage imageNamed:@"微信"] font:[UIFont systemFontOfSize:18] textColor:UIColor.redColor title:@"标题" spacing:4];
+    btn.backgroundColor = UIColor.greenColor;
+    [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.view);
+        make.size.mas_equalTo(CGSizeMake(200, 200));
+    }];
 //    YLT_CollectionSectionModel *model =
 //    [YLT_CollectionSectionModel ylt_createSectionData:@[@"11", @"22", @"33"]
 //                                         headerString:@"hahahha"
@@ -46,13 +52,13 @@
 //        NSLog(@"%zd", indexPath.row);
 //    });
     
-    UIView *target = UIView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
-        make.center.equalTo(self.view);
-        make.size.mas_equalTo(CGSizeMake(50, 50));
-    }).ylt_backgroundColor(UIColor.redColor).ylt_clickBlock(^(UIView *sender) {
-        NSLog(@"%@", sender);
-    });
-    target.hitsEdgeInsets = UIEdgeInsetsMake(-100, -100, -100, -100);
+//    UIView *target = UIView.ylt_createLayout(self.view, ^(MASConstraintMaker *make) {
+//        make.center.equalTo(self.view);
+//        make.size.mas_equalTo(CGSizeMake(50, 50));
+//    }).ylt_backgroundColor(UIColor.redColor).ylt_clickBlock(^(UIView *sender) {
+//        NSLog(@"%@", sender);
+//    });
+//    target.hitsEdgeInsets = UIEdgeInsetsMake(-100, -100, -100, -100);
     
     
 //    UIImage *image = [UIImage imageNamed:@"bg.png"];
