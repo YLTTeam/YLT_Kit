@@ -321,6 +321,7 @@
     CGSize size = [title sizeWithAttributes:@{NSFontAttributeName:font}];
     
     UIView *contentView = [[UIView alloc] init];
+    contentView.userInteractionEnabled = NO;
     contentView.backgroundColor = UIColor.clearColor;
     [result addSubview:contentView];
     
