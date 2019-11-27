@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YLT_Kit'
-  s.version          = '0.3.52'
+  s.version          = '0.3.53'
   s.summary          = 'YLT_Kit. 基础的kit框架'
 
   s.description      = <<-DESC

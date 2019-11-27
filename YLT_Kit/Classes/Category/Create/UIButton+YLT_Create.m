@@ -174,7 +174,7 @@
 /**
  布局
  */
-- (UIButton *(^)(YLT_ButtonLayout layout))ylt_layout {
+- (UIButton *(^)(YLT_ButtonLayout layout))ylt_buttonLayout {
     @weakify(self);
     return ^id(YLT_ButtonLayout layout) {
         @strongify(self);
@@ -304,7 +304,7 @@
     .ylt_normalTitle(title)
     .ylt_normarlImage(image)
     .ylt_normalColor([@"0x515151" ylt_colorFromHexString])
-    .ylt_layout(buttonLayout)
+    .ylt_buttonLayout(buttonLayout)
     .ylt_clickBlock(clickBlock);
     
     return result;

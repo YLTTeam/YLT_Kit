@@ -68,7 +68,7 @@ typedef NS_ENUM(NSUInteger, YLT_ButtonLayout) {
 /**
  布局
  */
-- (UIButton *(^)(YLT_ButtonLayout layout))ylt_layout;
+- (UIButton *(^)(YLT_ButtonLayout layout))ylt_buttonLayout;
 /**
  点击按钮的事件
  */
