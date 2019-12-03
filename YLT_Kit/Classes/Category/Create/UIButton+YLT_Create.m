@@ -115,8 +115,7 @@
             else if ([img isKindOfClass:[NSString class]]) {
                 if ([((NSString *)(img)) ylt_isURL]) {
                     [self setImageForState:state withURL:[NSURL URLWithString:img]];
-                }
-                else {
+                } else {
                     [self setImage:[UIImage ylt_imageNamed:img] forState:state];
                 }
             }

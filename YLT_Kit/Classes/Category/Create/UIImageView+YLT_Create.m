@@ -31,8 +31,7 @@
             else if ([image isKindOfClass:[NSString class]]) {
                 if ([((NSString *)image) ylt_isURL]) {
                     [self setImageWithURL:[NSURL URLWithString:(NSString *)image]];
-                }
-                else {
+                } else {
                     [self setImage:[UIImage ylt_imageNamed:(NSString *)image]];
                 }
             }
@@ -64,8 +63,7 @@
                         @strongify(self);
                         [self setImage:[image ylt_drawCircleImage]];
                     }];
-                }
-                else {
+                } else {
                     [self setImage:[[UIImage ylt_imageNamed:(NSString *)image] ylt_drawCircleImage]];
                 }
             }
@@ -95,8 +93,7 @@
                     [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                         [self setImage:[image ylt_drawRectImage:radius]];
                     }];
-                }
-                else {
+                } else {
                     [self setImage:[[UIImage ylt_imageNamed:(NSString *)image] ylt_drawRectImage:radius]];
                 }
             }

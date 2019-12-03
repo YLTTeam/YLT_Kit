@@ -61,6 +61,9 @@ static CGBitmapInfo const kTCDefaultBitMapOrder = kCGBitmapByteOrder32Little | k
  @return 图片
  */
 + (UIImage *)ylt_imageNamed:(NSString *)imageName {
+    if (!imageName.ylt_isValid) {
+        return nil;
+    }
     UIImage *result = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:imageName ofType:@"png"]];
     if (result == nil) {
         NSArray *array = [imageName componentsSeparatedByString:@"/"];
