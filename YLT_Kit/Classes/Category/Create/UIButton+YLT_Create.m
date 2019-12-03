@@ -108,11 +108,9 @@
         if ([self isKindOfClass:[UIButton class]]) {
             if ([img isKindOfClass:[UIImage class]]) {
                 [self setImage:img forState:state];
-            }
-            else if ([img isKindOfClass:[NSURL class]]) {
+            } else if ([img isKindOfClass:[NSURL class]]) {
                 [self setImageForState:state withURL:img];
-            }
-            else if ([img isKindOfClass:[NSString class]]) {
+            } else if ([img isKindOfClass:[NSString class]]) {
                 if ([((NSString *)(img)) ylt_isURL]) {
                     [self setImageForState:state withURL:[NSURL URLWithString:img]];
                 } else {

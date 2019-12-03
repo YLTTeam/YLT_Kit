@@ -24,11 +24,9 @@
         if ([self isKindOfClass:[UIImageView class]]) {
             if ([image isKindOfClass:[UIImage class]]) {
                 [self setImage:image];
-            }
-            else if ([image isKindOfClass:[NSURL class]]) {
+            } else if ([image isKindOfClass:[NSURL class]]) {
                 [self setImageWithURL:(NSURL *)image];
-            }
-            else if ([image isKindOfClass:[NSString class]]) {
+            } else if ([image isKindOfClass:[NSString class]]) {
                 if ([((NSString *)image) ylt_isURL]) {
                     [self setImageWithURL:[NSURL URLWithString:(NSString *)image]];
                 } else {
@@ -50,14 +48,12 @@
         if ([self isKindOfClass:[UIImageView class]]) {
             if ([image isKindOfClass:[UIImage class]]) {
                 [self setImage:[image ylt_drawCircleImage]];
-            }
-            else if ([image isKindOfClass:[NSURL class]]) {
+            } else if ([image isKindOfClass:[NSURL class]]) {
                 [self sd_setImageWithURL:(NSURL *)image completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                     @strongify(self);
                     [self setImage:[image ylt_drawCircleImage]];
                 }];
-            }
-            else if ([image isKindOfClass:[NSString class]]) {
+            } else if ([image isKindOfClass:[NSString class]]) {
                 if ([((NSString *)image) ylt_isURL]) {
                     [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                         @strongify(self);
@@ -82,13 +78,11 @@
         if ([self isKindOfClass:[UIImageView class]]) {
             if ([image isKindOfClass:[UIImage class]]) {
                 [self setImage:[image ylt_drawRectImage:radius]];
-            }
-            else if ([image isKindOfClass:[NSURL class]]) {
+            } else if ([image isKindOfClass:[NSURL class]]) {
                 [self sd_setImageWithURL:(NSURL *)image completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                     [self setImage:[image ylt_drawRectImage:radius]];
                 }];
-            }
-            else if ([image isKindOfClass:[NSString class]]) {
+            } else if ([image isKindOfClass:[NSString class]]) {
                 if ([((NSString *)image) ylt_isURL]) {
                     [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                         [self setImage:[image ylt_drawRectImage:radius]];
