@@ -121,13 +121,10 @@ YLT_ShareInstance(YLT_FileHelper);
 
 + (void)ylt_readImageFromPath:(NSString *)path callback:(void (^)(UIImage *))callback {
     [self ylt_readFileFromPath:path callback:^(NSData *result) {
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            UIImage *result = [UIImage imageWithData:result];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (callback) {
-                    callback(result);
-                }
-            });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (callback) {
+                callback([UIImage imageWithData:result]);
+            }
         });
     }];
 }

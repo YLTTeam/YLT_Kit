@@ -11,6 +11,10 @@
 #import <arpa/inet.h>
 #import <net/if.h>
 #import "sys/utsname.h"
+#import "YLT_BaseMacro.h"
+#import "NSObject+YLT_Extension.h"
+#import <ReactiveObjC/ReactiveObjC.h>
+#import "NSObject+YLT_Router.h"
 
 @implementation NSString (YLT_Extension)
 
@@ -26,6 +30,22 @@
 @dynamic ylt_isURL;
 @dynamic ylt_isLocalPath;
 @dynamic ylt_isAllChinese;
+
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [NSClassFromString(@"NSPlaceholderString") ylt_swizzleInstanceMethod:@selector(initWithData:encoding:) withMethod:@selector(initWithYLT_Data:encoding:)];
+        [NSClassFromString(@"NSTaggedPointerString") ylt_swizzleInstanceMethod:@selector(initWithData:encoding:) withMethod:@selector(initWithYLT_Data:encoding:)];
+        [NSClassFromString(@"__NSCFString") ylt_swizzleInstanceMethod:@selector(initWithData:encoding:) withMethod:@selector(initWithYLT_Data:encoding:)];
+    });
+}
+
+- (instancetype)initWithYLT_Data:(NSData *)data encoding:(NSStringEncoding)encoding {
+    if (data == nil || [data isKindOfClass:[NSNull class]]) {
+        return @"";
+    }
+    return [self initWithYLT_Data:data encoding:encoding];
+}
 
 #pragma mark - Public method 类方法
 /**
@@ -961,6 +981,24 @@
         searchRange = NSMakeRange(NSMaxRange(range), [str length] - NSMaxRange(range));
     }
     return results;
+}
+
+/// 路由事件
+- (id(^)(id params))ylt_router {
+    @weakify(self);
+    return ^id(id params) {
+        @strongify(self);
+        return YLT_Router(self.ylt_currentVC, self, params, nil);
+    };
+}
+
+/// 路由事件
+- (id(^)(id params, void(^completion)(NSError *error, id response)))ylt_routerCallback {
+    @weakify(self);
+    return ^id(id params, void(^completion)(NSError *error, id response)) {
+        @strongify(self);
+        return YLT_Router(self.ylt_currentVC, self, params, completion);
+    };
 }
 
 @end

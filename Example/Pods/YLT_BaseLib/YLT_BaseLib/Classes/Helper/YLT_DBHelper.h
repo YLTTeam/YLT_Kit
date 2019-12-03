@@ -14,6 +14,12 @@
 
 YLT_ShareInstanceHeader(YLT_DBHelper);
 
+///  所有私有数据库路径（即跟用户相关的数据库）
+@property (nonatomic, strong, readonly) NSMutableArray<NSString *> *ylt_allUserDBPaths;
+
+/// 数据库版本号 2019101201 一定是这种格式递增的样式
+@property (nonatomic, assign) NSInteger ylt_dbVersion;
+
 /**
  数据库路径
  */

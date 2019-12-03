@@ -75,5 +75,4 @@ void ylt_swizzleInstanceMethod(Class cls, SEL originSelector, SEL newSelector);
  */
 + (void)ylt_removeValueForKey:(NSString *)key;
 
-
 @end

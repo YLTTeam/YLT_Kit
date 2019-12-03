@@ -6,6 +6,7 @@
 //
 
 #import "YLT_LogHelper.h"
+#import "NSString+YLT_Extension.h"
 
 @implementation YLT_LogModel
 
@@ -35,150 +36,122 @@
     return result;
 }
 
-- (NSInteger)saveDB:(FMDatabase *)db {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    NSInteger result = 0;
-    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS DB_YLT_LogModel(logId INTEGER PRIMARY KEY AUTOINCREMENT, log TEXT, mark TEXT, time INTEGER, dateTime TEXT)"];
-    result = [db executeUpdate:@"INSERT INTO DB_YLT_LogModel(log,mark,time,dateTime) VALUES (?,?,?,?)", self.log, self.mark, [NSNumber numberWithInteger:self.time], self.dateTime];
-    result = [db lastInsertRowId];
-    if (sync) {
-        [db close];
-    }
-    return result;
+- (void)saveDB:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        BOOL result = NO;
+        
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            [db executeUpdate:@"CREATE TABLE IF NOT EXISTS DB_YLT_LogModel(logId INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, log TEXT, mark TEXT, time INTEGER, dateTime TEXT)"];
+            if ([db executeUpdate:@"INSERT INTO DB_YLT_LogModel(title,log,mark,time,dateTime) VALUES (?,?,?,?,?)", self.title, self.log, self.mark, [NSNumber numberWithInteger:self.time], self.dateTime]) {
+                result = YES;
+            }
+        }
+        if (complete) {
+            complete(@(result));
+        }
+    }];
 }
 
-- (BOOL)delDB:(FMDatabase *)db {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    BOOL result = NO;
-    result = [db executeUpdate:@"DELETE FROM DB_YLT_LogModel WHERE logId = ?", [NSNumber numberWithInteger:self.logId]];
-    if (sync) {
-        [db close];
-    }
-    return result;
++ (void)findDB_ForConditions:(NSString *)sender complete:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        NSMutableArray *result = nil;
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            result = [[NSMutableArray alloc] init];
+            FMResultSet* set;
+            if (!sender.ylt_isValid) {
+                set = [db executeQuery:@"SELECT * FROM DB_YLT_LogModel"];
+            } else {
+                set = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM DB_YLT_LogModel WHERE %@", sender]];
+            }
+            while ([set next]) {
+                YLT_LogModel *item = [[YLT_LogModel alloc] init];
+                item.logId = [set intForColumn:@"logId"];
+                item.title = [set stringForColumn:@"title"];
+                item.log = [set stringForColumn:@"log"];
+                item.mark = [set stringForColumn:@"mark"];
+                item.time = [set intForColumn:@"time"];
+                item.dateTime = [set stringForColumn:@"dateTime"];
+                [result addObject:item];
+            }
+        }
+        if (complete) {
+            complete(result);
+        }
+    }];
 }
 
-+ (BOOL)delDB:(FMDatabase *)db forConditions:(NSString *)sender {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    BOOL result = NO;
-    result = [db executeUpdate:[NSString stringWithFormat:@"DELETE FROM DB_YLT_LogModel WHERE %@", sender]];
-    if (sync) {
-        [db close];
-    }
-    return result;
+- (void)updateDB:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        BOOL result = NO;
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            if ([db executeUpdate:@"UPDATE DB_YLT_LogModel SET  title = ?, log = ?, mark = ?, time = ?, dateTime = ? WHERE logId = ?", self.title, self.log, self.mark, [NSNumber numberWithInteger:self.time], self.dateTime, [NSNumber numberWithInteger:self.logId]]) {
+                result = YES;
+            }
+        }
+        if (complete) {
+            complete(@(result));
+        }
+    }];
 }
 
-- (BOOL)updateDB:(FMDatabase *)db {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    BOOL result = NO;
-    result = [db executeUpdate:@"UPDATE DB_YLT_LogModel SET  log = ?, mark = ?, time = ?, dateTime = ? WHERE logId = ?", self.log, self.mark, [NSNumber numberWithInteger:self.time], self.dateTime, [NSNumber numberWithInteger:self.logId]];
-    if (sync) {
-        [db close];
-    }
-    return result;
++ (void)updateDB_ForConditions:(NSString *)sender complete:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        BOOL result = NO;
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            if ([db executeUpdate:[NSString stringWithFormat:@"UPDATE DB_YLT_LogModel SET %@", sender]]) {
+                result = YES;
+            }
+        }
+        if (complete) {
+            complete(@(result));
+        }
+    }];
 }
 
-+ (BOOL)updateDB:(FMDatabase *)db forConditions:(NSString *)sender {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    BOOL result = NO;
-    result = [db executeUpdate:[NSString stringWithFormat:@"UPDATE DB_YLT_LogModel SET %@", sender]];
-    if (sync) {
-        [db close];
-    }
-    return result;
+- (void)delDB:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        BOOL result = NO;
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            if ([db executeUpdate:@"DELETE FROM DB_YLT_LogModel WHERE logId = ?", [NSNumber numberWithInteger:self.logId]]) {
+                result = YES;
+            }
+        }
+        if (complete) {
+            complete(@(result));
+        }
+    }];
 }
 
-+ (NSArray *)findDB:(FMDatabase *)db forConditions:(NSString *)sender {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return nil;
-    }
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    FMResultSet* set;
-    if (sender.length == 0) {
-        set = [db executeQuery:@"SELECT * FROM DB_YLT_LogModel"];
-    }
-    else {
-        set = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM DB_YLT_LogModel WHERE %@", sender]];
-    }
-    while ([set next]) {
-        YLT_LogModel *item = [[YLT_LogModel alloc] init];
-        item.logId = [set intForColumn:@"logId"];
-        item.log = [set stringForColumn:@"log"];
-        item.mark = [set stringForColumn:@"mark"];
-        item.time = [set intForColumn:@"time"];
-        item.dateTime = [set stringForColumn:@"dateTime"];
-        [result addObject:item];
-    }
-    if (sync) {
-        [db close];
-    }
-    return result;
-}
-
-+ (NSInteger)maxKeyValueDB:(FMDatabase *)db {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    FMResultSet* set = [db executeQuery:@"SELECT MAX(CAST(logId as INT)) FROM DB_YLT_LogModel"];
-    NSInteger result = 0;
-    if ([set next]) {
-        result = [set intForColumnIndex:0];
-    }
-    if (sync) {
-        [db close];
-    }
-    return result;
++ (void)delDB_ForConditions:(NSString *)sender complete:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        BOOL result = NO;
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            if (!sender.ylt_isValid) {
+                if ([db executeUpdate:[NSString stringWithFormat:@"DELETE FROM DB_YLT_LogModel"]]) {
+                    result = YES;
+                }
+            } else {
+            if ([db executeUpdate:[NSString stringWithFormat:@"DELETE FROM DB_YLT_LogModel WHERE %@", sender]]) {
+                    result = YES;
+                }
+            }
+        }
+        if (complete) {
+            complete(@(result));
+        }
+    }];
 }
 
 @end
@@ -214,152 +187,123 @@
     return result;
 }
 
-- (NSInteger)saveDB:(FMDatabase *)db {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    NSInteger result = 0;
-    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS DB_YLT_APILogModel(logId INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT, parameters TEXT, result TEXT, mark TEXT, time INTEGER, dateTime TEXT)"];
-    result = [db executeUpdate:@"INSERT INTO DB_YLT_APILogModel(url,parameters,result,mark,time,dateTime) VALUES (?,?,?,?,?,?)", self.url, self.parameters, self.result, self.mark, [NSNumber numberWithInteger:self.time], self.dateTime];
-    result = [db lastInsertRowId];
-    if (sync) {
-        [db close];
-    }
-    return result;
+- (void)saveDB:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        BOOL result = NO;
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            [db executeUpdate:@"CREATE TABLE IF NOT EXISTS DB_YLT_APILogModel(logId INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, url TEXT, parameters TEXT, result TEXT, mark TEXT, time INTEGER, dateTime TEXT)"];
+            if ([db executeUpdate:@"INSERT INTO DB_YLT_APILogModel(title,url,parameters,result,mark,time,dateTime) VALUES (?,?,?,?,?,?,?)", self.title, self.url, self.parameters, self.result, self.mark, [NSNumber numberWithInteger:self.time], self.dateTime]) {
+                result = YES;
+            }
+        }
+        if (complete) {
+            complete(@(result));
+        }
+    }];
 }
 
-- (BOOL)delDB:(FMDatabase *)db {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    BOOL result = NO;
-    result = [db executeUpdate:@"DELETE FROM DB_YLT_APILogModel WHERE logId = ?", [NSNumber numberWithInteger:self.logId]];
-    if (sync) {
-        [db close];
-    }
-    return result;
++ (void)findDB_ForConditions:(NSString *)sender complete:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        NSMutableArray *result = nil;
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            result = [[NSMutableArray alloc] init];
+            FMResultSet* set;
+            if (!sender.ylt_isValid) {
+                set = [db executeQuery:@"SELECT * FROM DB_YLT_APILogModel"];
+            } else {
+                set = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM DB_YLT_APILogModel WHERE %@", sender]];
+            }
+            while ([set next]) {
+                YLT_APILogModel *item = [[YLT_APILogModel alloc] init];
+                item.logId = [set intForColumn:@"logId"];
+                item.title = [set stringForColumn:@"title"];
+                item.url = [set stringForColumn:@"url"];
+                item.parameters = [set stringForColumn:@"parameters"];
+                item.result = [set stringForColumn:@"result"];
+                item.mark = [set stringForColumn:@"mark"];
+                item.time = [set intForColumn:@"time"];
+                item.dateTime = [set stringForColumn:@"dateTime"];
+                [result addObject:item];
+            }
+        }
+        if (complete) {
+            complete(result);
+        }
+    }];
 }
 
-+ (BOOL)delDB:(FMDatabase *)db forConditions:(NSString *)sender {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    BOOL result = NO;
-    result = [db executeUpdate:[NSString stringWithFormat:@"DELETE FROM DB_YLT_APILogModel WHERE %@", sender]];
-    if (sync) {
-        [db close];
-    }
-    return result;
+- (void)updateDB:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        BOOL result = NO;
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            if ([db executeUpdate:@"UPDATE DB_YLT_APILogModel SET  title = ?, url = ?, parameters = ?, result = ?, mark = ?, time = ?, dateTime = ? WHERE logId = ?", self.title, self.url, self.parameters, self.result, self.mark, [NSNumber numberWithInteger:self.time], self.dateTime, [NSNumber numberWithInteger:self.logId]]) {
+                result = YES;
+            }
+        }
+        if (complete) {
+            complete(@(result));
+        }
+    }];
 }
 
-- (BOOL)updateDB:(FMDatabase *)db {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    BOOL result = NO;
-    result = [db executeUpdate:@"UPDATE DB_YLT_APILogModel SET  url = ?, parameters = ?, result = ?, mark = ?, time = ?, dateTime = ? WHERE logId = ?", self.url, self.parameters, self.result, self.mark, [NSNumber numberWithInteger:self.time], self.dateTime, [NSNumber numberWithInteger:self.logId]];
-    if (sync) {
-        [db close];
-    }
-    return result;
++ (void)updateDB_ForConditions:(NSString *)sender complete:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        BOOL result = NO;
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            if ([db executeUpdate:[NSString stringWithFormat:@"UPDATE DB_YLT_APILogModel SET %@", sender]]) {
+                result = YES;
+            }
+        }
+        if (complete) {
+            complete(@(result));
+        }
+    }];
 }
 
-+ (BOOL)updateDB:(FMDatabase *)db forConditions:(NSString *)sender {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    BOOL result = NO;
-    result = [db executeUpdate:[NSString stringWithFormat:@"UPDATE DB_YLT_APILogModel SET %@", sender]];
-    if (sync) {
-        [db close];
-    }
-    return result;
+- (void)delDB:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        BOOL result = NO;
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            if ([db executeUpdate:@"DELETE FROM DB_YLT_APILogModel WHERE logId = ?", [NSNumber numberWithInteger:self.logId]]) {
+                result = YES;
+            }
+        }
+        if (complete) {
+            complete(@(result));
+        }
+    }];
 }
 
-+ (NSArray *)findDB:(FMDatabase *)db forConditions:(NSString *)sender {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return nil;
-    }
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    FMResultSet* set;
-    if (sender.length == 0) {
-        set = [db executeQuery:@"SELECT * FROM DB_YLT_APILogModel"];
-    }
-    else {
-        set = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM DB_YLT_APILogModel WHERE %@", sender]];
-    }
-    while ([set next]) {
-        YLT_APILogModel *item = [[YLT_APILogModel alloc] init];
-        item.logId = [set intForColumn:@"logId"];
-        item.url = [set stringForColumn:@"url"];
-        item.parameters = [set stringForColumn:@"parameters"];
-        item.result = [set stringForColumn:@"result"];
-        item.mark = [set stringForColumn:@"mark"];
-        item.time = [set intForColumn:@"time"];
-        item.dateTime = [set stringForColumn:@"dateTime"];
-        [result addObject:item];
-    }
-    if (sync) {
-        [db close];
-    }
-    return result;
-}
-
-+ (NSInteger)maxKeyValueDB:(FMDatabase *)db {
-    BOOL sync = NO;
-    if (db == nil) {
-        sync = YES;
-        db = [FMDatabase databaseWithPath:[YLT_DBHelper shareInstance].ylt_dbPath];
-    }
-    if (![db open]) {
-        YLT_LogWarn(@"数据库错误");
-        return 0;
-    }
-    FMResultSet* set = [db executeQuery:@"SELECT MAX(CAST(logId as INT)) FROM DB_YLT_APILogModel"];
-    NSInteger result = 0;
-    if ([set next]) {
-        result = [set intForColumnIndex:0];
-    }
-    if (sync) {
-        [db close];
-    }
-    return result;
++ (void)delDB_ForConditions:(NSString *)sender complete:(void(^)(id response))complete {
+    [[YLT_DBHelper shareInstance].ylt_databaseQueue inDatabase:^(FMDatabase * _Nonnull db) {
+        BOOL result = NO;
+        if (!db.isOpen) {
+            YLT_LogWarn(@"数据库错误");
+        } else {
+            if (!sender.ylt_isValid) {
+                if ([db executeUpdate:[NSString stringWithFormat:@"DELETE FROM DB_YLT_APILogModel"]]) {
+                    result = YES;
+                }
+            } else {
+                if ([db executeUpdate:[NSString stringWithFormat:@"DELETE FROM DB_YLT_APILogModel WHERE %@", sender]]) {
+                    result = YES;
+                }
+            }
+        }
+        if (complete) {
+            complete(@(result));
+        }
+    }];
 }
 
 @end
@@ -378,8 +322,8 @@
     if (![db open]) {
         YLT_LogWarn(@"数据库错误");
     }
-    [db executeUpdate:@"DROP TABLE IF NOT EXISTS DB_YLT_APILogModel"];
-    [db executeUpdate:@"DROP TABLE IF NOT EXISTS DB_YLT_LogModel"];
+    [db executeUpdate:@"DROP TABLE IF EXISTS DB_YLT_APILogModel"];
+    [db executeUpdate:@"DROP TABLE IF EXISTS DB_YLT_LogModel"];
     [db close];
 }
 

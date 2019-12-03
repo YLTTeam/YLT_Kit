@@ -122,6 +122,7 @@ void ylt_swizzleInstanceMethod(Class cls, SEL originSelector, SEL newSelector) {
  @return 当前控制器
  */
 - (UIViewController *)ylt_currentVC {
+    UIResponder *responder = nil;
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     if (window.windowLevel != UIWindowLevelNormal) {
         NSArray *windows = [[UIApplication sharedApplication] windows];
@@ -132,18 +133,19 @@ void ylt_swizzleInstanceMethod(Class cls, SEL originSelector, SEL newSelector) {
         }
     }
     for (UIView *subView in [window subviews]) {
-        UIResponder *responder = [subView nextResponder];
+        responder = [subView nextResponder];
         if ([responder isEqual:window]) {
             if ([[subView subviews] count]) {
                 UIView *subSubView = [subView subviews][0];
                 responder = [subSubView nextResponder];
             }
         }
-        if([responder isKindOfClass:[UIViewController class]]) {
-            return [NSObject ylt_topViewController:((UIViewController *) responder)];
-        }
+        
     }
-    return window.rootViewController;
+    if (responder == nil || ![responder isKindOfClass:[UIViewController class]]) {
+        responder = window.rootViewController;
+    }
+    return [self ylt_topViewController:((UIViewController *) responder)];
 }
 
 - (UIViewController *)ylt_topViewController:(UIViewController *)controller {

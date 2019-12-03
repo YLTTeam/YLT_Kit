@@ -17,6 +17,7 @@
 @property (nonatomic, copy) void(^success)(NSDictionary *info);
 @property (nonatomic, copy) void(^failed)(NSError *error);
 @property (nonatomic, strong) UIImagePickerController *pickerVC;
+@property (nonatomic, assign) UIScrollViewContentInsetAdjustmentBehavior lastContentInsetAdjustmentBehavior API_AVAILABLE(ios(11.0));
 
 @end
 
@@ -41,6 +42,11 @@ YLT_ShareInstance(YLT_PhotoHelper);
     [[YLT_AuthorizationHelper shareInstance] ylt_authorizationType:YLT_Camera success:^{
         [YLT_PhotoHelper shareInstance].pickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
         [YLT_PhotoHelper shareInstance].pickerVC.allowsEditing = allowEdit;
+        if (@available(iOS 11.0, *)) {
+            [YLT_PhotoHelper shareInstance].lastContentInsetAdjustmentBehavior = [UIScrollView appearance].contentInsetAdjustmentBehavior;
+            [UIScrollView appearance].contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAutomatic;
+        } else {
+        }
         [[YLT_PhotoHelper shareInstance].ylt_currentVC presentViewController:[YLT_PhotoHelper shareInstance].pickerVC animated:YES completion:nil];
     } failed:^{
         NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:PHAuthorizationStatusDenied userInfo:@{NSLocalizedDescriptionKey:@"无权限访问"}];
@@ -66,6 +72,11 @@ YLT_ShareInstance(YLT_PhotoHelper);
     [[YLT_AuthorizationHelper shareInstance] ylt_authorizationType:YLT_PhotoLibrary success:^{
         [YLT_PhotoHelper shareInstance].pickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [YLT_PhotoHelper shareInstance].pickerVC.allowsEditing = allowEdit;
+        if (@available(iOS 11.0, *)) {
+            [YLT_PhotoHelper shareInstance].lastContentInsetAdjustmentBehavior = [UIScrollView appearance].contentInsetAdjustmentBehavior;
+            [UIScrollView appearance].contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAutomatic;
+        } else {
+        }
         [[YLT_PhotoHelper shareInstance].ylt_currentVC presentViewController:[YLT_PhotoHelper shareInstance].pickerVC animated:YES completion:nil];
     } failed:^{
         NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:PHAuthorizationStatusDenied userInfo:@{NSLocalizedDescriptionKey:@"无权限访问"}];
@@ -80,12 +91,20 @@ YLT_ShareInstance(YLT_PhotoHelper);
         [YLT_PhotoHelper shareInstance].success(info);
     }
     [self.pickerVC dismissViewControllerAnimated:YES completion:nil];
+    if (@available(iOS 11.0, *)) {
+        [UIScrollView appearance].contentInsetAdjustmentBehavior = self.lastContentInsetAdjustmentBehavior;
+    } else {
+    }
     [YLT_PhotoHelper shareInstance].pickerVC = nil;
 }
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:@"用户取消"}];
     [YLT_PhotoHelper shareInstance].failed(error);
     [self.pickerVC dismissViewControllerAnimated:YES completion:nil];
+    if (@available(iOS 11.0, *)) {
+        [UIScrollView appearance].contentInsetAdjustmentBehavior = self.lastContentInsetAdjustmentBehavior;
+    } else {
+    }
     [YLT_PhotoHelper shareInstance].pickerVC = nil;
 }
 

@@ -58,7 +58,12 @@
 #define iOS12  ([[UIDevice currentDevice] systemVersion].floatValue >= 12.0 && [[UIDevice currentDevice] systemVersion].floatValue <= 13.0)
 #define iOS12Later  ([[UIDevice currentDevice] systemVersion].floatValue >= 12.0)
 
-#define iOSNew ([[UIDevice currentDevice] systemVersion].floatValue >= 13.0)
+#define iOS13  ([[UIDevice currentDevice] systemVersion].floatValue >= 13.0 && [[UIDevice currentDevice] systemVersion].floatValue <= 14.0)
+#define iOS13Later  ([[UIDevice currentDevice] systemVersion].floatValue >= 13.0)
+
+#define iOSNew ([[UIDevice currentDevice] systemVersion].floatValue >= 14.0)
+
+#define YLT_IsDark (iOS12Later ? (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) : NO)
 
 /// 获取系统对象
 #define YLT_Application        [UIApplication sharedApplication]
@@ -77,7 +82,7 @@
 #define YLT_SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 #define YLT_SCREEN_BOUNDS [UIScreen mainScreen].bounds
 //宽度比例
-#define YLT_Scale_Width(width) (width) * YLT_SCREEN_WIDTH / 375.0
+#define YLT_Scale_Width(width) (((CGFloat)width)*YLT_SCREEN_WIDTH/375.0)
 
 // iOS沙盒目录
 #define YLT_DOCUMENT_PATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
@@ -135,6 +140,11 @@
 #define YLT_HEXCOLORA(hex,a) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:a]
 #define YLT_StringColor(color) [color ylt_colorFromHexString]
 #define YLT_StringValue(str) [str ylt_isValid]?str:@""
+
+// 路由
+#define YLT_Router(target, routerStr, attributeData, callback) [target ylt_routerHandler:routerStr params:attributeData completion:callback]
+// 快速路由
+#define YLT_RouterQuick(routerStr, attributeData) YLT_Router(self, routerStr, attributeData, nil)
 
 ///  通知处理
 // 增加一个通知监听
@@ -231,5 +241,8 @@
 
 #define YLT_BeginIgnoreUndeclaredSelecror YLT_BeginIgnoreClangWarning(-Wundeclared-selector)
 #define YLT_EndIgnoreUndeclaredSelecror YLT_EndIgnoreClangWarning
+
+#define YLT_BeginIgnoreUnusedVariable YLT_BeginIgnoreClangWarning(-Wunused-variable)
+#define YLT_EndIgnoreUnusedVariable YLT_EndIgnoreClangWarning
 
 #endif /* YLT_BaseMacro_h */

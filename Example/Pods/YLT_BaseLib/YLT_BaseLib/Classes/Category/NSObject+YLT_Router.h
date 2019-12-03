@@ -69,7 +69,6 @@
  */
 - (id)ylt_routerToClassname:(NSString *)clsname selname:(NSString *)selname isClassMethod:(BOOL)isClassMethod arg:(id)arg completion:(void(^)(NSError *error, id response))completion;
 
-
 /**
  路由数据分析
  
@@ -77,5 +76,11 @@
  @return 数据
  */
 - (NSDictionary *)analysisURL:(NSString *)routerURL;
+
+/// 快速路由记录
+/// @param selname 方法名
+/// @param params 参数
+/// @param completion 回调
+- (id)ylt_routerHandler:(NSString *)selname params:(id)params completion:(void(^)(NSError *error, id response))completion;
 
 @end
