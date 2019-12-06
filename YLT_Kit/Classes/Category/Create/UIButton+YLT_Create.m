@@ -11,9 +11,24 @@
 #import <YLT_BaseLib/YLT_BaseLib.h>
 #import <AFNetworking/UIButton+AFNetworking.h>
 #import "UIImage+YLT_Extension.h"
+#import <objc/message.h>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincomplete-implementation"
+
+@interface UIButton (YLT_CreateData)
+
+/** <#注释#> */
+@property (nonatomic, strong) UIView *ylt_contentView;
+
+/** <#注释#> */
+@property (nonatomic, strong) UIImageView *ylt_imageView;
+
+/** <#注释#> */
+@property (nonatomic, strong) UILabel *ylt_titleLabel;
+
+@end
+
 
 @implementation UIButton (YLT_Create)
 /**
@@ -171,33 +186,86 @@
 /**
  布局
  */
-- (UIButton *(^)(YLT_ButtonLayout layout))ylt_buttonLayout {
+- (UIButton *(^)(YLT_ButtonLayout layout, CGFloat spacing))ylt_buttonLayout {
     @weakify(self);
-    return ^id(YLT_ButtonLayout layout) {
+    return ^id(YLT_ButtonLayout layout, CGFloat spacing) {
         @strongify(self);
+        [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            obj.hidden = YES;
+        }];
         [self layoutIfNeeded];
+        CGSize size = [self.currentTitle sizeWithAttributes:@{NSFontAttributeName:self.titleLabel.font}];
+        self.ylt_contentView.userInteractionEnabled = NO;
+        self.ylt_contentView.backgroundColor = UIColor.clearColor;
+        [self addSubview:self.ylt_contentView];
+        
+        self.ylt_imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.ylt_contentView addSubview:self.ylt_imageView];
+        [self.ylt_contentView addSubview:self.ylt_titleLabel];
+        
+        CGFloat width = 0;
+        CGFloat height = 0;
+        UIImage *image = self.currentImage;
+        
         switch (layout) {
-            case YLT_ButtonLayoutImageAtLeft: {
-                self.titleEdgeInsets = UIEdgeInsetsZero;
-                self.imageEdgeInsets = UIEdgeInsetsZero;
-            }
-                break;
-            case YLT_ButtonLayoutImageAtRight: {
-                self.titleEdgeInsets = UIEdgeInsetsMake(0.0, -self.imageView.frame.size.width-self.frame.size.width + self.titleLabel.intrinsicContentSize.width, 0.0, 0.0);
-                self.imageEdgeInsets = UIEdgeInsetsMake(0.0,  0.0, 0.0, -self.titleLabel.frame.size.width-self.frame.size.width+self.imageView.frame.size.width);
-            }
-                break;
             case YLT_ButtonLayoutImageAtTop: {
-                self.titleEdgeInsets = UIEdgeInsetsMake(0.0, -self.imageView.frame.size.width, -self.imageView.frame.size.height, 0.0);
-                self.imageEdgeInsets = UIEdgeInsetsMake(-self.titleLabel.intrinsicContentSize.height, 0.0, 0.0, -self.titleLabel.intrinsicContentSize.width);
+                [self.ylt_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.centerX.equalTo(self.ylt_contentView);
+                }];
+                [self.ylt_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.bottom.centerX.equalTo(self.ylt_contentView);
+                }];
+                height = size.height + image.size.height + spacing;
+                width = (size.width > image.size.width) ? size.width : image.size.width;
             }
                 break;
             case YLT_ButtonLayoutImageAtBottom: {
-                self.titleEdgeInsets = UIEdgeInsetsMake(-self.titleLabel.intrinsicContentSize.height, -self.imageView.frame.size.width, 0.0, 0.0);
-                self.imageEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, -self.imageView.frame.size.height, -self.titleLabel.intrinsicContentSize.width);
+                [self.ylt_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.bottom.centerX.equalTo(self.ylt_contentView);
+                }];
+                [self.ylt_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.centerX.equalTo(self.ylt_contentView);
+                }];
+                height = size.height + image.size.height + spacing;
+                width = (size.width > image.size.width) ? size.width : image.size.width;
+            }
+                break;
+            case YLT_ButtonLayoutImageAtLeft: {
+                [self.ylt_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.centerY.equalTo(self.ylt_contentView);
+                }];
+                [self.ylt_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.right.centerY.equalTo(self.ylt_contentView);
+                }];
+                width = size.width + image.size.width + spacing;
+                height = (size.height > image.size.height) ? size.height : image.size.height;
+            }
+                break;
+            case YLT_ButtonLayoutImageAtRight: {
+                [self.ylt_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.right.centerY.equalTo(self.ylt_contentView);
+                }];
+                [self.ylt_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.centerY.equalTo(self.ylt_contentView);
+                }];
+                width = size.width + image.size.width + spacing;
+                height = (size.height > image.size.height) ? size.height : image.size.height;
             }
                 break;
         }
+        [self.ylt_contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.center.equalTo(self);
+            make.size.mas_equalTo(CGSizeMake(width, height));
+        }];
+        self.ylt_imageView.image = self.currentImage;
+        self.ylt_titleLabel.text = self.currentTitle;
+        self.ylt_titleLabel.font = self.titleLabel.font;
+        self.ylt_titleLabel.textColor = self.titleLabel.textColor;
+        
+        self.ylt_normarlImage(nil);
+        self.ylt_normalTitle(@"");
+        self.frame = CGRectMake(0, 0, width, height);
+        [self layoutIfNeeded];
         return self;
     };
 }
@@ -301,7 +369,7 @@
     .ylt_normalTitle(title)
     .ylt_normarlImage(image)
     .ylt_normalColor([@"0x515151" ylt_colorFromHexString])
-    .ylt_buttonLayout(buttonLayout)
+    .ylt_buttonLayout(buttonLayout, 4)
     .ylt_clickBlock(clickBlock);
     
     return result;
@@ -315,79 +383,42 @@
                             title:(NSString *)title
                           spacing:(CGFloat)spacing {
     UIButton *result = [UIButton buttonWithType:UIButtonTypeCustom];
-    CGSize size = [title sizeWithAttributes:@{NSFontAttributeName:font}];
-    
-    UIView *contentView = [[UIView alloc] init];
-    contentView.userInteractionEnabled = NO;
-    contentView.backgroundColor = UIColor.clearColor;
-    [result addSubview:contentView];
-    
-    UIImageView *imgView = [[UIImageView alloc] init];
-    imgView.contentMode = UIViewContentModeScaleAspectFit;
-    imgView.image = image;
-    [contentView addSubview:imgView];
-    
-    UILabel *nameLabel = [[UILabel alloc] init];
-    nameLabel.text = title;
-    nameLabel.font = font;
-    nameLabel.textColor = textColor;
-    [contentView addSubview:nameLabel];
-    
-    CGFloat width = 0;
-    CGFloat height = 0;
-    
-    switch (buttonLayout) {
-        case YLT_ButtonLayoutImageAtTop: {
-            [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.centerX.equalTo(contentView);
-            }];
-            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.bottom.centerX.equalTo(contentView);
-            }];
-            height = size.height + image.size.height + spacing;
-            width = (size.width > image.size.width) ? size.width : image.size.width;
-        }
-            break;
-        case YLT_ButtonLayoutImageAtBottom: {
-            [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.bottom.centerX.equalTo(contentView);
-            }];
-            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.centerX.equalTo(contentView);
-            }];
-            height = size.height + image.size.height + spacing;
-            width = (size.width > image.size.width) ? size.width : image.size.width;
-        }
-            break;
-        case YLT_ButtonLayoutImageAtLeft: {
-            [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.centerY.equalTo(contentView);
-            }];
-            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.right.centerY.equalTo(contentView);
-            }];
-            width = size.width + image.size.width + spacing;
-            height = (size.height > image.size.height) ? size.height : image.size.height;
-        }
-            break;
-        case YLT_ButtonLayoutImageAtRight: {
-            [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.right.centerY.equalTo(contentView);
-            }];
-            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.centerY.equalTo(contentView);
-            }];
-            width = size.width + image.size.width + spacing;
-            height = (size.height > image.size.height) ? size.height : image.size.height;
-        }
-            break;
-    }
-    [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(result);
-        make.size.mas_equalTo(CGSizeMake(width, height));
-    }];
-    result.frame = CGRectMake(0, 0, width, height);
+    result.ylt_normarlImage(image);
+    result.ylt_font(font);
+    result.ylt_normalColor(textColor);
+    result.ylt_normalTitle(title);
+    result.ylt_buttonLayout(buttonLayout, spacing);
     [superView addSubview:result];
+    return result;
+}
+
+- (UIView *)ylt_contentView {
+    UIView *result = objc_getAssociatedObject(self, @selector(ylt_contentView));
+    if (result == nil) {
+        result = [[UIView alloc] init];
+        objc_setAssociatedObject(self, @selector(ylt_contentView), result, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [result addSubview:self.ylt_imageView];
+        [result addSubview:self.ylt_titleLabel];
+    }
+    return result;
+}
+
+- (UIImageView *)ylt_imageView {
+    UIImageView *result = objc_getAssociatedObject(self, @selector(ylt_imageView));
+    if (result == nil) {
+        result = [[UIImageView alloc] init];
+        objc_setAssociatedObject(self, @selector(ylt_imageView), result, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
+    }
+    return result;
+}
+
+- (UILabel *)ylt_titleLabel {
+    UILabel *result = objc_getAssociatedObject(self, @selector(ylt_titleLabel));
+    if (result == nil) {
+        result = [[UILabel alloc] init];
+        objc_setAssociatedObject(self, @selector(ylt_titleLabel), result, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
     return result;
 }
 
