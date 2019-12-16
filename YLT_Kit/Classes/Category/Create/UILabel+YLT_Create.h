@@ -17,7 +17,7 @@
 /**
  文字
  */
-- (UILabel *(^)(NSString *text))ylt_text;
+- (UILabel *(^)(id text))ylt_text;
 /**
  文字颜色
  */

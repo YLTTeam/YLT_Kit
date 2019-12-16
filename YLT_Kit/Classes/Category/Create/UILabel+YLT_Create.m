@@ -66,11 +66,19 @@
 /**
  文字
  */
-- (UILabel *(^)(NSString *text))ylt_text {
+- (UILabel *(^)(id text))ylt_text {
     @weakify(self);
-    return ^id(NSString *text) {
+    return ^id(id text) {
         @strongify(self);
-        self.text = text;
+        if ([text isKindOfClass:NSString.class]) {
+            self.text = text;
+        } else if ([text isKindOfClass:RACSignal.class]) {
+            [((RACSignal *) text) subscribeNext:^(id  _Nullable x) {
+                @strongify(self);
+                self.ylt_text(x);
+            }];
+        }
+        
         return self;
     };
 }

@@ -32,6 +32,11 @@
                 } else {
                     [self setImage:[UIImage ylt_imageNamed:(NSString *)image]];
                 }
+            } else if ([image isKindOfClass:RACSignal.class]) {
+                [((RACSignal *) image) subscribeNext:^(id  _Nullable x) {
+                    @strongify(self);
+                    self.ylt_image(x);
+                }];
             }
         }
         return self;
