@@ -21,17 +21,17 @@ PODS:
   - FMDB/standard (2.7.5)
   - Masonry (1.1.0)
   - MJExtension (3.2.1)
-  - MJRefresh (3.2.3)
+  - MJRefresh (3.3.1)
   - ReactiveObjC (3.1.1)
-  - SDWebImage (5.3.2):
-    - SDWebImage/Core (= 5.3.2)
-  - SDWebImage/Core (5.3.2)
-  - YLT_BaseLib (0.3.65):
+  - SDWebImage (5.4.0):
+    - SDWebImage/Core (= 5.4.0)
+  - SDWebImage/Core (5.4.0)
+  - YLT_BaseLib (0.3.66):
     - FastCoding
     - FMDB
     - MJExtension
     - ReactiveObjC
-  - YLT_Kit (0.3.54):
+  - YLT_Kit (0.3.56):
     - AFNetworking
     - Aspects
     - Masonry
@@ -67,11 +67,11 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
-  MJRefresh: 2b1214a2dc8f4df4c5dcb028ea2ad4e245425fb7
+  MJRefresh: eeda70fbf0ad277f3178cef1cd0c3532591d6237
   ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
-  SDWebImage: 6ac2eb96571bff96ecde31a987172c5934a0eb7d
-  YLT_BaseLib: 7028d39cac77473238ea870484c7cf9dff4a344e
-  YLT_Kit: d45062e32afb43387098fde24464d0284311249d
+  SDWebImage: 5bf6aec6481ae2a062bdc59f9d6c1d1e552090e0
+  YLT_BaseLib: 0ff7acfd710c74fa82fa52b26abfc553125ccc98
+  YLT_Kit: de56b7915f6ea513c2434b003b743598c905af45
 
 PODFILE CHECKSUM: 65a474d3ca23e64c48d267336e751acf6a3ca453
 

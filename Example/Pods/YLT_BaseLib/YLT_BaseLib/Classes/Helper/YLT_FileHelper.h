@@ -20,6 +20,10 @@ YLT_ShareInstanceHeader(YLT_FileHelper);
  */
 + (NSString *)ylt_defaultFilePath;
 
+/// 在cache中创建目录
+/// @param basePath 目录结构  /root/second/
++ (BOOL)ylt_createDirectory:(NSString *)directoryPath;
+
 /**
  日志管理路径
  

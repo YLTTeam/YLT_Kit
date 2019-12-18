@@ -6,6 +6,7 @@
 //
 
 #import "YLT_FileHelper.h"
+#import "NSString+YLT_Extension.h"
 
 @implementation YLT_FileHelper
 
@@ -15,28 +16,38 @@ YLT_ShareInstance(YLT_FileHelper);
 }
 
 + (NSString *)ylt_defaultFilePath {
-    NSString *basePath = [NSString stringWithFormat:@"%@/%@", YLT_CACHE_PATH, YLT_BundleIdentifier];
+    NSString *basePath = [NSString stringWithFormat:@"%@", YLT_BundleIdentifier];
     if ([YLT_FileHelper ylt_createDirectory:basePath]) {
         return basePath;
     }
     return @"";
 }
 
-+ (BOOL)ylt_createDirectory:(NSString *)basePath {
-    BOOL result = YES;
-    BOOL isDirectory = NO;
-    if (![[NSFileManager defaultManager] fileExistsAtPath:basePath isDirectory:&isDirectory]) {
-        if (!isDirectory) {
-            @try {
-                result = [[NSFileManager defaultManager] createDirectoryAtPath:basePath withIntermediateDirectories:YES attributes:nil error:nil];
-            } @catch (NSException *exception) {
-                YLT_LogError(@"路径创建失败 %@", exception);
-                result = NO;
-            } @finally {
+/// 在cache中创建目录
+/// @param basePath 目录结构  /root/second/
++ (BOOL)ylt_createDirectory:(NSString *)directoryPath {
+    __block BOOL result = YES;
+    __block BOOL isDirectory = NO;
+    __block NSString *dir = YLT_CACHE_PATH;
+    [[directoryPath componentsSeparatedByString:@"/"] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.ylt_isValid) {
+            dir = [dir stringByAppendingPathComponent:obj];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:dir isDirectory:&isDirectory]) {
+                if (!isDirectory) {
+                    @try {
+                        result = [[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
+                    } @catch (NSException *exception) {
+                        YLT_LogError(@"路径创建失败 %@", exception);
+                        result = NO;
+                    } @finally {
+                    }
+                }
             }
+            
         }
-    }
-    return result;
+    }];
+    
+    return [[NSFileManager defaultManager] fileExistsAtPath:dir isDirectory:&isDirectory];
 }
 
 + (NSString *)ylt_createPath:(NSString *)path filename:(NSString *)filename {
@@ -56,13 +67,13 @@ YLT_ShareInstance(YLT_FileHelper);
 }
 
 + (NSString *)ylt_createLogWithFilename:(NSString *)filename {
-    NSString *basePath = [NSString stringWithFormat:@"%@/OpenLog", YLT_CACHE_PATH];
+    NSString *basePath = [NSString stringWithFormat:@"OpenLog"];
     [YLT_FileHelper ylt_createDirectory:basePath];
     return [YLT_FileHelper ylt_createPath:basePath filename:filename];
 }
 
 + (NSString *)ylt_createWithFilename:(NSString *)filename {
-    NSString *basePath = [NSString stringWithFormat:@"%@/Other", YLT_CACHE_PATH];
+    NSString *basePath = [NSString stringWithFormat:@"Other"];
     [YLT_FileHelper ylt_createDirectory:basePath];
     return [YLT_FileHelper ylt_createPath:basePath filename:filename];
 }
