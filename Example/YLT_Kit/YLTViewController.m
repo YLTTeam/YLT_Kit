@@ -32,7 +32,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     UIButton *btn = [UIButton ylt_createSuperView:self.view buttonLayout:YLT_ButtonLayoutImageAtBottom image:[UIImage imageNamed:@"微信"] font:[UIFont systemFontOfSize:18] textColor:UIColor.redColor title:@"标题" spacing:4];
     btn.backgroundColor = UIColor.greenColor;
     [btn mas_makeConstraints:^(MASConstraintMaker *make) {

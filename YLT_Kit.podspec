@@ -25,4 +25,5 @@ Pod::Spec.new do |s|
   s.dependency 'SDWebImage'
   s.dependency 'MJRefresh'
   s.dependency 'Aspects'
+  
 end
