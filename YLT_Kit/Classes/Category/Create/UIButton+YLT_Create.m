@@ -190,9 +190,9 @@
     @weakify(self);
     return ^id(YLT_ButtonLayout layout, CGFloat spacing) {
         @strongify(self);
-        [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            obj.hidden = YES;
-        }];
+//        [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            obj.hidden = YES;
+//        }];
         [self layoutIfNeeded];
         CGSize size = [self.currentTitle sizeWithAttributes:@{NSFontAttributeName:self.titleLabel.font}];
         self.ylt_contentView.userInteractionEnabled = NO;
