@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
   s.homepage         = 'https://github.com/YLTTeam/ylt_kit'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'xphaijj0305@126.com' => 'xiangph@qtec.cn' }
+  s.author           = { 'xphaijj0305@126.com' => 'xiangpuhua@126.com' }
   s.source           = { :git => 'https://github.com/YLTTeam/ylt_kit.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '8.0'
