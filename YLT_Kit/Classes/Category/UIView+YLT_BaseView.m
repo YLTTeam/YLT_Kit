@@ -149,6 +149,9 @@
     while (![obj isKindOfClass:[UIViewController class]] && obj != nil) {
         obj = (UIViewController *)[obj nextResponder];
     }
+    if (!obj) {
+        obj = self.ylt_currentVC;
+    }
     return obj;
 }
 
