@@ -64,21 +64,23 @@
 - (CAGradientLayer *)ylt_gradientLayerWithColors:(NSArray *)cgColorArray
                                        locations:(NSArray *)floatNumArray
                                       startPoint:(CGPoint )startPoint
-                                        endPoint:(CGPoint)endPoint{
+                                        endPoint:(CGPoint)endPoint {
     CAGradientLayer *layer = [CAGradientLayer layer];
-    layer.frame = self.bounds;
     if (cgColorArray && [cgColorArray count] > 0) {
         layer.colors = cgColorArray;
     } else {
         return nil;
     }
-    if (floatNumArray && [floatNumArray count] == [cgColorArray count]) {
-        layer.locations = floatNumArray;
-    }
-    layer.startPoint = startPoint;
-    layer.endPoint = endPoint;
-    [self.layer insertSublayer:layer atIndex:0];
-    
+    YLT_MAINDelay(0.1, ^{
+        layer.frame = self.bounds;
+        if (floatNumArray && [floatNumArray count] == [cgColorArray count]) {
+            layer.locations = floatNumArray;
+        }
+        layer.startPoint = startPoint;
+        layer.endPoint = endPoint;
+        [self.layer insertSublayer:layer atIndex:0];
+    });
+
     return layer;
 }
 
