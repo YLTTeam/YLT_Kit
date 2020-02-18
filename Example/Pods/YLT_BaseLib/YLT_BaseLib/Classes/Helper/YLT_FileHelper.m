@@ -32,18 +32,17 @@ YLT_ShareInstance(YLT_FileHelper);
     [[directoryPath componentsSeparatedByString:@"/"] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (obj.ylt_isValid) {
             dir = [dir stringByAppendingPathComponent:obj];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:dir isDirectory:&isDirectory]) {
-                if (!isDirectory) {
-                    @try {
-                        result = [[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
-                    } @catch (NSException *exception) {
-                        YLT_LogError(@"路径创建失败 %@", exception);
-                        result = NO;
-                    } @finally {
-                    }
+            BOOL res = [[NSFileManager defaultManager] fileExistsAtPath:dir isDirectory:&isDirectory];
+            if (!res || !isDirectory) {
+                NSError *error = nil;
+                @try {
+                    result = [[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:&error];
+                } @catch (NSException *exception) {
+                    YLT_LogError(@"路径创建失败 %@", exception);
+                    result = NO;
+                } @finally {
                 }
             }
-            
         }
     }];
     

@@ -13,7 +13,7 @@
 /**
  源数据
  */
-@property (nonatomic, strong) id ylt_sourceData;
+@property (nonatomic, strong) NSMutableDictionary *ylt_sourceData;
 
 /**
  返回当前ORM映射

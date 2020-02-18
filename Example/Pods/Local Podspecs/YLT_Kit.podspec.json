@@ -9,14 +9,14 @@
     "file": "LICENSE"
   },
   "authors": {
-    "xphaijj0305@126.com": "xiangph@qtec.cn"
+    "xphaijj0305@126.com": "xiangpuhua@126.com"
   },
   "source": {
     "git": "https://github.com/YLTTeam/ylt_kit.git",
     "tag": "0.3.62"
   },
   "platforms": {
-    "ios": "8.0"
+    "ios": "9.0"
   },
   "source_files": "YLT_Kit/Classes/**/*",
   "public_header_files": "YLT_Kit/Classes/**/*.h",

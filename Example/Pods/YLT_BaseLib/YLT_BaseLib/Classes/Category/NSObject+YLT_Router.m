@@ -361,7 +361,7 @@ static NSString *webRouterURL = nil;
         NSArray *tmpArray = [tmpStr componentsSeparatedByString:@"="];
         if (tmpArray.count == 2) {
             [params setObject:tmpArray[1] forKey:tmpArray[0]];
-        }else {
+        } else {
             YLT_LogError(@"参数不合法 : %@",tmpStr);
         }
     }
@@ -373,33 +373,37 @@ YLT_BeginIgnoreUndeclaredSelecror
 - (id)ylt_routerHandler:(NSString *)selname params:(id)params completion:(void(^)(NSError *error, id response))completion {
     __block id returnData = nil;
     if (selname.ylt_isValid) {
+        while ([selname hasPrefix:@"&"] || [selname hasPrefix:@"$"]) {
+            selname = [selname substringFromIndex:1];
+        }
         NSMutableArray<NSString *> *sels = [[NSMutableArray alloc] init];
         [sels addObject:selname];
         if (![selname hasSuffix:@":"]) {
             [sels addObject:[NSString stringWithFormat:@"%@:", selname]];
         }
-        [sels enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([selname hasPrefix:@"ylt://"] || [selname hasPrefix:@"http"]) {
-                returnData = [self ylt_routerToURL:selname arg:params completion:completion];
-                *stop = YES;
-            } else if ([self respondsToSelector:NSSelectorFromString(selname)]) {
-                if ([selname hasSuffix:@":"]) {
-                    returnData = [self performSelector:NSSelectorFromString(selname) withObject:params];
-                } else {
-                    returnData = [self performSelector:NSSelectorFromString(selname)];
-                }
-                *stop = YES;
-            } else if ([self.ylt_currentVC respondsToSelector:NSSelectorFromString(selname)]) {
-                if ([selname hasSuffix:@":"]) {
-                    returnData = [self.ylt_currentVC performSelector:NSSelectorFromString(selname) withObject:params];
-                } else {
-                    returnData = [self.ylt_currentVC performSelector:NSSelectorFromString(selname)];
-                }
-                *stop = YES;
-            } else {
-                YLT_LogError(@"事件未适配");
-            }
-        }];
+        if ([selname hasPrefix:@"ylt://"] || [selname hasPrefix:@"http"]) {
+            returnData = [self ylt_routerToURL:selname arg:params completion:completion];
+        } else {
+            [sels enumerateObjectsUsingBlock:^(NSString * _Nonnull object, NSUInteger idx, BOOL * _Nonnull selStop) {
+                [[object componentsSeparatedByString:@"."] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([selname hasPrefix:@"ylt://"] || [selname hasPrefix:@"http"]) {
+                        returnData = [self ylt_routerToURL:selname arg:params completion:completion];
+                        *selStop = YES;
+                    } else if (returnData != nil && [returnData respondsToSelector:NSSelectorFromString(obj)]) {
+                        returnData = [self safePerformAction:NSSelectorFromString(obj) target:returnData params:params];
+                        *selStop = YES;
+                    } else if ([self respondsToSelector:NSSelectorFromString(obj)]) {
+                        returnData = [self safePerformAction:NSSelectorFromString(obj) target:self params:params];
+                        *selStop = YES;
+                    } else if ([self.ylt_currentVC respondsToSelector:NSSelectorFromString(obj)]) {
+                        returnData = [self.ylt_currentVC safePerformAction:NSSelectorFromString(obj) target:self.ylt_currentVC params:params];
+                        *selStop = YES;
+                    } else {
+                        YLT_LogError(@"事件未适配");
+                    }
+                }];
+            }];
+        }
     } else {
         YLT_LogError(@"跳转事件为空");
     }

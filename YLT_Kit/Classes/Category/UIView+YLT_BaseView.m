@@ -183,11 +183,11 @@
 
 #pragma mark - getter
 
-- (void)setYlt_params:(id)ylt_params {
+- (void)setYlt_params:(NSDictionary *)ylt_params {
     objc_setAssociatedObject(self, @selector(ylt_params), ylt_params, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (id)ylt_params {
+- (NSDictionary *)ylt_params {
     return objc_getAssociatedObject(self, @selector(ylt_params));
 }
 

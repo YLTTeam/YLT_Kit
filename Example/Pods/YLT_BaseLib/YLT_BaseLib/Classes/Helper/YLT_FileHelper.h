@@ -40,6 +40,11 @@ YLT_ShareInstanceHeader(YLT_FileHelper);
  */
 + (NSString *)ylt_createWithFilename:(NSString *)filename;
 
+/// 创建文件
+/// @param path 文件路径
+/// @param filename 文件名
++ (NSString *)ylt_createPath:(NSString *)path filename:(NSString *)filename;
+
 /**
  存储文件到本地
  

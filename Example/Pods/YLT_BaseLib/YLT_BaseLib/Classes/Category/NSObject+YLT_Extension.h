@@ -29,6 +29,13 @@ void ylt_swizzleInstanceMethod(Class cls, SEL originSelector, SEL newSelector);
  */
 @property (nonatomic, strong) dispatch_semaphore_t ylt_semaphoreBlock;
 
+/** 第一个元素，主要用在数组中 */
+@property (nonatomic, assign) BOOL ylt_isFirst;
+/** 最后一个元素，主要用在数组 */
+@property (nonatomic, assign) BOOL ylt_isLast;
+/** 是否选中，主要用在数组 */
+@property (nonatomic, assign) BOOL ylt_isSelected;
+
 /**
  获取当前的控制器
 

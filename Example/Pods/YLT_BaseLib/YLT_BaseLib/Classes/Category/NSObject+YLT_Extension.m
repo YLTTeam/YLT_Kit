@@ -256,4 +256,28 @@ void ylt_swizzleInstanceMethod(Class cls, SEL originSelector, SEL newSelector) {
     return result;
 }
 
+- (void)setYlt_isSelected:(BOOL)ylt_isSelected {
+    objc_setAssociatedObject(self, @selector(ylt_isSelected), @(ylt_isSelected), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)ylt_isSelected {
+    return [objc_getAssociatedObject(self, @selector(ylt_isSelected)) boolValue];
+}
+
+- (void)setYlt_isLast:(BOOL)ylt_isLast {
+    objc_setAssociatedObject(self, @selector(ylt_isLast), @(ylt_isLast), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)ylt_isLast {
+    return [objc_getAssociatedObject(self, @selector(ylt_isLast)) boolValue];
+}
+
+- (void)setYlt_isFirst:(BOOL)ylt_isFirst {
+    objc_setAssociatedObject(self, @selector(ylt_isFirst), @(ylt_isFirst), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)isFirst {
+    return [objc_getAssociatedObject(self, @selector(ylt_isFirst)) boolValue];
+}
+
 @end
