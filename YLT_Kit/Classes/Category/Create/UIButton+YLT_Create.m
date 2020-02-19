@@ -22,6 +22,8 @@
 @property (nonatomic, strong) UIView *ylt_contentView;
 
 /** <#注释#> */
+@property (nonatomic, assign) YLT_ButtonLayout ylt_currentbuttonLayout;
+/** <#注释#> */
 @property (nonatomic, strong) UIImageView *ylt_imageView;
 
 /** <#注释#> */
@@ -31,6 +33,14 @@
 
 
 @implementation UIButton (YLT_Create)
+
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self ylt_swizzleInstanceMethod:@selector(setImage:forState:) withMethod:@selector(ylt_setImage:forState:)];
+    });
+}
+
 /**
  普通image
  */
@@ -190,6 +200,7 @@
     @weakify(self);
     return ^id(YLT_ButtonLayout layout, CGFloat spacing) {
         @strongify(self);
+        self.ylt_currentbuttonLayout = layout;
 //        [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 //            obj.hidden = YES;
 //        }];
@@ -262,6 +273,9 @@
         self.ylt_titleLabel.textColor = self.titleLabel.textColor;
         
         [self setImage:nil forState:UIControlStateNormal];
+        [self setImage:nil forState:UIControlStateDisabled];
+        [self setImage:nil forState:UIControlStateHighlighted];
+        [self setImage:nil forState:UIControlStateSelected];
         self.ylt_normalTitle(@"");
         self.frame = CGRectMake(0, 0, width, height);
         [self layoutIfNeeded];
@@ -269,6 +283,21 @@
     };
 }
 
+- (void)ylt_setImage:(UIImage *)image forState:(UIControlState)state {
+    if (self.ylt_currentbuttonLayout == 0) {
+        [self ylt_setImage:image forState:UIControlStateNormal];
+    } else {
+        self.ylt_imageView.image = image;
+    }
+}
+
+- (void)setYlt_currentbuttonLayout:(YLT_ButtonLayout)ylt_currentbuttonLayout {
+    objc_setAssociatedObject(self, @selector(ylt_currentbuttonLayout), @(ylt_currentbuttonLayout), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (YLT_ButtonLayout)ylt_currentbuttonLayout {
+    return [objc_getAssociatedObject(self, @selector(ylt_currentbuttonLayout)) integerValue];
+}
 
 /**
  点击按钮的事件
