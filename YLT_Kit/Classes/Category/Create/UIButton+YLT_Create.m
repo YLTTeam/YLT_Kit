@@ -200,7 +200,7 @@
     @weakify(self);
     return ^id(YLT_ButtonLayout layout, CGFloat spacing) {
         @strongify(self);
-        self.ylt_currentbuttonLayout = layout;
+        self.ylt_currentbuttonLayout = 0;
 //        [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 //            obj.hidden = YES;
 //        }];
@@ -279,6 +279,7 @@
         self.ylt_normalTitle(@"");
         self.frame = CGRectMake(0, 0, width, height);
         [self layoutIfNeeded];
+        self.ylt_currentbuttonLayout = layout;
         return self;
     };
 }
