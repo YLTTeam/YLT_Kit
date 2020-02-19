@@ -286,7 +286,7 @@
 
 - (void)ylt_setImage:(UIImage *)image forState:(UIControlState)state {
     if (self.ylt_currentbuttonLayout == 0) {
-        [self ylt_setImage:image forState:UIControlStateNormal];
+        [self ylt_setImage:image forState:state];
     } else {
         self.ylt_imageView.image = image;
     }
