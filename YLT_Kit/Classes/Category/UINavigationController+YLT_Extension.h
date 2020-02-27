@@ -42,6 +42,14 @@
 - (NSArray *)ylt_popToViewControllerWithClassName:(NSString *)className animated:(BOOL)animated;
 
 /**
+ 返回指定的viewControler
+
+ @param className 指定viewControler类名
+ @param animated 是否动画
+ */
+- (void)ylt_popToClassNames:(NSArray<NSString *> *)classNames animated:(BOOL)animated;
+
+/**
  返回指定的viewControler n层
 
  @param level n层

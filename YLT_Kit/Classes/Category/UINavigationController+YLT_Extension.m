@@ -136,6 +136,24 @@
 }
 
 /**
+ 返回指定的viewControler
+
+ @param className 指定viewControler类名
+ @param animated 是否动画
+ @return pop之后的viewControlers
+ */
+- (void)ylt_popToClassNames:(NSArray<NSString *> *)classNames animated:(BOOL)animated {
+    __block UIViewController *targetVC = nil;
+    [self.viewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([classNames containsObject:NSStringFromClass(obj.class)]) {
+            targetVC = obj;
+            *stop = YES;
+        }
+    }];
+    [self popToViewController:targetVC animated:YES];
+}
+
+/**
  返回指定的viewControler n层
  
  @param level n层
