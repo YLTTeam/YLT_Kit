@@ -153,6 +153,33 @@
     }
 }
 
+/// 移除navigationController
+/// @param count 数量
+- (void)ylt_removeViewControllersCount:(NSInteger)count {
+    NSInteger viewControllersCount = self.viewControllers.count;
+    NSMutableArray<UIViewController *> *viewControllers = [[NSMutableArray alloc] initWithArray:self.viewControllers];
+    if (viewControllersCount > count) {
+        for (NSInteger i = 0; i < count; i++) {
+            [viewControllers removeObjectAtIndex:viewControllers.count-2];
+        }
+    }
+    self.viewControllers = viewControllers;
+}
+
+/// 移除navigationController
+/// @param names 名称列表
+- (void)ylt_removeViewControllersForNames:(NSArray<NSString *> *)names {
+    NSMutableArray<UIViewController *> *viewControllers = [[NSMutableArray alloc] initWithArray:self.viewControllers];
+    for (NSInteger i = 0; i < viewControllers.count; i++) {
+        UIViewController *vc = viewControllers[i];
+        if ([names containsObject:NSStringFromClass(vc.class)]) {
+            [viewControllers removeObjectAtIndex:i];
+            i--;
+        }
+    }
+    self.viewControllers = viewControllers;
+}
+
 @end
 
 

@@ -50,4 +50,12 @@
  */
 - (NSArray *)ylt_popToViewControllerWithLevel:(NSInteger)level animated:(BOOL)animated;
 
+/// 移除navigationController
+/// @param count 数量
+- (void)ylt_removeViewControllersCount:(NSInteger)count;
+
+/// 移除navigationController
+/// @param names 名称列表
+- (void)ylt_removeViewControllersForNames:(NSArray<NSString *> *)names;
+
 @end
