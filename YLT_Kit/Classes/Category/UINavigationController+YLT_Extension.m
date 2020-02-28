@@ -144,7 +144,7 @@
  */
 - (void)ylt_popToClassNames:(NSArray<NSString *> *)classNames animated:(BOOL)animated {
     __block UIViewController *targetVC = nil;
-    [self.viewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [[[self.viewControllers reverseObjectEnumerator] allObjects] enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([classNames containsObject:NSStringFromClass(obj.class)]) {
             targetVC = obj;
             *stop = YES;
