@@ -263,7 +263,7 @@
         
         [self setImage:nil forState:UIControlStateNormal];
         self.ylt_normalTitle(@"");
-        self.frame = CGRectMake(0, 0, width, height);
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, height);
         [self layoutIfNeeded];
         return self;
     };
