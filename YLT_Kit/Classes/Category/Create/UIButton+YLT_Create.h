@@ -17,6 +17,9 @@ typedef NS_ENUM(NSUInteger, YLT_ButtonLayout) {
 
 @interface UIButton (YLT_Create)
 
+/** <#注释#> */
+@property (nonatomic, assign) CGSize ylt_buttonSize;
+
 /**
  普通image
  */

@@ -190,9 +190,6 @@
     @weakify(self);
     return ^id(YLT_ButtonLayout layout, CGFloat spacing) {
         @strongify(self);
-//        [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//            obj.hidden = YES;
-//        }];
         [self layoutIfNeeded];
         CGSize size = [self.currentTitle sizeWithAttributes:@{NSFontAttributeName:self.titleLabel.font}];
         self.ylt_contentView.userInteractionEnabled = NO;
@@ -256,19 +253,34 @@
             make.center.equalTo(self);
             make.size.mas_equalTo(CGSizeMake(width, height));
         }];
-        self.ylt_imageView.image = self.currentImage;
-        self.ylt_titleLabel.text = self.currentTitle;
-        self.ylt_titleLabel.font = self.titleLabel.font;
-        self.ylt_titleLabel.textColor = self.titleLabel.textColor;
-        
-        [self setImage:nil forState:UIControlStateNormal];
-        self.ylt_normalTitle(@"");
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, height);
+        self.imageView.hidden = YES;
+        self.titleLabel.hidden = YES;
+        self.ylt_buttonSize = CGSizeMake(width, height);
         [self layoutIfNeeded];
+        @weakify(self);
+        [RACObserve(self, imageView.frame) subscribeNext:^(id  _Nullable x) {
+            @strongify(self);
+            self.ylt_imageView.image = self.currentImage;
+            self.imageView.hidden = YES;
+        }];
+        [RACObserve(self, titleLabel.frame) subscribeNext:^(id  _Nullable x) {
+            @strongify(self);
+            self.ylt_titleLabel.text = self.currentTitle;
+            self.ylt_titleLabel.font = self.titleLabel.font;
+            self.ylt_titleLabel.textColor = self.titleLabel.textColor;
+            self.titleLabel.hidden = YES;
+        }];
         return self;
     };
 }
 
+- (void)setYlt_buttonSize:(CGSize)ylt_buttonSize {
+    objc_setAssociatedObject(self, @selector(ylt_buttonSize), [NSValue valueWithCGSize:ylt_buttonSize], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGSize)ylt_buttonSize {
+    return [objc_getAssociatedObject(self, @selector(ylt_buttonSize)) CGSizeValue];
+}
 
 /**
  点击按钮的事件
