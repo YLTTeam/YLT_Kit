@@ -5,7 +5,8 @@
 //  Created by 项普华 on 2018/5/22.
 //
 
-#import <YLT_Kit/YLT_Kit.h>
+#import "YLT_BaseView.h"
+#import "YLT_BaseVC.h"
 #import <WebKit/WebKit.h>
 
 @protocol YLT_WebProtocl
