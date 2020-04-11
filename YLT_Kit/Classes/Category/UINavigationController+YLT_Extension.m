@@ -150,7 +150,11 @@
             *stop = YES;
         }
     }];
-    [self popToViewController:targetVC animated:YES];
+    if (targetVC) {
+        [self popToViewController:targetVC animated:YES];
+    } else {
+        [self popViewControllerAnimated:YES];
+    }
 }
 
 /**
