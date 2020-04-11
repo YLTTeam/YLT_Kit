@@ -143,7 +143,10 @@
  @return pop之后的viewControlers
  */
 - (void)ylt_popToClassNames:(NSArray<NSString *> *)classNames animated:(BOOL)animated {
-    __block UIViewController *targetVC = nil;
+    __block UIViewController *targetVC = self.viewControllers.lastObject;
+    if (self.viewControllers.count >= 2) {
+        targetVC = [self.viewControllers objectAtIndex:self.viewControllers.count-2];
+    }
     [[[self.viewControllers reverseObjectEnumerator] allObjects] enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([classNames containsObject:NSStringFromClass(obj.class)]) {
             targetVC = obj;
