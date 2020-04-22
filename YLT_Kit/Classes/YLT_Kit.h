@@ -46,6 +46,7 @@
 #import "UIView+YLT_Extension.h"
 #import "UIView+YLT_GesExtension.h"
 #import "UIViewController+YLT_BaseVC.h"
+#import "YLT_PageControl.h"
 #import "YLT_HorizontalFlowLayout.h"
 #import "YLT_ImageFilter.h"
 #import "YLT_InputTextField.h"
@@ -54,5 +55,14 @@
 #import "YLT_CollectionSectionModel.h"
 #import "YLT_TableRowModel.h"
 #import "YLT_TableSectionModel.h"
+#import "YLT_PageBaseView+DataSource.h"
+#import "YLT_PageBaseView.h"
+#import "YLT_PageCell.h"
+#import "YLT_PageModel+Extension.h"
+#import "YLT_PageModel.h"
+#import "YLT_PageReusableView.h"
+#import "YLT_PageTools.h"
+#import "YLT_PageVC.h"
+#import "YLT_PageView.h"
 
 #endif /* YLT_Kit_h */

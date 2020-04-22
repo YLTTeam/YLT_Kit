@@ -6,7 +6,7 @@
 //
 
 #import "UIImageView+YLT_Create.h"
-#import <AFNetworking/UIImageView+AFNetworking.h>
+#import <SDWebImage/SDWebImage.h>
 #import <YLT_BaseLib/YLT_BaseLib.h>
 #import "UIImage+YLT_Extension.h"
 #import "UIView+YLT_Create.h"
@@ -25,10 +25,10 @@
             if ([image isKindOfClass:[UIImage class]]) {
                 [self setImage:image];
             } else if ([image isKindOfClass:[NSURL class]]) {
-                [self setImageWithURL:(NSURL *)image];
+                [self sd_setImageWithURL:(NSURL *)image];
             } else if ([image isKindOfClass:[NSString class]]) {
                 if ([((NSString *)image) ylt_isURL]) {
-                    [self setImageWithURL:[NSURL URLWithString:(NSString *)image]];
+                    [self sd_setImageWithURL:[NSURL URLWithString:(NSString *)image]];
                 } else {
                     [self setImage:[UIImage ylt_imageNamed:(NSString *)image]];
                 }
