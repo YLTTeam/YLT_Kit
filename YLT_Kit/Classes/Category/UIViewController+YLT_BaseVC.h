@@ -160,4 +160,13 @@
 + (UIViewController *)ylt_modalVCWithParam:(id)ylt_param
                                   callback:(void(^)(id response))callback;
 
+/**  在主线程执行操作*/
+- (void)ylt_performSelectorOnMainThread:(void(^)(void))block;
+
+/**  退出 presentViewController  count：次数*/
+- (void)ylt_dismissViewControllerWithCount:(NSInteger)count animated:(BOOL)animated;
+
+/**  退出 presentViewController 到指定的控制器*/
+- (void)ylt_dismissToViewControllerWithClassName:(NSString *)className animated:(BOOL)animated;
+
 @end
