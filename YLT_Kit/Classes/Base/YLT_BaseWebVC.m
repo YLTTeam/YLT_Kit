@@ -549,7 +549,7 @@ YLT_ShareInstance(YLT_WKProcessPool);
 }
 
 - (void)prepareLoading:(NSString *)urlString {
-    NSDictionary *params = [self analysisURL:urlString];
+    NSDictionary *params = [YLT_BaseWebVC analysisURL:urlString];
     if (params && [params.allKeys containsObject:@"navigationBarHidden"]) {
         @weakify(self);
         if ([[params objectForKey:@"navigationBarHidden"] boolValue]) {
@@ -674,24 +674,22 @@ YLT_ShareInstance(YLT_WKProcessPool);
     [self ylt_removeAllObserMessageHandlers];
 }
 
-- (NSDictionary *)analysisURL:(NSString *)url {
-    NSMutableDictionary *result = [NSMutableDictionary new];
-    NSArray *components = [url componentsSeparatedByString:@"?"];
-    if (components.count >= 2) {
-        NSString *tempName = components.lastObject;
-        NSArray *components = [tempName componentsSeparatedByString:@"&"];
-        for (NSString *tmpStr in components) {
-            if (!tmpStr.ylt_isValid) {
-                continue;
-            }
-            NSArray *tmpArray = [tmpStr componentsSeparatedByString:@"="];
-            if (tmpArray.count == 2) {
-                [result setObject:tmpArray[1] forKey:tmpArray[0]];
-            } else {
-                YLT_LogError(@"参数不合法 : %@",tmpStr);
-            }
++ (NSDictionary *)analysisURL:(NSString *)url {
+    NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:[NSURL URLWithString:url] resolvingAgainstBaseURL:NO];
+    NSArray<NSString *> *params = [urlComponents.query componentsSeparatedByString:@"&"];
+    __block NSMutableDictionary *result = [NSMutableDictionary new];
+    [params enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSArray *list = [obj componentsSeparatedByString:@"="];
+        if (list.count > 2) {
+            __block NSString *value = @"";
+            [list enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                value = (idx==0)?@"":[NSString stringWithFormat:@"%@%@", value, obj];
+            }];
+            [result setObject:value forKey:list[0]];
+        } else if (list.count == 2) {
+            [result setObject:list[1] forKey:list[0]];
         }
-    }
+    }];
     return result;
 }
 

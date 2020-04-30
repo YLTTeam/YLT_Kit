@@ -204,4 +204,6 @@
 
 - (void)registerBackBtn:(BOOL)hasBackBtn closeBtn:(BOOL)hasCloseBtn;
 
++ (NSDictionary *)analysisURL:(NSString *)url;
+
 @end
