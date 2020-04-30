@@ -9,6 +9,8 @@
 
 @interface NSDate (YLT_Extension)
 
+@property (nonatomic, strong, readonly) NSCalendar *gregorianCalendar;
+
 /**
  * 获取日、月、年、小时、分钟、秒
  */
@@ -118,8 +120,6 @@
 - (NSString *)ylt_stringByMessageDate;
 - (NSString *)ylt_stringByTimeHM;
 
-
-
 + (NSCalendar *) ylt_currentCalendar; // avoid bottlenecks
 
 // Relative dates from the current date
@@ -143,7 +143,6 @@
 @property (nonatomic, readonly) NSString *ylt_longString;
 @property (nonatomic, readonly) NSString *ylt_longDateString;
 @property (nonatomic, readonly) NSString *ylt_longTimeString;
-
 
 // Comparing dates
 - (BOOL) ylt_isSameDay: (NSDate *) aDate;
@@ -202,5 +201,6 @@
 - (NSInteger) ylt_daysAfterDate: (NSDate *) aDate;
 - (NSInteger) ylt_daysBeforeDate: (NSDate *) aDate;
 - (NSInteger) ylt_distanceInDaysToDate:(NSDate *)anotherDate;
+- (NSDateComponents *)ylt_distanceDate:(NSDate *)anotherDate;
 
 @end

@@ -75,7 +75,9 @@
  @param routerURL 路由地址
  @return 数据
  */
-- (NSDictionary *)analysisURL:(NSString *)routerURL;
+- (NSDictionary *)ylt_analysisURL:(NSString *)routerURL;
+
+- (NSDictionary *)ylt_generateParamsString:(NSString *)paramString;
 
 /// 快速路由记录
 /// @param selname 方法名

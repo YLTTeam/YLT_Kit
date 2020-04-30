@@ -46,7 +46,7 @@ static NSString *webRouterURL = nil;
  */
 - (id)ylt_routerToURL:(NSString *)routerURL isClassMethod:(BOOL)isClassMethod arg:(id)arg completion:(void(^)(NSError *error, id response))completion {
     if ([routerURL hasPrefix:YLT_ROUTER_PREFIX]) {
-        NSDictionary *urlParams = [self analysisURL:routerURL];
+        NSDictionary *urlParams = [self ylt_analysisURL:routerURL];
         NSString *clsname = ([urlParams.allKeys containsObject:YLT_ROUTER_CLS_NAME])?urlParams[YLT_ROUTER_CLS_NAME]:@"";
         NSString *selname = ([urlParams.allKeys containsObject:YLT_ROUTER_SEL_NAME])?urlParams[YLT_ROUTER_SEL_NAME]:@"";
         NSDictionary *params = ([urlParams.allKeys containsObject:YLT_ROUTER_ARG_DATA])?urlParams[YLT_ROUTER_ARG_DATA]:nil;
@@ -115,7 +115,7 @@ static NSString *webRouterURL = nil;
     if ([sel containsString:@"?"]) {
         sel = [[selname componentsSeparatedByString:@"?"] firstObject];
         NSString *paramString = [[selname componentsSeparatedByString:@"?"] lastObject];
-        params = [self generateParamsString:paramString];
+        params = [self ylt_generateParamsString:paramString];
     }
     return [self ylt_routerToClassname:clsname selname:sel isClassMethod:isClassMethod param:params arg:arg completion:completion];
 }
@@ -275,7 +275,7 @@ static NSString *webRouterURL = nil;
  
  @param routerURL ylt://class[/sel][/...多余的被忽略...][?参数]
  */
-- (NSDictionary *)analysisURL:(NSString *)routerURL {
+- (NSDictionary *)ylt_analysisURL:(NSString *)routerURL {
     //显示错误
     void(^showError)(void) = ^{
         YLT_LogError(@"URL不合法 : %@", routerURL);
@@ -344,14 +344,14 @@ static NSString *webRouterURL = nil;
             if ([tempString hasPrefix:@"?"]) {
                 tempString = [tempString substringFromIndex:1];
             }
-            [result setObject:[self generateParamsString:tempString] forKey:YLT_ROUTER_ARG_DATA];
+            [result setObject:[self ylt_generateParamsString:tempString] forKey:YLT_ROUTER_ARG_DATA];
         }
     }
     
     return result;
 }
 
-- (NSDictionary *)generateParamsString:(NSString *)paramString {
+- (NSDictionary *)ylt_generateParamsString:(NSString *)paramString {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     NSArray *components = [paramString componentsSeparatedByString:@"&"];
     for (NSString *tmpStr in components) {
@@ -399,13 +399,13 @@ YLT_BeginIgnoreUndeclaredSelecror
                         returnData = [self.ylt_currentVC safePerformAction:NSSelectorFromString(obj) target:self.ylt_currentVC params:params];
                         *selStop = YES;
                     } else {
-                        YLT_LogError(@"事件未适配");
+                        YLT_LogWarn(@"事件未适配");
                     }
                 }];
             }];
         }
     } else {
-        YLT_LogError(@"跳转事件为空");
+        YLT_LogWarn(@"跳转事件为空");
     }
     if (returnData && [returnData respondsToSelector:@selector(setYlt_completion:)]) {
         [returnData performSelector:@selector(setYlt_completion:) withObject:completion];

@@ -276,7 +276,7 @@ void ylt_swizzleInstanceMethod(Class cls, SEL originSelector, SEL newSelector) {
     objc_setAssociatedObject(self, @selector(ylt_isFirst), @(ylt_isFirst), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BOOL)isFirst {
+- (BOOL)ylt_isFirst {
     return [objc_getAssociatedObject(self, @selector(ylt_isFirst)) boolValue];
 }
 

@@ -6,6 +6,7 @@
 //
 
 #import "NSDate+YLT_Extension.h"
+#import "objc/message.h"
 
 #define D_MINUTE    60
 #define D_HOUR    3600
@@ -184,18 +185,14 @@
 }
 
 + (NSInteger)ylt_weekday:(NSDate *)date {
-    NSCalendar *gregorian = [[NSCalendar alloc]
-                             initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents *comps = [gregorian components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear | NSCalendarUnitWeekday) fromDate:date];
+    NSDateComponents *comps = [date.gregorianCalendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear | NSCalendarUnitWeekday) fromDate:date];
     NSInteger weekday = [comps weekday];
     
     return weekday;
 }
 
 + (NSInteger)ylt_week:(NSDate *)date {
-    NSCalendar *gregorian = [[NSCalendar alloc]
-                             initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents *comps = [gregorian components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear | NSCalendarUnitWeekday) fromDate:date];
+    NSDateComponents *comps = [date.gregorianCalendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear | NSCalendarUnitWeekday) fromDate:date];
     NSInteger weekYear = [comps weekOfYear];
     
     return weekYear;
@@ -418,17 +415,14 @@
 }
 
 + (NSInteger)ylt_getDaysFrom:(NSDate *)serverDate To:(NSDate *)endDate {
-    NSCalendar *gregorian = [[NSCalendar alloc]
-                             initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    
-    [gregorian setFirstWeekday:2];
+    [serverDate.gregorianCalendar setFirstWeekday:2];
     
     //去掉时分秒信息
     NSDate *fromDate;
     NSDate *toDate;
-    [gregorian rangeOfUnit:NSCalendarUnitDay startDate:&fromDate interval:NULL forDate:serverDate];
-    [gregorian rangeOfUnit:NSCalendarUnitDay startDate:&toDate interval:NULL forDate:endDate];
-    NSDateComponents *dayComponents = [gregorian components:NSCalendarUnitDay fromDate:fromDate toDate:toDate options:0];
+    [serverDate.gregorianCalendar rangeOfUnit:NSCalendarUnitDay startDate:&fromDate interval:NULL forDate:serverDate];
+    [serverDate.gregorianCalendar rangeOfUnit:NSCalendarUnitDay startDate:&toDate interval:NULL forDate:endDate];
+    NSDateComponents *dayComponents = [serverDate.gregorianCalendar components:NSCalendarUnitDay fromDate:fromDate toDate:toDate options:0];
     
     return dayComponents.day;
 }
@@ -876,11 +870,23 @@
 }
 // Thanks, dmitrydims
 // I have not yet thoroughly tested this
-- (NSInteger)ylt_distanceInDaysToDate:(NSDate *)anotherDate
-{
-    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay fromDate:self toDate:anotherDate options:0];
+- (NSInteger)ylt_distanceInDaysToDate:(NSDate *)anotherDate {
+    NSDateComponents *components = [self.gregorianCalendar components:NSCalendarUnitDay fromDate:self toDate:anotherDate options:0];
     return components.day;
+}
+
+- (NSDateComponents *)ylt_distanceDate:(NSDate *)anotherDate {
+    NSDateComponents *components = [self.gregorianCalendar components:(NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond) fromDate:self toDate:anotherDate options:0];
+    return components;
+}
+
+- (NSCalendar *)gregorianCalendar {
+    NSCalendar *result = objc_getAssociatedObject(self, @selector(gregorianCalendar));
+    if (result == nil) {
+        result = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        objc_setAssociatedObject(self, @selector(gregorianCalendar), result, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return result;
 }
 
 @end

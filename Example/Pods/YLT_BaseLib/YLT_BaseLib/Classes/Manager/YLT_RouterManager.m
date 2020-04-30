@@ -84,7 +84,7 @@ YLT_ShareInstance(YLT_RouterManager);
  @return 数据
  */
 + (NSDictionary *)analysisURL:(NSString *)routerURL {
-    return [[YLT_RouterManager shareInstance] analysisURL:routerURL];
+    return [[YLT_RouterManager shareInstance] ylt_analysisURL:routerURL];
 }
 
 @end
