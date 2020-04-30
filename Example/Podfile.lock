@@ -31,7 +31,7 @@ PODS:
     - FMDB
     - MJExtension
     - ReactiveObjC
-  - YLT_Kit (0.3.65):
+  - YLT_Kit (0.4.0):
     - AFNetworking
     - Aspects
     - Masonry
@@ -71,7 +71,7 @@ SPEC CHECKSUMS:
   ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
   SDWebImage: 97351f6582ceca541ea294ba66a1fcb342a331c2
   YLT_BaseLib: 7102ccc8cf709ee4c60cbf5a90c665a258156233
-  YLT_Kit: dd8a74ba261a5fb7a6119493221d00d46a9e266b
+  YLT_Kit: a0ec7effbbf51436889feb15131a660a28a00852
 
 PODFILE CHECKSUM: 41ecb03d1231ca64c5d9dc210e16f1546e01728e
 
