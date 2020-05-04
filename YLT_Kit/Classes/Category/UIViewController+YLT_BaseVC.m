@@ -42,13 +42,6 @@
     if ([self respondsToSelector:@selector(ylt_request)]) {
         [self performSelector:@selector(ylt_request)];
     }
-    if (@available(iOS 13.0, *)) {
-        [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
-            [NSNotificationCenter.defaultCenter postNotificationName:YLT_UserInterfaceStyleChangeNotification object:@(traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)];
-            return [UIColor clearColor];
-        }];
-    } else {
-    }
     [self ylt_viewDidLoad];
 }
 

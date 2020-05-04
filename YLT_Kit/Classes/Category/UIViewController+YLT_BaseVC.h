@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "UIView+YLT_BaseView.h"
 
-static NSString *const YLT_UserInterfaceStyleChangeNotification = @"YLT_UserInterfaceStyleChangeNotification";
-
 @protocol HookBaseVCProtocol <NSObject>
 
 @optional
