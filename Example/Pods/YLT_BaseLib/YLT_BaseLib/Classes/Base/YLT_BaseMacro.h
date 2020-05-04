@@ -63,7 +63,7 @@
 
 #define iOSNew ([[UIDevice currentDevice] systemVersion].floatValue >= 14.0)
 
-#define YLT_IsDark (iOS12Later ? (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) : NO)
+#define YLT_IsDark (iOS12Later ? (self.ylt_currentVC.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) : NO)
 
 /// 获取系统对象
 #define YLT_Application        [UIApplication sharedApplication]
