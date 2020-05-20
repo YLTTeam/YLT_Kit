@@ -50,4 +50,7 @@ typedef NS_ENUM(NSInteger, YLT_ImageFilterType) {
                           value2:(CGFloat)value2
                       completion:(void(^)(UIImage *outputImage))completion;
 
+/** 通过字符串，宽度创建二维码 */
++ (UIImage *)createImageFromString:(NSString *)string width:(CGFloat)width;
+
 @end
