@@ -37,6 +37,8 @@
                     @strongify(self);
                     self.ylt_image(x);
                 }];
+            } else {
+                [self setImage:nil];
             }
         }
         return self;
