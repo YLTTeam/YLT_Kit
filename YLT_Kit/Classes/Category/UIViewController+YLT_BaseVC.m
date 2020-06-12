@@ -45,6 +45,14 @@
     [self ylt_viewDidLoad];
 }
 
+- (void)ylt_request {
+    [self.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(ylt_request)]) {
+            [obj performSelector:@selector(ylt_request)];
+        }
+    }];
+}
+
 - (void)ylt_viewWillAppear:(BOOL)animated {
     [self ylt_viewWillAppear:animated];
     if (self.ylt_queue.isSuspended) {
