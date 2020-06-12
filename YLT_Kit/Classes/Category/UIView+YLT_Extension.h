@@ -15,6 +15,11 @@
 + (NSString *)ylt_identify;
 
 /**
+ 网络请求
+ */
+- (void)ylt_request;
+
+/**
  添加闪动动画
  */
 - (void)ylt_shakeAnimation;

@@ -10,11 +10,30 @@
 
 @implementation UIView (YLT_Extension)
 
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [UIView ylt_swizzleInstanceMethod:@selector(didMoveToSuperview) withMethod:@selector(ylt_didMoveToSuperview)];
+    });
+}
+
 /**
  view的标识
  */
 + (NSString *)ylt_identify {
     return NSStringFromClass(self);
+}
+
+- (void)ylt_didMoveToSuperview {
+    [self ylt_didMoveToSuperview];
+    [self ylt_request];
+}
+
+/**
+ 网络请求
+ */
+- (void)ylt_request {
+    
 }
 
 - (void)ylt_shakeAnimation {
