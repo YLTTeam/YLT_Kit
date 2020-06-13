@@ -30,7 +30,6 @@
 
 #pragma mark - hook
 - (void)ylt_viewDidLoad {
-    [self ylt_viewDidLoad];
     if ([self respondsToSelector:@selector(ylt_bindData)]) {
         [self performSelector:@selector(ylt_bindData)];
     }
@@ -43,6 +42,7 @@
     if ([self respondsToSelector:@selector(ylt_request)]) {
         [self performSelector:@selector(ylt_request)];
     }
+    [self ylt_viewDidLoad];
 }
 
 - (void)ylt_request {
