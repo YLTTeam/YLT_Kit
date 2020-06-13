@@ -30,18 +30,6 @@
 
 #pragma mark - hook
 - (void)ylt_viewDidLoad {
-    if ([self respondsToSelector:@selector(ylt_bindData)]) {
-        [self performSelector:@selector(ylt_bindData)];
-    }
-    if ([self respondsToSelector:@selector(ylt_setup)]) {
-        [self performSelector:@selector(ylt_setup)];
-    }
-    if ([self respondsToSelector:@selector(ylt_addSubViews)]) {
-        [self performSelector:@selector(ylt_addSubViews)];
-    }
-    if ([self respondsToSelector:@selector(ylt_request)]) {
-        [self performSelector:@selector(ylt_request)];
-    }
     [self ylt_viewDidLoad];
 }
 
