@@ -47,6 +47,10 @@
         //队列处于暂停状态 页面显示 开启队列
         [self.ylt_queue setSuspended:NO];
     }
+    if (self.ylt_needRefreshRequest) {
+        [self ylt_request];
+    }
+    self.ylt_needRefreshRequest = NO;
 }
 
 - (void)ylt_viewWillLayoutSubviews {
@@ -249,6 +253,13 @@
 
 - (id)ylt_params {
     return objc_getAssociatedObject(self, @selector(ylt_params));
+}
+
+- (void)setYlt_needRefreshRequest:(BOOL)ylt_needRefreshRequest {
+    objc_setAssociatedObject(self, @selector(ylt_needRefreshRequest), @(ylt_needRefreshRequest), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+- (BOOL)ylt_needRefreshRequest {
+    return [objc_getAssociatedObject(self, @selector(ylt_needRefreshRequest)) boolValue];
 }
 
 - (NSOperationQueue *)ylt_queue {

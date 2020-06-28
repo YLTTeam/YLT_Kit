@@ -58,6 +58,10 @@
 @interface UIViewController (YLT_BaseVC)<HookBaseVCProtocol>
 
 /**
+ 是否需要刷新页面，即重新请求网络数据
+ */
+@property (nonatomic, assign) BOOL ylt_needRefreshRequest;
+/**
  上一个页面传入的参数
  */
 @property (nonatomic, strong) id ylt_params;
