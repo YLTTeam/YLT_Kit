@@ -21,6 +21,7 @@
     dispatch_once(&onceToken, ^{
         [UIViewController ylt_swizzleInstanceMethod:@selector(viewDidLoad) withMethod:@selector(ylt_viewDidLoad)];
         [UIViewController ylt_swizzleInstanceMethod:@selector(viewWillAppear:) withMethod:@selector(ylt_viewWillAppear:)];
+        [UIViewController ylt_swizzleInstanceMethod:@selector(viewDidAppear:) withMethod:@selector(ylt_viewDidAppear:)];
         [UIViewController ylt_swizzleInstanceMethod:@selector(viewWillLayoutSubviews) withMethod:@selector(ylt_viewWillLayoutSubviews)];
         [UIViewController ylt_swizzleInstanceMethod:@selector(viewWillDisappear:) withMethod:@selector(ylt_viewWillDisappear:)];
         [UIViewController ylt_swizzleInstanceMethod:@selector(prepareForSegue:sender:) withMethod:@selector(ylt_prepareForSegue:sender:)];
@@ -47,6 +48,10 @@
         //队列处于暂停状态 页面显示 开启队列
         [self.ylt_queue setSuspended:NO];
     }
+}
+
+- (void)ylt_viewDidAppear:(BOOL)animated {
+    [self ylt_viewDidAppear:animated];
     if (self.ylt_needRefreshRequest) {
         [self ylt_request];
     }
