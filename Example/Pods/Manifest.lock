@@ -23,6 +23,9 @@ PODS:
   - MJExtension (3.2.1)
   - MJRefresh (3.4.1)
   - ReactiveObjC (3.1.1)
+  - SDWebImage (5.8.3):
+    - SDWebImage/Core (= 5.8.3)
+  - SDWebImage/Core (5.8.3)
   - YLT_BaseLib (0.4.0):
     - FastCoding
     - FMDB
@@ -34,11 +37,8 @@ PODS:
     - Masonry
     - MJRefresh
     - ReactiveObjC
+    - SDWebImage
     - YLT_BaseLib
-    - YYKit
-  - YYKit (1.0.9):
-    - YYKit/no-arc (= 1.0.9)
-  - YYKit/no-arc (1.0.9)
 
 DEPENDENCIES:
   - YLT_Kit (from `../`)
@@ -53,8 +53,8 @@ SPEC REPOS:
     - MJExtension
     - MJRefresh
     - ReactiveObjC
+    - SDWebImage
     - YLT_BaseLib
-    - YYKit
 
 EXTERNAL SOURCES:
   YLT_Kit:
@@ -69,9 +69,9 @@ SPEC CHECKSUMS:
   MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
   MJRefresh: 3153c59a363159092c08b2177ec3a7d09f90bfaf
   ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
+  SDWebImage: 112503ec94a5a2a41869503844a15e8d8f1ead5c
   YLT_BaseLib: 7102ccc8cf709ee4c60cbf5a90c665a258156233
-  YLT_Kit: 0e40d565532240397fc8ef6d300f4d0f667c4830
-  YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
+  YLT_Kit: f646de56de11a24d021bfc24bf5a5f09bee8ef16
 
 PODFILE CHECKSUM: 41ecb03d1231ca64c5d9dc210e16f1546e01728e
 

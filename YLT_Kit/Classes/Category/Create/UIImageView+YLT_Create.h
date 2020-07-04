@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Masonry/Masonry.h>
-#import <YYKit/UIImageView+YYWebImage.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface UIImageView (YLT_Create)
 
