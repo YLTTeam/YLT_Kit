@@ -6,7 +6,6 @@
 //
 
 #import "UIImageView+YLT_Create.h"
-#import <SDWebImage/SDWebImage.h>
 #import <YLT_BaseLib/YLT_BaseLib.h>
 #import "UIImage+YLT_Extension.h"
 #import "UIView+YLT_Create.h"
@@ -25,10 +24,10 @@
             if ([image isKindOfClass:[UIImage class]]) {
                 [self setImage:image];
             } else if ([image isKindOfClass:[NSURL class]]) {
-                [self sd_setImageWithURL:(NSURL *)image];
+                [self setImageWithURL:(NSURL *)image options:YYWebImageOptionAvoidSetImage];
             } else if ([image isKindOfClass:[NSString class]]) {
                 if ([((NSString *)image) ylt_isURL]) {
-                    [self sd_setImageWithURL:[NSURL URLWithString:(NSString *)image]];
+                    [self setImageWithURL:[NSURL URLWithString:(NSString *)image] options:YYWebImageOptionAvoidSetImage];
                 } else {
                     [self setImage:[UIImage ylt_imageNamed:(NSString *)image]];
                 }
@@ -56,13 +55,13 @@
             if ([image isKindOfClass:[UIImage class]]) {
                 [self setImage:[image ylt_drawCircleImage]];
             } else if ([image isKindOfClass:[NSURL class]]) {
-                [self sd_setImageWithURL:(NSURL *)image completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                [self setImageWithURL:(NSURL *)image placeholder:nil options:YYWebImageOptionAvoidSetImage completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
                     @strongify(self);
                     [self setImage:[image ylt_drawCircleImage]];
                 }];
             } else if ([image isKindOfClass:[NSString class]]) {
                 if ([((NSString *)image) ylt_isURL]) {
-                    [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                    [self setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] placeholder:nil options:YYWebImageOptionAvoidSetImage completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
                         @strongify(self);
                         [self setImage:[image ylt_drawCircleImage]];
                     }];
@@ -86,12 +85,14 @@
             if ([image isKindOfClass:[UIImage class]]) {
                 [self setImage:[image ylt_drawRectImage:radius]];
             } else if ([image isKindOfClass:[NSURL class]]) {
-                [self sd_setImageWithURL:(NSURL *)image completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                [self setImageWithURL:(NSURL *)image placeholder:nil options:(YYWebImageOptionAvoidSetImage) completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+                    @strongify(self);
                     [self setImage:[image ylt_drawRectImage:radius]];
                 }];
             } else if ([image isKindOfClass:[NSString class]]) {
                 if ([((NSString *)image) ylt_isURL]) {
-                    [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                    [self setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] placeholder:nil options:(YYWebImageOptionAvoidSetImage) completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+                        @strongify(self);
                         [self setImage:[image ylt_drawRectImage:radius]];
                     }];
                 } else {
