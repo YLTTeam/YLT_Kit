@@ -205,4 +205,13 @@ typedef NS_ENUM (NSUInteger, UIGradientStyle) {
  */
 + (UIColor *)ylt_colorWithGradientStyle:(UIGradientStyle)gradientStyle withFrame:(CGRect)frame andColors:(NSArray<UIColor *> * _Nonnull)colors locations:(NSArray *)c_locations;
 
+/**
+ * 颜色渐变
+ * @param startColor 起始颜色
+ * @param endColor 终止颜色
+ * @param f 系数
+ * @return 颜色
+ */
++ (UIColor *)ylt_colorStartColor:(NSString *)startColor endColor:(NSString *)endColor f:(CGFloat)f;
+
 @end

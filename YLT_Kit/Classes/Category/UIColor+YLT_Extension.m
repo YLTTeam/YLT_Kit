@@ -439,5 +439,85 @@
     }
 }
 
+/**
+ * 颜色渐变
+ * @param startColor 起始颜色
+ * @param endColor 终止颜色
+ * @param f 系数
+ * @return 颜色
+ */
++ (UIColor *)ylt_colorStartColor:(NSString *)startColor endColor:(NSString *)endColor f:(CGFloat)f {
+    startColor = [startColor stringByReplacingOccurrencesOfString:@"#" withString:@""];
+    startColor = [startColor stringByReplacingOccurrencesOfString:@"0x" withString:@""];
+    startColor = [startColor stringByReplacingOccurrencesOfString:@"0X" withString:@""];
+    endColor = [endColor stringByReplacingOccurrencesOfString:@"#" withString:@""];
+    endColor = [endColor stringByReplacingOccurrencesOfString:@"0x" withString:@""];
+    endColor = [endColor stringByReplacingOccurrencesOfString:@"0X" withString:@""];
+    
+    // Scan values
+    unsigned int sr, sg, sb, sa;
+    unsigned int er, eg, eb, ea;
+    
+    NSRange range;
+    range.location = 0;
+    range.length = 2;
+    NSString *rString = [startColor substringWithRange:range];
+    range.location = 2;
+    NSString *gString = [startColor substringWithRange:range];
+    range.location = 4;
+    NSString *bString = [startColor substringWithRange:range];
+    NSString *aString = @"FF";
+    if ([startColor length] == 8) {
+        range.location = 6;
+        aString = [startColor substringWithRange:range];
+    }
+    [[NSScanner scannerWithString:rString] scanHexInt:&sr];
+    [[NSScanner scannerWithString:gString] scanHexInt:&sg];
+    [[NSScanner scannerWithString:bString] scanHexInt:&sb];
+    [[NSScanner scannerWithString:aString] scanHexInt:&sa];
+    
+    
+    range.location = 0;
+    range.length = 2;
+    rString = [endColor substringWithRange:range];
+    range.location = 2;
+    gString = [endColor substringWithRange:range];
+    range.location = 4;
+    bString = [endColor substringWithRange:range];
+    
+    aString = @"FF";
+    if ([startColor length] == 8) {
+        range.location = 6;
+        aString = [endColor substringWithRange:range];
+    }
+    [[NSScanner scannerWithString:rString] scanHexInt:&er];
+    [[NSScanner scannerWithString:gString] scanHexInt:&eg];
+    [[NSScanner scannerWithString:bString] scanHexInt:&eb];
+    [[NSScanner scannerWithString:aString] scanHexInt:&ea];
+    
+    int r,g,b,a;
+    if (er >= sr) {
+        r = (int)(sr+(er-sr)*f);
+    } else {
+        r = (int)(er+(sr-er)*f);
+    }
+    if (eg >= sg) {
+        g = (int)(sg+(eg-sg)*f);
+    } else {
+        g = (int)(eg+(sg-eg)*f);
+    }
+    if (eb >= sb) {
+        b = (int)(sb+(eb-sb)*f);
+    } else {
+        b = (int)(eb+(sb-eb)*f);
+    }
+    if (ea > sa) {
+        a = (int)(sa+(ea-sa)*f);
+    } else {
+        a = (int)(ea+(sa-ea)*f);
+    }
+    
+    return [UIColor colorWithRed:((CGFloat)r)/255. green:((CGFloat)g)/255. blue:((CGFloat)b)/255. alpha:((CGFloat)a)/255.];
+}
 
 @end
