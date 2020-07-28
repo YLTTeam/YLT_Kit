@@ -7,6 +7,7 @@
 
 #import "UIView+YLT_Extension.h"
 #import <YLT_BaseLib/YLT_BaseLib.h>
+#import <ReactiveObjC/ReactiveObjC.h>
 
 @implementation UIView (YLT_Extension)
 
@@ -99,15 +100,20 @@
  */
 - (void)ylt_cornerType:(UIRectCorner)rectCorner radius:(NSUInteger)radius {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self layoutIfNeeded];
-        //绘制圆角 要设置的圆角 使用“|”来组合
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:rectCorner cornerRadii:CGSizeMake(radius, radius)];
-        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-        //设置大小
-        maskLayer.frame = self.bounds;
-        //设置图形样子
-        maskLayer.path = maskPath.CGPath;
-        self.layer.mask = maskLayer;
+        @weakify(self);
+        [RACObserve(self, bounds) subscribeNext:^(id  _Nullable x) {
+            @strongify(self);
+            if (self.bounds.size.width != 0 && self.bounds.size.height != 0)   {
+                //绘制圆角 要设置的圆角 使用“|”来组合
+                UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:rectCorner cornerRadii:CGSizeMake(radius, radius)];
+                CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                //设置大小
+                maskLayer.frame = self.bounds;
+                //设置图形样子
+                maskLayer.path = maskPath.CGPath;
+                self.layer.mask = maskLayer;
+            }
+        }];
     });
 }
 
