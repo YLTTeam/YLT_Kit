@@ -93,12 +93,33 @@
 }
 
 /**
+ 生成全圆角
+ */
+- (void)ylt_cornerRadius {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @weakify(self);
+        [RACObserve(self, bounds) subscribeNext:^(id  _Nullable x) {
+            @strongify(self);
+            if (self.bounds.size.width != 0 && self.bounds.size.height != 0)   {
+                //绘制圆角 要设置的圆角 使用“|”来组合
+                UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(self.bounds.size.height/2., self.bounds.size.height/2.)];
+                CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                //设置大小
+                maskLayer.frame = self.bounds;
+                //设置图形样子
+                maskLayer.path = maskPath.CGPath;
+                self.layer.mask = maskLayer;
+            }
+        }];
+    });
+}
+/**
  部分角生成圆角
  
  @param rectCorner 指定角
  @param radius 圆角率
  */
-- (void)ylt_cornerType:(UIRectCorner)rectCorner radius:(NSUInteger)radius {
+- (void)ylt_cornerType:(UIRectCorner)rectCorner radius:(CGFloat)radius {
     dispatch_async(dispatch_get_main_queue(), ^{
         @weakify(self);
         [RACObserve(self, bounds) subscribeNext:^(id  _Nullable x) {

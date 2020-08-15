@@ -61,7 +61,12 @@
  @param rectCorner 指定角
  @param radius 圆角率
  */
-- (void)ylt_cornerType:(UIRectCorner)rectCorner radius:(NSUInteger)radius;
+- (void)ylt_cornerType:(UIRectCorner)rectCorner radius:(CGFloat)radius;
+
+/**
+ 生成全圆角
+ */
+- (void)ylt_cornerRadius;
 
 /**
  设置内边框颜色
