@@ -55,7 +55,7 @@
 
 @end
 
-@interface UIViewController (YLT_BaseVC)<HookBaseVCProtocol>
+@interface UIViewController (YLT_BaseVC)<HookBaseVCProtocol, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate>
 
 /**
  是否需要刷新页面，即重新请求网络数据
@@ -65,6 +65,15 @@
  上一个页面传入的参数
  */
 @property (nonatomic, strong) id ylt_params;
+
+/** 页面主视图 */
+@property (nonatomic, strong) UIView *mainView;
+
+/** 主CollectionView */
+@property (nonatomic, strong) UICollectionView *mainCollectionView;
+
+/** 主Table */
+@property (nonatomic, strong) UITableView *mainTableView;
 
 /**
  当前页面的操作队列，进入页面的时候会启动，离开页面时会挂起

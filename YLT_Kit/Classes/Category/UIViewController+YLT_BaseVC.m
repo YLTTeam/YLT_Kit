@@ -298,6 +298,86 @@
     return completion;
 }
 
+- (void)setMainView:(UIView *)mainView {
+    if (objc_getAssociatedObject(self, @selector(mainView))) {
+        [objc_getAssociatedObject(self, @selector(mainView)) removeFromSuperview];
+    }
+    objc_setAssociatedObject(self, @selector(mainView), mainView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self.view addSubview:mainView];
+    [mainView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+}
+
+- (UIView *)mainView {
+    UIView *result = objc_getAssociatedObject(self, @selector(mainView));
+    if (nil == result) {
+        result = [[UIView alloc] init];
+        objc_setAssociatedObject(self, @selector(mainView), result, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        result.backgroundColor = UIColor.clearColor;
+        [self.view addSubview:result];
+        [result mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.view);
+        }];
+    }
+    return result;
+}
+
+- (void)setMainCollectionView:(UICollectionView *)mainCollectionView {
+    if (objc_getAssociatedObject(self, @selector(mainCollectionView))) {
+        [objc_getAssociatedObject(self, @selector(mainCollectionView)) removeFromSuperview];
+    }
+    objc_setAssociatedObject(self, @selector(mainCollectionView), mainCollectionView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self.mainView addSubview:mainCollectionView];
+    [mainCollectionView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.mainView);
+    }];
+}
+
+- (UICollectionView *)mainCollectionView {
+    UICollectionView *result = objc_getAssociatedObject(self, @selector(mainCollectionView));
+    if (nil == result) {
+        UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+        result = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
+        result.dataSource = self;
+        result.delegate = self;
+        objc_setAssociatedObject(self, @selector(mainCollectionView), result, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        result.backgroundColor = UIColor.clearColor;
+        [self.mainView addSubview:result];
+        [result mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.mainView);
+        }];
+    }
+    return result;
+}
+
+- (void)setMainTableView:(UITableView *)mainTableView {
+    if (objc_getAssociatedObject(self, @selector(mainTableView))) {
+        [objc_getAssociatedObject(self, @selector(mainTableView)) removeFromSuperview];
+    }
+    objc_setAssociatedObject(self, @selector(mainTableView), mainTableView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self.mainView addSubview:mainTableView];
+    [mainTableView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.mainView);
+    }];
+}
+
+- (UITableView *)mainTableView {
+    UITableView *result = objc_getAssociatedObject(self, @selector(mainTableView));
+    if (nil == result) {
+        result = [[UITableView alloc] initWithFrame:CGRectZero];
+        result.dataSource = self;
+        result.delegate = self;
+        objc_setAssociatedObject(self, @selector(mainTableView), result, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        result.backgroundColor = UIColor.clearColor;
+        [self.mainView addSubview:result];
+        [result mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.mainView);
+        }];
+    }
+    return result;
+}
+
 /**  在主线程执行操作*/
 - (void)ylt_performSelectorOnMainThread:(void(^)(void))block{
     if ([[NSThread currentThread] isMainThread]) {
@@ -311,7 +391,6 @@
 
 /**  退出 presentViewController  count：次数*/
 - (void)ylt_dismissViewControllerWithCount:(NSInteger)count animated:(BOOL)animated{
-
     count--;
     // 不是自己，并且自己弹出过VC， 递归交给自己弹出的VC处理
     if (count>0 && self.presentingViewController) {
@@ -326,7 +405,6 @@
 
 /**  退出 presentViewController 到指定的控制器*/
 - (void)ylt_dismissToViewControllerWithClassName:(NSString *)className animated:(BOOL)animated{
-
     // 不是自己，并且自己弹出过VC， 递归交给自己弹出的VC处理
     if (![self.class isKindOfClass:NSClassFromString(className)] && self.presentingViewController) {
         [self.presentingViewController ylt_dismissToViewControllerWithClassName:className animated:animated];
