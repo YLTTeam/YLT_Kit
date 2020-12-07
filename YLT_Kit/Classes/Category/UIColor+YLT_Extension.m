@@ -6,6 +6,7 @@
 //
 
 #import "UIColor+YLT_Extension.h"
+#import "UIImage+YLT_Extension.h"
 #import <objc/message.h>
 
 @implementation UIColor (YLT_Extension)
@@ -345,98 +346,7 @@
 }
 
 + (UIColor *)ylt_colorWithGradientStyle:(UIGradientStyle)gradientStyle withFrame:(CGRect)frame andColors:(NSArray<UIColor *> * _Nonnull)colors locations:(NSArray *)c_locations{
-    CAGradientLayer *backgroundGradientLayer = [CAGradientLayer layer];
-    backgroundGradientLayer.frame = frame;
-    NSMutableArray *cgColors = [[NSMutableArray alloc] init];
-    for (UIColor *color in colors) {
-        [cgColors addObject:(id)[color CGColor]];
-    }
-    
-    switch (gradientStyle) {
-        case YLT_UIGradientStyleLeftToRight: {
-            backgroundGradientLayer.colors = cgColors;
-            
-            [backgroundGradientLayer setStartPoint:CGPointMake(0.0, 0.5)];
-            [backgroundGradientLayer setEndPoint:CGPointMake(1.0, 0.5)];
-            if (c_locations) {
-                backgroundGradientLayer.locations = c_locations;
-            }else{
-                backgroundGradientLayer.locations = @[@0,@1];
-            }
-            UIGraphicsBeginImageContextWithOptions(backgroundGradientLayer.bounds.size,NO, [UIScreen mainScreen].scale);
-            [backgroundGradientLayer renderInContext:UIGraphicsGetCurrentContext()];
-            UIImage *backgroundColorImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            
-            return [UIColor colorWithPatternImage:backgroundColorImage];
-        }
-            
-        case YLT_UIGradientStyleRadial: {
-            UIGraphicsBeginImageContextWithOptions(frame.size,NO, [UIScreen mainScreen].scale);
-            
-            CGFloat locations[2] = {0.0, 1.0};
-            CGColorSpaceRef myColorspace = CGColorSpaceCreateDeviceRGB();
-            CFArrayRef arrayRef = (__bridge CFArrayRef)cgColors;
-            
-            
-            CGGradientRef myGradient = CGGradientCreateWithColors(myColorspace, arrayRef, locations);
-            
-            
-            
-            CGPoint myCentrePoint = CGPointMake(0.5 * frame.size.width, 0.5 * frame.size.height);
-            float myRadius = MIN(frame.size.width, frame.size.height) * 0.5;
-            
-            
-            CGContextDrawRadialGradient (UIGraphicsGetCurrentContext(), myGradient, myCentrePoint,
-                                         0, myCentrePoint, myRadius,
-                                         kCGGradientDrawsAfterEndLocation);
-            
-            
-            UIImage *backgroundColorImage = UIGraphicsGetImageFromCurrentImageContext();
-            
-            CGColorSpaceRelease(myColorspace);
-            CGGradientRelease(myGradient);
-            UIGraphicsEndImageContext();
-            
-            return [UIColor colorWithPatternImage:backgroundColorImage];
-        }
-            break;
-        case YLT_UIGradientStyleTriangle: {
-            backgroundGradientLayer.colors = cgColors;
-            
-            [backgroundGradientLayer setStartPoint:CGPointMake(0.0, 1)];
-            [backgroundGradientLayer setEndPoint:CGPointMake(1.0, 0)];
-            if (c_locations) {
-                backgroundGradientLayer.locations = c_locations;
-            }else{
-                backgroundGradientLayer.locations = @[@0,@1];
-            }
-            UIGraphicsBeginImageContextWithOptions(backgroundGradientLayer.bounds.size,NO, [UIScreen mainScreen].scale);
-            [backgroundGradientLayer renderInContext:UIGraphicsGetCurrentContext()];
-            UIImage *backgroundColorImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            
-            return [UIColor colorWithPatternImage:backgroundColorImage];
-        }
-            break;
-            
-        case YLT_UIGradientStyleTopToBottom:
-        default: {
-            
-            backgroundGradientLayer.colors = cgColors;
-            if (c_locations) {
-                backgroundGradientLayer.locations = c_locations;
-            }else{
-                backgroundGradientLayer.locations = @[@0,@1];
-            }
-            UIGraphicsBeginImageContextWithOptions(backgroundGradientLayer.bounds.size,NO, [UIScreen mainScreen].scale);
-            [backgroundGradientLayer renderInContext:UIGraphicsGetCurrentContext()];
-            UIImage *backgroundColorImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            
-            return [UIColor colorWithPatternImage:backgroundColorImage];
-        }
-    }
+    return [UIColor colorWithPatternImage:[UIImage ylt_imageWithGradientStyle:gradientStyle withFrame:frame andColors:colors locations:c_locations]];
 }
 
 /**

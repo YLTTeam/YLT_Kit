@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIColor+YLT_Extension.h"
 @class ALAsset;
 
 @interface UIImage (YLT_Extension)
@@ -27,6 +28,26 @@
  @return 图片
  */
 + (UIImage *)ylt_imageWithColor:(UIColor *)color;
+
+/**
+ 创建指定大小的渐变色背景图
+ 
+ @param gradientStyle 渐变方向
+ @param frame 尺寸
+ @param colors 渐变色
+ @return 颜色
+ */
++ (UIImage *)ylt_imageWithGradientStyle:(UIGradientStyle)gradientStyle withFrame:(CGRect)frame andColors:(NSArray<UIColor *> * _Nonnull)colors;
+
+/**
+ 创建指定大小的渐变色背景图
+ 
+ @param gradientStyle 渐变方向
+ @param frame 尺寸
+ @param colors 渐变色
+ @return 颜色
+ */
++ (UIImage *)ylt_imageWithGradientStyle:(UIGradientStyle)gradientStyle withFrame:(CGRect)frame andColors:(NSArray<UIColor *> * _Nonnull)colors locations:(NSArray *)c_locations;
 
 /**
  通过颜色,尺寸获取纯色的图片
