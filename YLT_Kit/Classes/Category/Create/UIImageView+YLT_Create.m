@@ -27,6 +27,14 @@
             } else if ([image isKindOfClass:[NSURL class]]) {
                 [self sd_setImageWithURL:(NSURL *)image];
             } else if ([image isKindOfClass:[NSString class]]) {
+                if ([((NSString *)image) mj_JSONObject]) {
+                    id obj = [((NSString *)image) mj_JSONObject];
+                    if ([obj isKindOfClass:NSArray.class]) {
+                        image = ((NSArray *) obj).firstObject;
+                    } else if ([obj isKindOfClass:NSDictionary.class]) {
+                        image = [((NSDictionary *) obj) objectForKey:@"url"];
+                    }
+                }
                 if ([((NSString *)image) ylt_isURL]) {
                     [self sd_setImageWithURL:[NSURL URLWithString:(NSString *)image]];
                 } else {
