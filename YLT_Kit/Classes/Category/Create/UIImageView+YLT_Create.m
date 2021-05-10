@@ -21,6 +21,7 @@
     @weakify(self);
     return ^id(id image) {
         @strongify(self);
+        [self sd_cancelCurrentImageLoad];
         if ([self isKindOfClass:[UIImageView class]]) {
             if ([image isKindOfClass:[UIImage class]]) {
                 [self setImage:image];

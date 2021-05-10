@@ -120,6 +120,7 @@
     @weakify(self);
     return ^id(id img, UIControlState state) {
         @strongify(self);
+        [self cancelImageDownloadTaskForState:state];
         if ([self isKindOfClass:[UIButton class]]) {
             if ([img isKindOfClass:[UIImage class]]) {
                 [self setImage:img forState:state];
