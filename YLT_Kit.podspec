@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YLT_Kit'
-  s.version          = '0.5.2'
+  s.version          = '0.6.0'
   s.summary          = 'YLT_Kit. 基础的kit框架'
 
   s.description      = <<-DESC
@@ -17,13 +17,14 @@ Pod::Spec.new do |s|
 
   s.source_files = 'YLT_Kit/Classes/**/*'
   s.public_header_files = 'YLT_Kit/Classes/**/*.h'
-  s.frameworks = 'UIKit', 'AVFoundation', 'AssetsLibrary', 'WebKit'
+  s.frameworks = 'UIKit', 'AVFoundation', 'WebKit'
   s.dependency 'AFNetworking'
   s.dependency 'ReactiveObjC'
   s.dependency 'Masonry'
   s.dependency 'YLT_BaseLib'
   s.dependency 'SDWebImage'
   s.dependency 'MJRefresh'
+  s.dependency 'RMUniversalAlert'
   s.dependency 'Aspects'
   
 end

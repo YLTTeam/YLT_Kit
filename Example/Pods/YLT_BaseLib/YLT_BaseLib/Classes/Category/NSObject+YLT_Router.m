@@ -10,6 +10,7 @@
 #import "NSString+YLT_Extension.h"
 #import "NSObject+YLT_Extension.h"
 #import <objc/message.h>
+#import <MJExtension/MJExtension.h>
 
 @implementation NSObject (YLT_Router)
 
@@ -352,20 +353,22 @@ static NSString *webRouterURL = nil;
 }
 
 - (NSDictionary *)ylt_generateParamsString:(NSString *)paramString {
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    NSArray *components = [paramString componentsSeparatedByString:@"&"];
-    for (NSString *tmpStr in components) {
-        if (!tmpStr.ylt_isValid) {
-            continue;
+    if ([paramString hasPrefix:@"bcparam={"]) {
+        NSDictionary *params = [paramString substringFromIndex:8].mj_keyValues;
+        return @{@"bcparam":params};
+    } else {
+        paramString = [[paramString componentsSeparatedByString:@"?"] lastObject];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        NSArray *components = [paramString componentsSeparatedByString:@"&"];
+        for (NSString *tmpStr in components) {
+            if (!tmpStr.ylt_isValid) {
+                continue;
+            }
+            NSRange range = [tmpStr rangeOfString:@"=" options:(0)];
+            [params setObject:[tmpStr substringFromIndex:range.location+1] forKey:[tmpStr substringToIndex:range.location]];
         }
-        NSArray *tmpArray = [tmpStr componentsSeparatedByString:@"="];
-        if (tmpArray.count == 2) {
-            [params setObject:tmpArray[1] forKey:tmpArray[0]];
-        } else {
-            YLT_LogError(@"参数不合法 : %@",tmpStr);
-        }
+        return params;
     }
-    return params;
 }
 
 YLT_BeginIgnorePerformSelectorLeaksWarning
