@@ -24,7 +24,11 @@
 #define iPhoneXR (([UIScreen mainScreen].bounds.size.width==414&&[UIScreen mainScreen].bounds.size.height==896) || ([UIScreen mainScreen].bounds.size.width==896&&[UIScreen mainScreen].bounds.size.height==414))
 #define iPhoneXSMAX iPhoneXR
 
-#define iPhoneXLater (iPhoneX || iPhoneXR )
+#define iPhone12Mini (([UIScreen mainScreen].bounds.size.width==375&&[UIScreen mainScreen].bounds.size.height==812) || ([UIScreen mainScreen].bounds.size.width==812&&[UIScreen mainScreen].bounds.size.height==375))
+#define iPhone12Pro (([UIScreen mainScreen].bounds.size.width==390&&[UIScreen mainScreen].bounds.size.height==844) || ([UIScreen mainScreen].bounds.size.width==844&&[UIScreen mainScreen].bounds.size.height==390))
+#define iPhone12ProMax  (([UIScreen mainScreen].bounds.size.width==428&&[UIScreen mainScreen].bounds.size.height==926) || ([UIScreen mainScreen].bounds.size.width==926&&[UIScreen mainScreen].bounds.size.height==428))
+
+#define iPhoneXLater (iPhoneX || iPhoneXR || iPhone12Mini || iPhone12Pro || iPhone12ProMax)
 
 // 状态栏高度
 #define STATUS_BAR_HEIGHT (iPhoneXLater ? 44.f : 20.f)
@@ -61,9 +65,12 @@
 #define iOS13  ([[UIDevice currentDevice] systemVersion].floatValue >= 13.0 && [[UIDevice currentDevice] systemVersion].floatValue <= 14.0)
 #define iOS13Later  ([[UIDevice currentDevice] systemVersion].floatValue >= 13.0)
 
-#define iOSNew ([[UIDevice currentDevice] systemVersion].floatValue >= 14.0)
+#define iOS14  ([[UIDevice currentDevice] systemVersion].floatValue >= 14.0 && [[UIDevice currentDevice] systemVersion].floatValue <= 15.0)
+#define iOS14Later  ([[UIDevice currentDevice] systemVersion].floatValue >= 14.0)
 
-#define YLT_IsDark (iOS12Later ? (self.ylt_currentVC.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) : NO)
+#define iOSNew ([[UIDevice currentDevice] systemVersion].floatValue >= 15.0)
+
+#define YLT_IsDark (iOS12Later ? (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) : NO)
 
 /// 获取系统对象
 #define YLT_Application        [UIApplication sharedApplication]
@@ -82,13 +89,14 @@
 #define YLT_SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 #define YLT_SCREEN_BOUNDS [UIScreen mainScreen].bounds
 //宽度比例
+#define YLT_Scale (YLT_SCREEN_WIDTH/375.0)
 #define YLT_Scale_Width(width) (((CGFloat)width)*YLT_SCREEN_WIDTH/375.0)
 
 // iOS沙盒目录
 #define YLT_DOCUMENT_PATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define YLT_CACHE_PATH [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
-#define YLT_TipAlert(_S_, ...) [[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:(_S_), ##__VA_ARGS__] message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] show];
+#define YLT_TipAlert(_S_, ...) [RMUniversalAlert showAlertInViewController:self.ylt_currentVC withTitle:[NSString stringWithFormat:(_S_), ##__VA_ARGS__] message:nil cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:nil tapBlock:nil];
 
 #if DEBUG
 //输出日志信息

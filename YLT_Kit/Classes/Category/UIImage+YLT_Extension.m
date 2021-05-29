@@ -6,7 +6,6 @@
 //
 
 #import "UIImage+YLT_Extension.h"
-#import <AssetsLibrary/AssetsLibrary.h>
 #import <AVFoundation/AVFoundation.h>
 #import <YLT_BaseLib/YLT_BaseLib.h>
 
@@ -403,20 +402,6 @@ static CGBitmapInfo const kTCDefaultBitMapOrder = kCGBitmapByteOrder32Little | k
     UIImage*thumbnailImage = thumbnailImageRef ? [[UIImage alloc]initWithCGImage: thumbnailImageRef] : nil;
     
     return thumbnailImage;
-}
-
-+ (UIImage *)ylt_fullResolutionImageFromALAsset:(ALAsset *)asset {
-    ALAssetRepresentation *assetRep = [asset defaultRepresentation];
-    CGImageRef imgRef = [assetRep fullResolutionImage];
-    UIImage *img = [UIImage imageWithCGImage:imgRef scale:assetRep.scale orientation:(UIImageOrientation)assetRep.orientation];
-    return img;
-}
-
-+ (UIImage *)ylt_fullScreenImageALAsset:(ALAsset *)asset {
-    ALAssetRepresentation *assetRep = [asset defaultRepresentation];
-    CGImageRef imgRef = [assetRep fullScreenImage];//fullScreenImage已经调整过方向了
-    UIImage *img = [UIImage imageWithCGImage:imgRef];
-    return img;
 }
 
 //截取当前屏幕

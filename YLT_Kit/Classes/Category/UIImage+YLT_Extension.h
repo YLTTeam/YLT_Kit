@@ -131,22 +131,6 @@
 + (UIImage *) ylt_thumbnailImageForVideo:(NSURL *)videoURL;
 
 /**
- 获取原图
- 
- @param asset 资源
- @return 图片
- */
-+ (UIImage *)ylt_fullResolutionImageFromALAsset:(ALAsset *)asset;
-
-/**
- 获取调整后的全屏图
- 
- @param asset 资源
- @return 图片
- */
-+ (UIImage *)ylt_fullScreenImageALAsset:(ALAsset *)asset;
-
-/**
  获取当前屏幕
  
  @return 屏幕快照

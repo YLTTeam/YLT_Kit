@@ -11,7 +11,6 @@
 #import <objc/message.h>
 #import "YLT_BaseMacro.h"
 #import <MJExtension/MJExtension.h>
-#import <FastCoding/FastCoder.h>
 
 @interface XXObserverRemover : NSObject {
     __strong NSMutableArray *_centers;
@@ -187,49 +186,6 @@ void ylt_swizzleInstanceMethod(Class cls, SEL originSelector, SEL newSelector) {
  */
 + (void)ylt_swizzleInstanceMethod:(SEL)origSelector withMethod:(SEL)newSelector {
     ylt_swizzleInstanceMethod(self, origSelector, newSelector);
-}
-
-/**
- *  存储对象
- *
- *  @param key key
- */
-- (void)ylt_storeValueWithKey:(NSString *)key {
-    NSParameterAssert(self);
-    NSParameterAssert(key);
-    
-    NSData *data = [FastCoder dataWithRootObject:self];
-    if (data) {
-        [[NSUserDefaults standardUserDefaults] setObject:data forKey:key];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-/**
- *  获取对象
- *
- *  @param key key
- *
- *  @return 对象
- */
-+ (id)ylt_valueByKey:(NSString *)key {
-    NSParameterAssert(key);
-    if (![[[NSUserDefaults standardUserDefaults] dictionaryRepresentation].allKeys containsObject:key]) {
-        return nil;
-    }
-    NSData *data = [[NSUserDefaults standardUserDefaults] valueForKey:key];
-    return [FastCoder objectWithData:data];
-}
-
-/**
- *  移除对象
- *
- *  @param key key
- */
-+ (void)ylt_removeValueForKey:(NSString *)key {
-    NSParameterAssert(key);
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {

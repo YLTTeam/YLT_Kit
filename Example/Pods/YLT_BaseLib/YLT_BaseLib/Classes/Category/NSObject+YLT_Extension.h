@@ -59,27 +59,4 @@ void ylt_swizzleInstanceMethod(Class cls, SEL originSelector, SEL newSelector);
  */
 + (void)ylt_swizzleInstanceMethod:(SEL)origSelector withMethod:(SEL)newSelector;
 
-/**
- *  存储对象
- *
- *  @param key key
- */
-- (void)ylt_storeValueWithKey:(NSString *)key;
-
-/**
- *  获取对象
- *
- *  @param key key
- *
- *  @return 对象
- */
-+ (id)ylt_valueByKey:(NSString *)key;
-
-/**
- *  移除对象
- *
- *  @param key key
- */
-+ (void)ylt_removeValueForKey:(NSString *)key;
-
 @end
