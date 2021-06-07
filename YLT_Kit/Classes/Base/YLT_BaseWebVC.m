@@ -231,19 +231,17 @@ YLT_ShareInstance(YLT_WKProcessPool);
 // 类型，在请求先判断能不能跳转（请求）
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     NSString *hostname = navigationAction.request.URL.host.lowercaseString;
-    //    if (navigationAction.navigationType == WKNavigationTypeLinkActivated && ![hostname containsString:@".baidu.com"]) {
-    //        // 对于跨域，需要手动跳转
-    //        [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
-    //        // 不允许web内跳转
-    //        decisionHandler(WKNavigationActionPolicyCancel);
-    //    } else {
-    //        decisionHandler(WKNavigationActionPolicyAllow);
-    //    }
+    NSString *scheme = navigationAction.request.URL.scheme;
     if (self.ylt_webViewDecidePolicyForNavigationAction) {
         self.ylt_webViewDecidePolicyForNavigationAction(webView, navigationAction);
     }
-    decisionHandler(WKNavigationActionPolicyAllow);
-    YLT_LogInfo(@"%@", hostname);
+    if ([scheme isEqualToString:@"itms-appss"]) {
+        [[UIApplication sharedApplication] openURL:navigationAction.request.URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly:@NO} completionHandler:^(BOOL success) {
+        }];
+        decisionHandler(WKNavigationActionPolicyCancel);
+    } else {
+        decisionHandler(WKNavigationActionPolicyAllow);
+    }
 }
 
 // 在响应完成时，会回调此方法
