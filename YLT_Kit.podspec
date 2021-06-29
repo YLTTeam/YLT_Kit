@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YLT_Kit'
-  s.version          = '0.6.1'
+  s.version          = '0.6.2'
   s.summary          = 'YLT_Kit. 基础的kit框架'
 
   s.description      = <<-DESC
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.author           = { 'xphaijj0305@126.com' => 'xiangpuhua@126.com' }
   s.source           = { :git => 'https://github.com/YLTTeam/ylt_kit.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '11.0'
 
   s.source_files = 'YLT_Kit/Classes/**/*'
   s.public_header_files = 'YLT_Kit/Classes/**/*.h'

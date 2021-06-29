@@ -235,9 +235,15 @@ YLT_ShareInstance(YLT_WKProcessPool);
     if (self.ylt_webViewDecidePolicyForNavigationAction) {
         self.ylt_webViewDecidePolicyForNavigationAction(webView, navigationAction);
     }
-    if ([scheme isEqualToString:@"itms-appss"]) {
-        [[UIApplication sharedApplication] openURL:navigationAction.request.URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly:@NO} completionHandler:^(BOOL success) {
-        }];
+    if ([scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"]) {
+        decisionHandler(WKNavigationActionPolicyAllow);
+    } else if ([UIApplication.sharedApplication canOpenURL:navigationAction.request.URL]) {
+        if (@available(iOS 10.0, *)) {
+            [[UIApplication sharedApplication] openURL:navigationAction.request.URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly:@NO} completionHandler:^(BOOL success) {
+            }];
+        } else {
+            [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
+        }
         decisionHandler(WKNavigationActionPolicyCancel);
     } else {
         decisionHandler(WKNavigationActionPolicyAllow);

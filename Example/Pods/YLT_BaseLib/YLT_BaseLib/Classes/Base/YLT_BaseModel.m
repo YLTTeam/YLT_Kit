@@ -24,17 +24,17 @@
 
 + (instancetype)mj_objectWithKeyValues:(NSDictionary *)keyValues context:(NSManagedObjectContext *)context{
     YLT_BaseModel *res = [super mj_objectWithKeyValues:keyValues context:context];
-    if ([res respondsToSelector:@selector(setYlt_sourceData:)]) {
-        res.ylt_sourceData = keyValues.mutableCopy;
-    }
+//    if ([res respondsToSelector:@selector(setYlt_sourceData:)]) {
+//        res.ylt_sourceData = keyValues.mutableCopy;
+//    }
     return res;
 }
 
 - (instancetype)mj_setKeyValues:(NSDictionary *)keyValues context:(NSManagedObjectContext *)context {
     YLT_BaseModel *res = [super mj_setKeyValues:keyValues context:context];
-    if ([res respondsToSelector:@selector(setYlt_sourceData:)]) {
-        res.ylt_sourceData = keyValues.mutableCopy;
-    }
+//    if ([res respondsToSelector:@selector(setYlt_sourceData:)]) {
+//        res.ylt_sourceData = keyValues.mutableCopy;
+//    }
     return res;
 }
 
@@ -283,6 +283,10 @@
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
     }
     return [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+    YLT_LogWarn(@"设置的值VALUE:%@ 没有对应的KEY:%@", value, key);
 }
 
 #pragma mark - setter getter

@@ -15,6 +15,9 @@
 @implementation NSObject (YLT_Router)
 
 static NSString *webRouterURL = nil;
+static NSString *RouterPrefix = @"ylt://";
+static NSDictionary *routerHookData = nil;
+
 /**
  注册web路由
  
@@ -22,6 +25,22 @@ static NSString *webRouterURL = nil;
  */
 - (void)registerWebRouter:(NSString *)webRouter {
     webRouterURL = webRouter;
+}
+
+/**
+ * @brief 注册路由前缀
+ * @param routerPrefix 前缀字符
+ */
+- (void)registerRouterPrefix:(NSString *)routerPrefix {
+    RouterPrefix = routerPrefix;
+}
+
+/**
+ * @brief 路由拦截器
+ * @param routerHook 拦截器
+ */
+- (void)registerRouterHook:(NSDictionary *)routerHook {
+    routerHookData = routerHook;
 }
 
 /**
@@ -46,7 +65,14 @@ static NSString *webRouterURL = nil;
  @return 回参
  */
 - (id)ylt_routerToURL:(NSString *)routerURL isClassMethod:(BOOL)isClassMethod arg:(id)arg completion:(void(^)(NSError *error, id response))completion {
-    if ([routerURL hasPrefix:YLT_ROUTER_PREFIX]) {
+    NSMutableArray *tmpURLs = [routerURL componentsSeparatedByString:@"?"].mutableCopy;
+    NSString *tmpURL = tmpURLs.firstObject;
+    if ([routerHookData.allKeys containsObject:tmpURL]) {
+        tmpURL = routerHookData[tmpURL];
+        [tmpURLs replaceObjectAtIndex:0 withObject:tmpURL];
+        routerURL = [tmpURLs componentsJoinedByString:@"?"];
+    }
+    if ([routerURL hasPrefix:RouterPrefix]) {
         NSDictionary *urlParams = [self ylt_analysisURL:routerURL];
         NSString *clsname = ([urlParams.allKeys containsObject:YLT_ROUTER_CLS_NAME])?urlParams[YLT_ROUTER_CLS_NAME]:@"";
         NSString *selname = ([urlParams.allKeys containsObject:YLT_ROUTER_SEL_NAME])?urlParams[YLT_ROUTER_SEL_NAME]:@"";
@@ -298,14 +324,14 @@ static NSString *webRouterURL = nil;
                                                                                   }];
     
     //不以“ylt://”未前缀，或者字符串就是“ylt://”，则不合法
-    if (![routerURL ylt_isValid] || ![routerURL hasPrefix:YLT_ROUTER_PREFIX] || [routerURL isEqualToString:YLT_ROUTER_PREFIX]) {
+    if (![routerURL ylt_isValid] || ![routerURL hasPrefix:RouterPrefix] || [routerURL isEqualToString:RouterPrefix]) {
         showError();
         return result;
     }
     
     NSString *tempString = nil;
     NSScanner *scanner = [NSScanner scannerWithString:routerURL];
-    [scanner setScanLocation:YLT_ROUTER_PREFIX.length]; //设置从ylt://后面开始扫描
+    [scanner setScanLocation:RouterPrefix.length]; //设置从ylt://后面开始扫描
     //解析路径部分
     {
         //扫描出path部分(ylt://.....?)
@@ -384,12 +410,12 @@ YLT_BeginIgnoreUndeclaredSelecror
         if (![selname hasSuffix:@":"]) {
             [sels addObject:[NSString stringWithFormat:@"%@:", selname]];
         }
-        if ([selname hasPrefix:@"ylt://"] || [selname hasPrefix:@"http"]) {
+        if ([selname hasPrefix:RouterPrefix] || [selname hasPrefix:@"http"]) {
             returnData = [self ylt_routerToURL:selname arg:params completion:completion];
         } else {
             [sels enumerateObjectsUsingBlock:^(NSString * _Nonnull object, NSUInteger idx, BOOL * _Nonnull selStop) {
                 [[object componentsSeparatedByString:@"."] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([selname hasPrefix:@"ylt://"] || [selname hasPrefix:@"http"]) {
+                    if ([selname hasPrefix:RouterPrefix] || [selname hasPrefix:@"http"]) {
                         returnData = [self ylt_routerToURL:selname arg:params completion:completion];
                         *selStop = YES;
                     } else if (returnData != nil && [returnData respondsToSelector:NSSelectorFromString(obj)]) {

@@ -24,6 +24,21 @@ YLT_ShareInstance(YLT_RouterManager);
 + (void)registerWebRouter:(NSString *)webRouter {
     [[YLT_RouterManager shareInstance] registerWebRouter:webRouter];
 }
+/**
+ * @brief 注册路由前缀
+ * @param routerPrefix 前缀字符
+ */
++ (void)registerRouterPrefix:(NSString *)routerPrefix {
+    [[YLT_RouterManager shareInstance] registerRouterPrefix:routerPrefix];
+}
+
+/**
+ * @brief 路由拦截器
+ * @param routerHook 拦截器
+ */
++ (void)registerRouterHook:(NSDictionary *)routerHook {
+    [[YLT_RouterManager shareInstance] registerRouterHook:routerHook];
+}
 
 /**
  路由  默认路由实例方法

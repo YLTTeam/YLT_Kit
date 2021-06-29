@@ -203,4 +203,9 @@
 - (NSInteger) ylt_distanceInDaysToDate:(NSDate *)anotherDate;
 - (NSDateComponents *)ylt_distanceDate:(NSDate *)anotherDate;
 
+// 一年中第几周
+- (NSInteger) ylt_weekIndexInYear;
+// 一月中第几周
+- (NSInteger) ylt_weekIndexInMonth;
+
 @end
