@@ -37,7 +37,7 @@
                     }
                 }
                 if ([((NSString *)image) ylt_isURL]) {
-                    [self sd_setImageWithURL:[NSURL URLWithString:(NSString *)image]];
+                    [self sd_setImageWithURL:[NSURL URLWithString:[(NSString *)image stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
                 } else {
                     [self setImage:[UIImage ylt_imageNamed:(NSString *)image]];
                 }
@@ -71,7 +71,7 @@
                 }];
             } else if ([image isKindOfClass:[NSString class]]) {
                 if ([((NSString *)image) ylt_isURL]) {
-                    [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                    [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:[(NSString *)image stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                         @strongify(self);
                         [self setImage:[image ylt_drawCircleImage]];
                     }];
@@ -100,7 +100,7 @@
                 }];
             } else if ([image isKindOfClass:[NSString class]]) {
                 if ([((NSString *)image) ylt_isURL]) {
-                    [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:(NSString *)image] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                    [self sd_setImageWithURL:(NSURL *)[NSURL URLWithString:[(NSString *)image stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                         [self setImage:[image ylt_drawRectImage:radius]];
                     }];
                 } else {
